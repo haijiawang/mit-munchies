@@ -10,6 +10,6 @@ Running locally requires a few extra npm scripts from `package.json` in comparis
 2. Open a new terminal (with the original one still open) and run `npm run dev` to start the backend at port `3000`.
 3. To view your website, **connect to [localhost:8080](http://localhost:8080)** (instead of port 3000) since the backend will no longer serve any HTML files.
 
-## Deployment to Vercel
+## Deployed Site
 
 Our official site is deployed [here](https://re-thrift-dyld.vercel.app/#/)
