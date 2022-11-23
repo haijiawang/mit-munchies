@@ -18,10 +18,11 @@ class UserCollection {
    * @param {string} password - The password of the user
    * @return {Promise<HydratedDocument<User>>} - The newly created user
    */
-  static async addOne(username: string, password: string): Promise<HydratedDocument<User>> {
+  static async addOne(userDetails: {username?: string; password?: string; phoneNumber?: string; email?: string; location?: string}): Promise<HydratedDocument<User>> {
+    const {username, password, phoneNumber, email, location} = userDetails;
     const dateJoined = new Date();
 
-    const user = new UserModel({username, password, dateJoined});
+    const user = new UserModel({username, password, phoneNumber, email, location, dateJoined});
     await user.save(); // Saves user to MongoDB
     return user;
   }
@@ -67,16 +68,23 @@ class UserCollection {
    * @param {Object} userDetails - An object with the user's updated credentials
    * @return {Promise<HydratedDocument<User>>} - The updated user
    */
-  static async updateOne(userId: Types.ObjectId | string, userDetails: {password?: string; username?: string}): Promise<HydratedDocument<User>> {
+  static async updateOne(userId: Types.ObjectId | string, userDetails: {username?: string; password?: string; phoneNumber?: string; email?: string; location?: string}): Promise<HydratedDocument<User>> {
     const user = await UserModel.findOne({_id: userId});
-    if (userDetails.password) {
-      user.password = userDetails.password;
-    }
-
     if (userDetails.username) {
       user.username = userDetails.username;
     }
-
+    if (userDetails.password) {
+      user.password = userDetails.password;
+    }
+    if (userDetails.phoneNumber) {
+      user.phoneNumber = userDetails.phoneNumber;
+    }
+    if (userDetails.email) {
+      user.email = userDetails.email;
+    }
+    if (userDetails.location) {
+      user.location = userDetails.location;
+    }
     await user.save();
     return user;
   }

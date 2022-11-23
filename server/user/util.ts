@@ -1,11 +1,16 @@
 import type {HydratedDocument} from 'mongoose';
 import moment from 'moment';
 import type {User} from './model';
+import {Types} from "mongoose";
 
 // Update this if you add a property to the User type!
 type UserResponse = {
   _id: string;
   username: string;
+  password: string;
+  phoneNumber: string;
+  email: string;
+  location: string;
   dateJoined: string;
 };
 
@@ -35,6 +40,11 @@ const constructUserResponse = (user: HydratedDocument<User>): UserResponse => {
   return {
     ...userCopy,
     _id: userCopy._id.toString(),
+    username: userCopy.username,
+    password: userCopy.password,
+    phoneNumber: userCopy.phoneNumber,
+    email: userCopy.email,
+    location: userCopy.location,
     dateJoined: formatDate(user.dateJoined)
   };
 };
