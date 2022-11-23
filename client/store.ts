@@ -5,12 +5,12 @@ import createPersistedState from 'vuex-persistedstate';
 Vue.use(Vuex);
 
 /**
- * Storage for data that needs to be accessed from various compoentns.
+ * Storage for data that needs to be accessed from various components.
  */
 const store = new Vuex.Store({
   state: {
-    filter: null, // Username to filter shown freets by (null = show all)
-    freets: [], // All freets created in the app
+    filter: null, // Username to filter shown requests by (null = show all) // TODO: Update for different kinds of filtering
+    requests: [], // All requests created in the app
     username: null, // Username of the logged in user
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
   },
@@ -33,25 +33,25 @@ const store = new Vuex.Store({
     },
     updateFilter(state, filter) {
       /**
-       * Update the stored freets filter to the specified one.
-       * @param filter - Username of the user to fitler freets by
+       * Update the stored requests filter to the specified one.
+       * @param filter - Username of the user to fitler requests by
        */
       state.filter = filter;
     },
-    updateFreets(state, freets) {
+    updateRequests(state, requests) {
       /**
-       * Update the stored freets to the provided freets.
-       * @param freets - Freets to store
+       * Update the stored requests to the provided requests.
+       * @param requests - Requests to store
        */
-      state.freets = freets;
+      state.requests = requests;
     },
-    async refreshFreets(state) {
+    async refreshRequests(state) {
       /**
-       * Request the server for the currently available freets.
+       * Request the server for the currently available requests.
        */
-      const url = state.filter ? `/api/users/${state.filter}/freets` : '/api/freets';
+      const url = state.filter ? `/api/users/${state.filter}/requests` : '/api/requests'; // TODO: Update for different types of filtering
       const res = await fetch(url).then(async r => r.json());
-      state.freets = res;
+      state.requests = res;
     }
   },
   // Store data across page refreshes, only discard on browser close

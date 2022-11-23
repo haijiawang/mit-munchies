@@ -13,3 +13,188 @@ Running locally requires a few extra npm scripts from `package.json` in comparis
 ## Deployed Site
 
 Our official site is deployed [here](https://re-thrift-dyld.vercel.app/#/)
+
+### API Routes
+
+For the Alpha release, we have implemented User and Donation Request.
+Note: Freet documentation has been kept to serve as a continuous reference while implementing other concepts, but is not used for any functionality and will be deleted before the final push. 
+
+#### `GET /`
+
+This renders the `index.html` file. 
+
+## User ##
+
+#### `POST /api/users/session` - Sign in user
+
+**Body**
+
+- `username` _{string}_ - The user's username
+- `password` _{string}_ - The user's password
+
+**Returns**
+
+- A success message
+- An object with user's details (without password)
+
+**Throws**
+
+- `403` if the user is already logged in
+- `400` if username or password is not in correct format format or missing in the req
+- `401` if the user login credentials are invalid
+
+#### `DELETE /api/users/session` - Sign out user
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if user is not logged in
+
+#### `POST /api/users` - Create an new user account
+
+**Body**
+
+- `username` _{string}_ - The user's username
+- `phone` _{string}_ - The user’s phone number
+- `email` _{string}_ - The user’s email address for contact
+- `locationcity` _{string}_ - The user’s city
+- `locationstate` _{string}_ - The user’s state
+- `password` _{string}_ - The user's password
+
+**Returns**
+
+- A success message
+- An object with the created user's details (without password)
+
+**Throws**
+
+- `403` if there is a user already logged in
+- `400` if username or password is in the wrong format
+- `409` if username is already in use
+
+#### `PUT /api/users` - Update a user's profile
+
+**Body** _(no need to add fields that are not being changed)_
+
+- `username` _{string}_ - The user's username
+- `phone` _{string}_ - The user’s phone number
+- `email` _{string}_ - The user’s email address for contact
+- `locationcity` _{string}_ - The user’s city
+- `locationstate` _{string}_ - The user’s state
+- `password` _{string}_ - The user's password
+
+**Returns**
+
+- A success message
+- An object with the update user details (without password)
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if username or password is in the wrong format
+- `409` if the username is already in use
+
+#### `DELETE /api/users` - Delete user
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+
+## Donation Request ##
+
+#### `GET /api/requests` - Get all the requests
+
+**Returns**
+
+- An array of all requests sorted by the start date of the accepting donations period
+
+#### `GET /api/requests?requestor=USERNAME` - Get requests by requestor
+
+**Returns**
+
+- An array of requests posted by the user with username `requestor`
+
+**Throws**
+
+- `400` if `requestor` is not given
+- `404` if `requestor` is not a recognized username of any user
+
+#### `GET /api/requests?date=DATE` - Get events on or after a given date start date
+
+**Returns**
+
+- An array of requests accepting donations on or after `date`
+
+**Throws**
+
+- `400` if `date` is not given
+- `400` if date is invalid, or past the current date
+
+#### `GET /api/requests?locationcity=CITY&locationstate=STATE` - Get requests by location
+
+**Returns**
+
+- An array of requests within a given 
+
+**Throws**
+
+- `400` if `locationcity` or `locationstate` is not given
+
+#### `POST /api/requests/` - Create a new request
+
+**Body**
+
+- `contact` _{string}_ - the email or phone number specific to this request
+- `description` _{string}_ - the types of clothing and amounts wanted
+- `startdate` _{string}_ - the start date for accepting donations
+- `enddate` _{string}_ - the end date for accepting donations
+
+**Returns**
+
+- A success message
+- A object with the created request
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` If the any of the required request content is empty
+
+#### `DELETE /api/requests/:requestId?` - Delete an existing request
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `403` if the user is not the requestor
+- `404` if the requestId is invalid
+
+#### `PUT /api/requests/:requestId?` - Update an existing request
+
+**Body**
+
+- `contact` _{string}_ - the email or phone number specific to this request
+- `description` _{string}_ - the types of clothing and amounts wanted
+- `startdate` _{string}_ - the start date for accepting donations
+- `enddate` _{string}_ - the end date for accepting donations
+
+**Returns**
+
+- A success message
+- An object with the updated request
+
+**Throws**
+
+- `403` if the user is not logged in
+- `404` if the requestId is invalid
+- `403` if the user is not the requestor
+- `400` if there are no update fields given filled (all empty)
