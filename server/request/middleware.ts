@@ -1,6 +1,5 @@
 import type {Request, Response, NextFunction} from 'express';
 import {Types} from 'mongoose';
-import FreetCollection from '../freet/collection';
 import RequestCollection from "./collection";
 
 /**
@@ -50,7 +49,7 @@ const isValidRequestModifier = async (req: Request, res: Response, next: NextFun
   const userId = request.author; //TODO
   if (req.session.userId !== userId.toString()) {
     res.status(403).json({
-      error: 'Cannot modify other users\' freets.'
+      error: 'Cannot modify other users\' requests.'
     });
     return;
   }

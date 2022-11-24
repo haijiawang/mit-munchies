@@ -42,9 +42,9 @@ const constructRequestResponse = (request: HydratedDocument<Request>): RequestRe
     author:requestCopy.author,
     contact: requestCopy.contact,
     description: requestCopy.description,
-    startDate: requestCopy.startDate,
-    endDate: requestCopy.endDate,
-    dateCreated: requestCopy.dateCreated
+    startDate: formatDate(requestCopy.startDate),
+    endDate: formatDate(requestCopy.endDate),
+    dateCreated: formatDate(requestCopy.dateCreated),
   };
 };
 

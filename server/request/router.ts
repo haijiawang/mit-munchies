@@ -67,7 +67,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const request = await RequestCollection.addOne(userId, req.body);
+    const request = await RequestCollection.addOne(req.body);
 
     res.status(201).json({
       message: 'Your request was created successfully.',
