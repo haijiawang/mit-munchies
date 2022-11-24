@@ -11,7 +11,7 @@ export default {
   },
   methods: {
     async submit() {
-      const url = this.value ? `/api/requests?requestor=${this.value}` : '/api/requests';
+      const url = this.value ? `/api/requests?author=${this.value}` : '/api/requests';
       try {
         const r = await fetch(url);
         const res = await r.json();
