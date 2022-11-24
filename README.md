@@ -115,37 +115,16 @@ This renders the `index.html` file.
 
 - An array of all requests sorted by the start date of the accepting donations period
 
-#### `GET /api/requests?requestor=USERNAME` - Get requests by requestor
+#### `GET /api/requests?author=USERNAME` - Get requests by requestor
 
 **Returns**
 
-- An array of requests posted by the user with username `requestor`
+- An array of requests posted by the user with username `author`
 
 **Throws**
 
-- `400` if `requestor` is not given
-- `404` if `requestor` is not a recognized username of any user
-
-#### `GET /api/requests?date=DATE` - Get events on or after a given date start date
-
-**Returns**
-
-- An array of requests accepting donations on or after `date`
-
-**Throws**
-
-- `400` if `date` is not given
-- `400` if date is invalid, or past the current date
-
-#### `GET /api/requests?locationcity=CITY&locationstate=STATE` - Get requests by location
-
-**Returns**
-
-- An array of requests within a given 
-
-**Throws**
-
-- `400` if `locationcity` or `locationstate` is not given
+- `400` if `author` is not given
+- `404` if `author` is not a recognized username of any user
 
 #### `POST /api/requests/` - Create a new request
 
@@ -153,8 +132,6 @@ This renders the `index.html` file.
 
 - `contact` _{string}_ - the email or phone number specific to this request
 - `description` _{string}_ - the types of clothing and amounts wanted
-- `startdate` _{string}_ - the start date for accepting donations
-- `enddate` _{string}_ - the end date for accepting donations
 
 **Returns**
 
@@ -184,8 +161,6 @@ This renders the `index.html` file.
 
 - `contact` _{string}_ - the email or phone number specific to this request
 - `description` _{string}_ - the types of clothing and amounts wanted
-- `startdate` _{string}_ - the start date for accepting donations
-- `enddate` _{string}_ - the end date for accepting donations
 
 **Returns**
 
