@@ -8,7 +8,7 @@ import UserCollection from '../user/collection';
  * stored in MongoDB, including adding, finding, updating, and deleting freets.
  * Feel free to add additional operations in this file.
  *
- * Note: HydratedDocument<Freet> is the output of the FreetModel() constructor,
+ * Note: HydratedDocument<Request> is the output of the RequestModel() constructor,
  * and contains all the information in Freet. https://mongoosejs.com/docs/typescript.html
  */
 class RequestCollection {
@@ -17,41 +17,40 @@ class RequestCollection {
    *
    * @param {string} author - The author of the Request
    * @param {string} contact - The phone/email of the author
+   * @param {string} description - The description of the request
    * @return {Promise<HydratedDocument<Request>>} - The newly created Request
    */
-  static async addOne(requestDetails: {author: string, contact: string, description: string, startDate: string, endDate:string }): Promise<HydratedDocument<Request>> {
+  static async addOne(requestDetails: {author: string, contact: string, description: string}): Promise<HydratedDocument<Request>> {
     const date = new Date();
-    const {author, contact, description, startDate, endDate} = requestDetails;
+    const {author, contact, description} = requestDetails;
     const request = new RequestModel({
       author,
-      contact,
-      description,
-      startDate,
-      endDate,
+      contact: contact,
+      description: description,
       dateCreated: date
     });
     await request.save(); // Saves freet to MongoDB
-    return request.populate('authorId'); //TODO: SHOULD I CHANGE THIS TO AUTHOR?
+    return request.populate('author'); //TODO: SHOULD I CHANGE THIS TO AUTHOR?
   }
 
   /**
    * Find a request by requestId
    *
-   * @param {string} freetId - The id of the freet to find
-   * @return {Promise<HydratedDocument<Freet>> | Promise<null> } - The freet with the given freetId, if any
+   * @param {string} requestId - The id of the request to find
+   * @return {Promise<HydratedDocument<Request>> | Promise<null> } - The request with the given requestId, if any
    */
   static async findOne(requestId: Types.ObjectId | string): Promise<HydratedDocument<Request>> {
-    return RequestModel.findOne({_id: requestId}).populate('authorId');
+    return RequestModel.findOne({_id: requestId}).populate('author');
   }
 
   /**
    * Get all the requests in the database
    *
-   * @return {Promise<HydratedDocument<Freet>[]>} - An array of all of the freets
+   * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests
    */
   static async findAll(): Promise<Array<HydratedDocument<Request>>> {
     // Retrieves Requests and sorts them from most to least recent
-    return RequestModel.find({}).sort({dateCreated: -1}).populate('authorId');
+    return RequestModel.find({}).sort({dateCreated: -1}).populate('author');
   }
 
   /**
@@ -62,7 +61,7 @@ class RequestCollection {
    */
   static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Request>>> {
     const author = await UserCollection.findOneByUsername(username);
-    return RequestModel.find({authorId: author._id}).sort({dateCreated: -1}).populate('authorId');
+    return RequestModel.find({author: author._id}).sort({dateCreated: -1}).populate('author');
   }
 
   /** //TODO: UPDATE THIS
@@ -76,7 +75,7 @@ class RequestCollection {
     const request = await RequestModel.findOne({_id: requestId});
     request.description = description;
     await request.save();
-    return request.populate('authorId');
+    return request.populate('author');
   }
 
   /**

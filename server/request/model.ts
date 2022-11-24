@@ -10,21 +10,17 @@ import type {User} from '../user/model';
 // Type definition for Request on the backend
 export type Request = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
-  author: string;
+  author: Types.ObjectId;
   contact: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
   dateCreated: Date;
 };
 
 export type PopulatedRequest = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
-  author: string;
+  author: User;
   contact: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
   dateCreated: Date;
 };
 
@@ -35,8 +31,9 @@ const RequestSchema = new Schema<Request>({
   // The author username
   author: {
     // Use Types.ObjectId outside of the schema
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true,
+    ref: 'User'
   },
   // The contact of the user
   contact: {
@@ -49,16 +46,6 @@ const RequestSchema = new Schema<Request>({
     // Use Types.ObjectId outside of the schema
     type: String,
     required: true,
-  },
-  // The date the post is open for
-  startDate: {
-    type: Date,
-    required: true
-  },
-  // The end date of the request
-  endDate: {
-    type: Date,
-    required: true
   },
   // The date the freet was created
   dateCreated: {

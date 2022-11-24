@@ -55,7 +55,7 @@
 <script>
 import RequestComponent from "@/components/Request/RequestComponent.vue";
 import CreateRequestForm from "@/components/Request/CreateRequestForm.vue";
-import GetRequestForm from "@/components/Request/GetRequestForm.vue";
+import GetRequestsForm from "@/components/Request/GetRequestsForm.vue";
 
 export default {
   name: "RequestsPage",

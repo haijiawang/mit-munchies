@@ -23,15 +23,15 @@ const isRequestExists = async (req: Request, res: Response, next: NextFunction) 
  * spaces and not more than 140 characters
  */
 const isValidRequestContent = (req: Request, res: Response, next: NextFunction) => {
-  const {content} = req.body as {content: string};
-  if (!content.trim()) {
+  const {contact, description} = req.body as {contact: string, description: string};
+  if (!description.trim()) {
     res.status(400).json({
       error: 'Request content must be at least one character long.'
     });
     return;
   }
  //TODO: DELETE THIS OR CHANGE NUMBER
-  if (content.length > 140) {
+  if (description.length > 140) {
     res.status(413).json({
       error: 'Request content must be no more than 140 characters.'
     });

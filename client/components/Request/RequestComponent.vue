@@ -6,11 +6,11 @@
     class="request"
   >
     <header>
-      <h3 class="requestor">
-        @{{ request.requestor }}
+      <h3 class="author">
+        @{{ request.author }}
       </h3>
       <div
-        v-if="$store.state.username === request.requestor"
+        v-if="$store.state.username === request.author"
         class="actions"
       >
         <button
@@ -46,7 +46,7 @@
       v-else
       class="contact"
     >
-      {{ request.contact }}
+      Contact me: {{ request.contact }}
     </p>
     <textarea
       v-if="editing"
@@ -58,31 +58,7 @@
       v-else
       class="description"
     >
-      {{ request.description }}
-    </p>
-    <textarea
-      v-if="editing"
-      class="startdate"
-      :value="draftstart"
-      @input="draftstart = $event.target.value"
-    />
-    <p
-      v-else
-      class="startdate"
-    >
-      {{ request.startdate }}
-    </p>
-    <textarea
-      v-if="editing"
-      class="enddate"
-      :value="draftend"
-      @input="draftend = $event.target.value"
-    />
-    <p
-      v-else
-      class="enddate"
-    >
-      {{ request.enddate }}
+      Request Description: {{ request.description }}
     </p>
     <section class="alerts">
       <article
@@ -111,8 +87,6 @@ export default {
       editing: false, // Whether or not this request is in edit mode
       draftcontact: this.request.contact, // Potentially-new contact for this request
       draftdescription: this.request.description, // Potentially-new description for this request
-      draftstart: this.request.startdate, // Potentially-new start date for this request
-      draftend: this.request.enddate, // Potentially-new end date for this request
       alerts: {} // Displays success/error messages encountered during request modification
     };
   },
@@ -124,8 +98,6 @@ export default {
       this.editing = true; // Keeps track of if a request is being edited
       this.draftcontact = this.request.contact; // The contact of our current "draft" while being edited
       this.draftdescription = this.request.description; // The description of our current "draft" while being edited
-      this.draftstart = this.request.startdate; // The start date of our current "draft" while being edited
-      this.draftend = this.request.enddate; // The end date of our current "draft" while being edited
     },
     stopEditing() {
       /**
@@ -134,8 +106,6 @@ export default {
       this.editing = false;
       this.draftcontact = this.request.contact;
       this.draftdescription = this.request.description; 
-      this.draftstart = this.request.startdate; 
-      this.draftend = this.request.enddate; 
     },
     deleteRequest() {
       /**
@@ -166,7 +136,7 @@ export default {
       const params = {
         method: 'PATCH',
         message: 'Successfully edited request!',
-        body: JSON.stringify({contact: this.draftcontact, description: this.draftdescription, startdate: this.draftstart, enddate: this.draftend}),
+        body: JSON.stringify({contact: this.draftcontact, description: this.draftdescription}),
         callback: () => {
           this.$set(this.alerts, params.message, 'success');
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);

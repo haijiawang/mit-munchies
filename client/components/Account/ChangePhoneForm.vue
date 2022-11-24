@@ -12,7 +12,7 @@ export default {
       method: 'PATCH',
       hasBody: true,
       fields: [
-        {id: 'phone', label: 'Phone', value: ''}
+        {id: 'phoneNumber', label: 'Phone Number', value: ''}
       ],
       title: 'Change phone number',
       callback: () => {
