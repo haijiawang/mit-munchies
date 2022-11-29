@@ -4,6 +4,7 @@ import { Schema, model } from 'mongoose';
 export type Response = {
     _id: Types.ObjectId,
     author: Types.ObjectId,
+    requestId: Types.ObjectId,
     contact: string;
     description: string;
     dateCreated: Date;
@@ -14,6 +15,10 @@ const ResponseSchema = new Schema<Response>({
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'User'
+    },
+    requestId: {
+        type: Schema.Types.ObjectId,
+        required: true
     },
     contact: {
         type: String,
