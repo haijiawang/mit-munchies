@@ -1,5 +1,5 @@
 // This file must be in the /api folder for Vercel to detect it as a serverless function
-import type {Request, Response} from 'express';
+import type { Request, Response } from 'express';
 import express from 'express';
 import session from 'express-session';
 import logger from 'morgan';
@@ -7,10 +7,11 @@ import http from 'http';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import * as userValidator from '../server/user/middleware';
-import {userRouter} from '../server/user/router';
-import {freetRouter} from '../server/freet/router';
-import {requestRouter} from "../server/request/router";
-import {eventRouter} from "../server/event/router";
+import { userRouter } from '../server/user/router';
+import { freetRouter } from '../server/freet/router';
+import { requestRouter } from "../server/request/router";
+import { responseRouter } from '../server/response/router';
+import { eventRouter } from "../server/event/router";
 import MongoStore from 'connect-mongo';
 
 // Load environmental variables
@@ -50,7 +51,7 @@ app.use(logger('dev'));
 app.use(express.json());
 
 // Parse incoming requests with urlencoded payloads ('content-type: application/x-www-form-urlencoded' in header)
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 
 // Initialize cookie session
 // https://www.npmjs.com/package/express-session#options
@@ -73,6 +74,7 @@ app.use(userValidator.isCurrentSessionUserExists);
 app.use('/api/users', userRouter);
 app.use('/api/freets', freetRouter);
 app.use('/api/requests', requestRouter);
+app.use('/api/responses', responseRouter)
 app.use('/api/events', eventRouter);
 
 // Catch all the other routes and display error message

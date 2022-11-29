@@ -1,4 +1,4 @@
-import type {NextFunction, Request, Response} from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
 import RequestCollection from './collection';
 import * as userValidator from '../user/middleware';
@@ -67,7 +67,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const request = await RequestCollection.addOne({author: userId, contact: req.body.contact, description: req.body.description});
+    const request = await RequestCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description });
 
     res.status(201).json({
       message: 'Your request was created successfully.',
@@ -94,7 +94,7 @@ router.delete(
     requestValidator.isValidRequestModifier
   ],
   async (req: Request, res: Response) => {
-    await RequestCollection.deleteOne(req.params.freetId);
+    await RequestCollection.deleteOne(req.params.requestId);
     res.status(200).json({
       message: 'Your request was deleted successfully.'
     });
@@ -131,4 +131,4 @@ router.patch(
   }
 );
 
-export {router as requestRouter};
+export { router as requestRouter };
