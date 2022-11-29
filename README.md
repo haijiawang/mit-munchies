@@ -193,16 +193,17 @@ This renders the `index.html` file.
 - `400` if `coordinator` is not given
 - `404` if `coordinator` is not a recognized username of any user
 
-#### `GET /api/events?date=DATE` - Get events on or after a given date
+#### `GET /api/events?startrange=START&endrange=END` - Get events within a given date range
 
 **Returns**
 
-- An array of events being held on or after `date`
+- An array of events occurring between `startrange` and `endrange` (inclusive)
 
 **Throws**
 
-- `400` if `date` is not given
-- `404` if date is invalid, or past the current date
+- `400` if `startrange` is not given (if `endrange` is not given, assume no end date)
+- `404` if `startrange` or `endrange` is invalid
+- `404` if `startrange` is past the current date
 
 #### `GET /api/events?location=LOCATION` - Get events by event location
 
@@ -221,7 +222,6 @@ This renders the `index.html` file.
 
 - `startdate` _{string}_ - Start date of the event formatted as "yyyy-mm-dd"
 - `enddate` _{string}_ - End date of the event formatted as "yyyy-mm-dd"
-- `event` _{int}_ - Event flag, 0 when event is still a request and 1 when responses are closed and event moves to events page
 - `location` _{string}_ - The location of the event
 - `description` _{string}_ - The description of the items the coordinator is looking for to be donated
 - `contact` _{string}_ - The contact method (phone or email) by which the coordinator wants to setup donation drop offs
@@ -237,7 +237,7 @@ This renders the `index.html` file.
 - `403` if the user is not logged in
 - `400` if the any of the event content is empty
 - `404` if the `startdate` or `enddate` are invalid, or is `enddate` is distinctly earlier than `startdate`
-- `404` if the `donationdate` 
+- `404` if the `donationdate` is invalid
 - `404` if the `location` state abbreviation does not exist
 
 #### `DELETE /api/events/:eventId?` - Delete an existing event
@@ -270,7 +270,7 @@ This renders the `index.html` file.
 
 **Throws**
 
-- `400` if `event` is empty
+- `400` if all fields are empty
 - `403` if the user is not logged in
 - `403` if the user is not the coordinator of the event
 - `404` if the eventId is invalid
