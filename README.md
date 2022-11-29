@@ -23,7 +23,7 @@ Note: Freet documentation has been kept to serve as a continuous reference while
 
 This renders the `index.html` file. 
 
-## User ##
+### User ###
 
 #### `POST /api/users/session` - Sign in user
 
@@ -107,7 +107,7 @@ This renders the `index.html` file.
 
 - `403` if the user is not logged in
 
-## Donation Request ##
+### (Donation) Request ###
 
 #### `GET /api/requests` - Get all the requests
 
@@ -173,3 +173,122 @@ This renders the `index.html` file.
 - `404` if the requestId is invalid
 - `403` if the user is not the requestor
 - `400` if there are no update fields given filled (all empty)
+
+### Event ###
+
+#### `GET /api/events` - Get all the events
+
+**Returns**
+
+- An array of all events sorted in descending order by event date (or earliest date if it spans multiple days)
+
+#### `GET /api/events?coordinator=USERNAME` - Get events by event coordinator
+
+**Returns**
+
+- An array of events hosted by the user with username `coordinator`
+
+**Throws**
+
+- `400` if `coordinator` is not given
+- `404` if `coordinator` is not a recognized username of any user
+
+#### `GET /api/events?date=DATE` - Get events on or after a given date
+
+**Returns**
+
+- An array of events being held on or after `date`
+
+**Throws**
+
+- `400` if `date` is not given
+- `404` if date is invalid, or past the current date
+
+#### `GET /api/events?location=LOCATION` - Get events by event location
+
+**Returns**
+
+- An array of events in a given location
+
+**Throws**
+
+- `400` if `location` is not given
+- `404` if `location` is invalid (i.e. improperly formatted as city,state(two-letter abbreviation))
+
+#### `POST /api/events` - Create a new event
+
+**Body**
+
+- `startdate` _{string}_ - Start date of the event formatted as "yyyy-mm-dd"
+- `enddate` _{string}_ - End date of the event formatted as "yyyy-mm-dd"
+- `event` _{int}_ - Event flag, 0 when event is still a request and 1 when responses are closed and event moves to events page
+- `location` _{string}_ - The location of the event
+- `description` _{string}_ - The description of the items the coordinator is looking for to be donated
+- `contact` _{string}_ - The contact method (phone or email) by which the coordinator wants to setup donation drop offs
+- `donationdate` _{string}_ - Last date for accepting donations, formatted as "yyyy-mm-dd"
+
+**Returns**
+
+- A success message
+- A object with the created event
+
+**Throws**
+
+- `403` if the user is not logged in
+- `400` if the any of the event content is empty
+- `404` if the `startdate` or `enddate` are invalid, or is `enddate` is distinctly earlier than `startdate`
+- `404` if the `donationdate` 
+- `404` if the `location` state abbreviation does not exist
+
+#### `DELETE /api/events/:eventId?` - Delete an existing event
+
+**Returns**
+
+- A success message
+
+**Throws**
+
+- `403` if the user is not logged in
+- `403` if the user is not the coordinator of the event
+- `404` if the eventId is invalid
+
+#### `PUT /api/events/:eventId?` - Update an existing event
+
+**Body**
+
+- `startdate` _{string}_ - Start date of the event formatted as "yyyy-mm-dd"
+- `enddate` _{string}_ - End date of the event formatted as "yyyy-mm-dd"
+- `location` _{string}_ - The location of the event
+- `description` _{string}_ - The description of the items the coordinator is looking for to be donated
+- `contact` _{string}_ - The contact method (phone or email) by which the coordinator wants to setup donation drop offs
+- `donationdate` _{string}_ - Last date for accepting donations, formatted as "yyyy-mm-dd"
+
+**Returns**
+
+- A success message
+- An object with the updated event
+
+**Throws**
+
+- `400` if `event` is empty
+- `403` if the user is not logged in
+- `403` if the user is not the coordinator of the event
+- `404` if the eventId is invalid
+
+#### `PUT /api/events/:eventId?` - Push event from requests to events page
+
+**Body**
+
+- `event` _{int}_ - Event flag, 0 when event is still a request and 1 when responses are closed and event moves to events page
+
+**Returns**
+
+- A success message
+- An object with the updated event
+
+**Throws**
+
+- `400` if `event` is empty
+- `403` if the user is not logged in
+- `403` if the user is not the coordinator of the event
+- `404` if the eventId is invalid
