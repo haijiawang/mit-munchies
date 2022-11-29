@@ -1,8 +1,8 @@
-import type {NextFunction, Request, Response} from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
 import EventCollection from './collection';
 import * as userValidator from '../user/middleware';
-import * as eventValidator from './middleware';
+// import * as eventValidator from './middleware';
 import * as util from './util';
 
 const router = express.Router();
@@ -80,7 +80,7 @@ router.get(
     // eventValidator.isValidDates; 
 
     // Events by date
-    let end = (req.query.endrange !== undefined) ? req.query.endrange: null;
+    let end = (req.query.endrange !== undefined) ? req.query.endrange : null;
     const dateEvents = await EventCollection.findAllByDateRange(req.query.startrange as string, end as string);
     const response = dateEvents.map(util.constructEventResponse);
     res.status(200).json(response);
@@ -191,7 +191,7 @@ router.delete(
  * @throws {403} - if the user is not logged in or not the coordinator of the event
  * @throws {404} - If the eventId is not valid
  */
- router.patch(
+router.patch(
   '/:eventId?',
   [
     userValidator.isUserLoggedIn
@@ -229,4 +229,4 @@ router.delete(
   },
 );
 
-export {router as eventRouter};
+export { router as eventRouter };
