@@ -12,14 +12,15 @@ class ResponseCollection {
         return ResponseModel.find({ author: aId }).sort({ dateCreated: -1 }).populate('author');
     }
 
-    static async addOne(responseDetails: { author: string, contact: string, description: string }): Promise<HydratedDocument<Response>> {
+    static async addOne(responseDetails: { author: string, contact: string, description: string, requestId: string }): Promise<HydratedDocument<Response>> {
         const date = new Date();
-        const { author, contact, description } = responseDetails;
+        const { author, contact, description, requestId } = responseDetails;
         const response = new ResponseModel({
             author,
             contact: contact,
             description: description,
-            dateCreated: date
+            requestId: requestId,
+            dateCreated: date,
         });
         await response.save();
         return response.populate('author');
