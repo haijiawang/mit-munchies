@@ -203,7 +203,7 @@ This renders the `index.html` file.
 
 - `400` if `startrange` is not given (if `endrange` is not given, assume no end date)
 - `404` if `startrange` or `endrange` is invalid
-- `404` if `startrange` is past the current date
+- `404` if `endrange` exists and is earlier the current date
 
 #### `GET /api/events?location=LOCATION` - Get events by event location
 

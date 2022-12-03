@@ -80,7 +80,8 @@ class EventCollection {
    * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
    */
    static async findAllByLocation(location: string): Promise<Array<HydratedDocument<Event>>> {
-    return EventModel.find({location: location}).sort({startdate: -1}).populate('coordinatorId');
+    location.replace(/\s+/g, ''); // remove all whitespace
+    return EventModel.find({location: location.toUpperCase()}).sort({startdate: -1}).populate('coordinatorId'); // standardize all uppercase
   }
 
   /**
@@ -92,7 +93,7 @@ class EventCollection {
    */
    static async findAllByDateRange(startrange: string, endrange: string = null): Promise<Array<HydratedDocument<Event>>> {
     const start = new Date(startrange);
-    if(endrange!==null){
+    if(endrange!==null && endrange!==(null as string)){
       const end = new Date(endrange);
       return EventModel.find({$or: [{startdate:{$gte:start, $lt:end}}, {enddate:{$gte:start, $lt:end}}]}).sort({startdate: -1}).populate('coordinatorId'); // TODO: Double check date range
     }

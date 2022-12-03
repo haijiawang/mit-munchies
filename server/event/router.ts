@@ -2,7 +2,7 @@ import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
 import EventCollection from './collection';
 import * as userValidator from '../user/middleware';
-// import * as eventValidator from './middleware';
+import * as eventValidator from './middleware';
 import * as util from './util';
 
 const router = express.Router();
@@ -65,7 +65,7 @@ router.get(
       next();
       return;
     }
-    // eventValidator.isAccountExists; 
+    eventValidator.isCoordinatorExists; 
 
     // Events by coordinator
     const coordinatorEvents = await EventCollection.findAllByUsername(req.query.coordinator as string);
@@ -77,7 +77,7 @@ router.get(
       next();
       return;
     }
-    // eventValidator.isValidDates; 
+    eventValidator.isValidDates; 
 
     // Events by date
     let end = (req.query.endrange !== undefined) ? req.query.endrange : null;
@@ -90,7 +90,7 @@ router.get(
   ],
   // Events by location
   async (req: Request, res: Response) => {
-    // eventValidator.isValidLocation; 
+    eventValidator.isValidLocation; 
 
     const locEvents = await EventCollection.findAllByLocation(req.query.location as string);
     const response = locEvents.map(util.constructEventResponse);
@@ -120,10 +120,10 @@ router.post(
   '/',
   [
     userValidator.isUserLoggedIn,
-    // eventValidator.isValidContent, 
-    // eventValidator.isValidDates,
-    // eventValidator.isValidDonationDate,
-    // eventValidaotr.isValidLocation
+    eventValidator.isValidContent, 
+    eventValidator.isValidDates,
+    eventValidator.isValidDonationDate,
+    eventValidator.isValidLocation
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
@@ -151,8 +151,8 @@ router.delete(
   '/:eventId?',
   [
     userValidator.isUserLoggedIn,
-    // eventValidator.isEventExists, 
-    // eventValidator.isValidCoordinator 
+    eventValidator.isEventExists, 
+    eventValidator.isValidCoordinator 
   ],
   async (req: Request, res: Response) => {
     await EventCollection.deleteOne(req.params.eventId);
@@ -194,7 +194,8 @@ router.delete(
 router.patch(
   '/:eventId?',
   [
-    userValidator.isUserLoggedIn
+    userValidator.isUserLoggedIn,
+    eventValidator.isValidCoordinator
   ],
   async (req: Request, res: Response, next: NextFunction) => {
     if (req.body.event !== undefined) {
@@ -202,10 +203,10 @@ router.patch(
       return;
     }
 
-    // eventValidator.isValidContent; 
-    // eventValidator.isValidDates;
-    // eventValidator.isValidDonationDate;
-    // eventValidaotr.isValidLocation;
+    eventValidator.isValidContent; 
+    eventValidator.isValidDates;
+    eventValidator.isValidDonationDate;
+    eventValidator.isValidLocation;
 
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const event = await EventCollection.updateOne(userId, req.body.description, req.body.startdate, req.body.enddate,
@@ -217,7 +218,7 @@ router.patch(
     });
   },
   async (req: Request, res: Response) => {
-    // eventValidator.isValidEventFlag; 
+    eventValidator.isValidEventFlag; 
 
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const event = await EventCollection.updateEventOne(userId, req.body.event);
