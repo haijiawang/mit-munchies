@@ -20,14 +20,16 @@ class RequestCollection {
    * @param {string} description - The description of the request
    * @return {Promise<HydratedDocument<Request>>} - The newly created Request
    */
-  static async addOne(requestDetails: {author: string, contact: string, description: string}): Promise<HydratedDocument<Request>> {
+  static async addOne(requestDetails: {author: string, contact: string, description: string, color: string, size: string}): Promise<HydratedDocument<Request>> {
     const date = new Date();
-    const {author, contact, description} = requestDetails;
+    const {author, contact, description, color, size} = requestDetails;
     const request = new RequestModel({
       author,
       contact: contact,
       description: description,
-      dateCreated: date
+      dateCreated: date,
+      color: color,
+      size: size,
     });
     await request.save(); // Saves freet to MongoDB
     return request.populate('author'); //TODO: SHOULD I CHANGE THIS TO AUTHOR?
@@ -62,6 +64,26 @@ class RequestCollection {
   static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Request>>> {
     const author = await UserCollection.findOneByUsername(username);
     return RequestModel.find({author: author._id}).sort({dateCreated: -1}).populate('author');
+  }
+
+  /**
+   * Get all the requests in a given color
+   *
+   * @param {string} color - The color of the items
+   * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests with the specified color
+   */
+  static async findAllByColor(color: string): Promise<Array<HydratedDocument<Request>>> {
+    return RequestModel.find({color:color}).sort({dateCreated: -1}).populate('author');
+  }
+
+  /**
+   * Get all the requests in a given size
+   *
+   * @param {string} size - The color of the items
+   * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests with the specified color
+   */
+  static async findAllBySize(size: string): Promise<Array<HydratedDocument<Request>>> {
+    return RequestModel.find({size:size}).sort({dateCreated: -1}).populate('author');
   }
 
   /** //TODO: UPDATE THIS

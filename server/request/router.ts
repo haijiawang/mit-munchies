@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from 'express';
+import type {NextFunction, Request, Response} from 'express';
 import express from 'express';
 import RequestCollection from './collection';
 import * as userValidator from '../user/middleware';
@@ -26,26 +26,64 @@ const router = express.Router();
  *
  */
 router.get(
-  '/',
-  async (req: Request, res: Response, next: NextFunction) => {
-    // Check if author query parameter was supplied
-    if (req.query.author !== undefined) {
-      next();
-      return;
-    }
+    '/',
+    async (req: Request, res: Response, next: NextFunction) => {
+        // Check if author query parameter was supplied
+        if (req.query.author !== undefined) {
+            next();
+            return;
+        }
 
-    const allRequests = await RequestCollection.findAll();
-    const response = allRequests.map(util.constructRequestResponse);
-    res.status(200).json(response);
-  },
-  [
-    userValidator.isAuthorExists
-  ],
-  async (req: Request, res: Response) => {
-    const authorRequests = await RequestCollection.findAllByUsername(req.query.author as string);
-    const response = authorRequests.map(util.constructRequestResponse);
-    res.status(200).json(response);
-  }
+        const allRequests = await RequestCollection.findAll();
+        const response = allRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    },
+    [
+        userValidator.isAuthorExists
+    ],
+    async (req: Request, res: Response) => {
+        const authorRequests = await RequestCollection.findAllByUsername(req.query.author as string);
+        const response = authorRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    }
+);
+
+/**
+ * Get request by color
+ *
+ * @name GET /api/requests?color=color
+ *
+ * @return {FreetResponse[]} - An array of freets created by user with username, author
+ * @throws {400} - If author is not given
+ * @throws {404} - If no user has given author
+ *
+ */
+router.get(
+    '/',
+    async (req: Request, res: Response) => {
+        const allRequests = await RequestCollection.findAllByColor(req.body.color);
+        const response = allRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    }
+);
+
+/**
+ * Get request by size
+ *
+ * @name GET /api/requests?color=color
+ *
+ * @return {FreetResponse[]} - An array of freets created by user with username, author
+ * @throws {400} - If author is not given
+ * @throws {404} - If no user has given author
+ *
+ */
+router.get(
+    '/',
+    async (req: Request, res: Response) => {
+        const allRequests = await RequestCollection.findAllBySize(req.body.size);
+        const response = allRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    }
 );
 
 /**
@@ -60,20 +98,26 @@ router.get(
  * @throws {413} - If the freet content is more than 140 characters long
  */
 router.post(
-  '/',
-  [
-    userValidator.isUserLoggedIn,
-    requestValidator.isValidRequestContent
-  ],
-  async (req: Request, res: Response) => {
-    const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const request = await RequestCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description });
+    '/',
+    [
+        userValidator.isUserLoggedIn,
+        requestValidator.isValidRequestContent
+    ],
+    async (req: Request, res: Response) => {
+        const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
+        const request = await RequestCollection.addOne({
+            author: userId,
+            contact: req.body.contact,
+            description: req.body.description,
+            color: req.body.color,
+            size: req.body.size
+        });
 
-    res.status(201).json({
-      message: 'Your request was created successfully.',
-      request: util.constructRequestResponse(request)
-    });
-  }
+        res.status(201).json({
+            message: 'Your request was created successfully.',
+            request: util.constructRequestResponse(request)
+        });
+    }
 );
 
 /**
@@ -87,18 +131,18 @@ router.post(
  * @throws {404} - If the freetId is not valid
  */
 router.delete(
-  '/:requestId?',
-  [
-    userValidator.isUserLoggedIn,
-    requestValidator.isRequestExists,
-    requestValidator.isValidRequestModifier
-  ],
-  async (req: Request, res: Response) => {
-    await RequestCollection.deleteOne(req.params.requestId);
-    res.status(200).json({
-      message: 'Your request was deleted successfully.'
-    });
-  }
+    '/:requestId?',
+    [
+        userValidator.isUserLoggedIn,
+        requestValidator.isRequestExists,
+        requestValidator.isValidRequestModifier
+    ],
+    async (req: Request, res: Response) => {
+        await RequestCollection.deleteOne(req.params.requestId);
+        res.status(200).json({
+            message: 'Your request was deleted successfully.'
+        });
+    }
 );
 
 /**
@@ -115,20 +159,20 @@ router.delete(
  * @throws {413} - If the freet content is more than 140 characters long
  */
 router.patch(
-  '/:requestId?',
-  [
-    userValidator.isUserLoggedIn,
-    requestValidator.isRequestExists,
-    requestValidator.isValidRequestModifier,
-    requestValidator.isValidRequestContent
-  ],
-  async (req: Request, res: Response) => {
-    const request = await RequestCollection.updateOne(req.params.freetId, req.body.content);
-    res.status(200).json({
-      message: 'Your request was updated successfully.',
-      request: util.constructRequestResponse(request)
-    });
-  }
+    '/:requestId?',
+    [
+        userValidator.isUserLoggedIn,
+        requestValidator.isRequestExists,
+        requestValidator.isValidRequestModifier,
+        requestValidator.isValidRequestContent
+    ],
+    async (req: Request, res: Response) => {
+        const request = await RequestCollection.updateOne(req.params.freetId, req.body.content);
+        res.status(200).json({
+            message: 'Your request was updated successfully.',
+            request: util.constructRequestResponse(request)
+        });
+    }
 );
 
-export { router as requestRouter };
+export {router as requestRouter};
