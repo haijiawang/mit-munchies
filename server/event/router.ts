@@ -77,7 +77,7 @@ router.get(
       next();
       return;
     }
-    eventValidator.isValidDates; 
+    eventValidator.isValidDatesQuery; 
 
     // Events by date
     let end = (req.query.endrange !== undefined) ? req.query.endrange : null;
@@ -121,7 +121,7 @@ router.post(
   [
     userValidator.isUserLoggedIn,
     eventValidator.isValidContent, 
-    eventValidator.isValidDates,
+    eventValidator.isValidDatesBody,
     eventValidator.isValidDonationDate,
     eventValidator.isValidLocation
   ],
@@ -204,7 +204,7 @@ router.patch(
     }
 
     eventValidator.isValidContent; 
-    eventValidator.isValidDates;
+    eventValidator.isValidDatesBody;
     eventValidator.isValidDonationDate;
     eventValidator.isValidLocation;
 

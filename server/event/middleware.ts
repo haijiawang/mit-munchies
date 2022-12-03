@@ -32,8 +32,7 @@ const states = new Set<string>([ 'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT',
 /**
  * Checks if the start and end dates of an event in req.query are valid. 
  */
- const isValidDates = async (req: Request, res: Response, next: NextFunction) => {
-  // do for query AND body
+ const isValidDatesQuery = async (req: Request, res: Response, next: NextFunction) => {
   if(!req.query.startrange){
     res.status(400).json({
       error: `No start date provided for finding events.`
@@ -68,6 +67,52 @@ const states = new Set<string>([ 'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT',
     if (end.getTime() < start.getTime()){ // is end date earlier than start date
       res.status(404).json({
         error: `End date ${req.query.endrange} is earlier than start date ${req.query.startrange}.`
+      });
+      return;
+    }
+  }
+
+  next();
+};
+
+/**
+ * Checks if the start and end dates of an event in req.body are valid. 
+ */
+ const isValidDatesBody = async (req: Request, res: Response, next: NextFunction) => {
+  if(!req.body.startrange){
+    res.status(400).json({
+      error: `No start date provided for finding events.`
+    });
+    return;
+  }
+
+  const start = new Date(req.body.startrange.toString());
+  if (!(start instanceof Date) || isNaN(start.getTime())){ // is startrange valid
+    res.status(404).json({
+      error: `Start date ${req.body.startrange} for event is not a valid date.`
+    });
+    return;
+  }
+
+  if(req.body.endrange!==undefined && req.body.endrange!==(null as string)){
+    const end = new Date(req.body.endrange.toString());
+    if (!(end instanceof Date) || isNaN(end.getTime())){ // is endrange valid
+      res.status(404).json({
+        error: `End date ${req.body.endrange} for event is not a valid date.`
+      });
+      return;
+    }
+
+    if (end.getTime() < new Date().getTime()){ // has end date already passed
+      res.status(404).json({
+        error: `End date ${req.body.endrange} is earlier than today's date ${new Date().toString()}.`
+      });
+      return;
+    }
+
+    if (end.getTime() < start.getTime()){ // is end date earlier than start date
+      res.status(404).json({
+        error: `End date ${req.body.endrange} is earlier than start date ${req.body.startrange}.`
       });
       return;
     }
@@ -194,7 +239,8 @@ const isValidDonationDate = async (req: Request, res: Response, next: NextFuncti
 
 export {
   isCoordinatorExists,
-  isValidDates,
+  isValidDatesQuery,
+  isValidDatesBody,
   isValidLocation,
   isValidContent,
   isValidDonationDate,
