@@ -14,6 +14,8 @@ export type Request = {
   contact: string;
   description: string;
   dateCreated: Date;
+  color: string;
+  size: string;
 };
 
 export type PopulatedRequest = {
@@ -22,6 +24,8 @@ export type PopulatedRequest = {
   contact: string;
   description: string;
   dateCreated: Date;
+  color: string;
+  size: string;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -50,6 +54,16 @@ const RequestSchema = new Schema<Request>({
   // The date the freet was created
   dateCreated: {
     type: Date,
+    required: true
+  },
+  // The color of the item
+  color: {
+    type: String,
+    required: true
+  },
+  // The size of the item
+  size: {
+    type: String,
     required: true
   }
 });

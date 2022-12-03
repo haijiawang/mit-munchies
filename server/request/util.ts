@@ -11,6 +11,8 @@ type RequestResponse = {
   contact: string;
   description: string;
   dateCreated: string;
+  color: string;
+  size: string;
 };
 
 /**
@@ -42,7 +44,9 @@ const constructRequestResponse = (request: HydratedDocument<Request>): RequestRe
     author: username,
     contact: requestCopy.contact,
     description: requestCopy.description,
-    dateCreated: formatDate(requestCopy.dateCreated)
+    dateCreated: formatDate(requestCopy.dateCreated),
+    color: requestCopy.color,
+    size: requestCopy.size,
   };
 };
 
