@@ -5,10 +5,58 @@
   <article
     class="request"
   >
-    <header>
-      <h3 class="author">
-        @{{ request.author }}
-      </h3>
+    <h3 class="author">
+      @{{ request.author }}
+    </h3>
+    <textarea
+        v-if="editing"
+        class="contact"
+        :value="draftContact"
+        @input="draftContact = $event.target.value"
+    />
+    <p
+        v-else
+        class="contact"
+    >
+      Contact me: {{ request.contact }}
+    </p>
+    <textarea
+        v-if="editing"
+        class="description"
+        :value="draftDescription"
+        @input="draftDescription = $event.target.value"
+    />
+    <p
+        v-else
+        class="description"
+    >
+      Request Description: {{ request.description }}
+    </p>
+    <textarea
+        v-if="editing"
+        class="color"
+        :value="draftColor"
+        @input="draftColor = $event.target.value"
+    />
+    <p
+        v-else
+        class="color"
+    >
+      Color: {{ request.color }}
+    </p>
+    <textarea
+        v-if="editing"
+        class="size"
+        :value="draftSize"
+        @input="draftSize = $event.target.value"
+    />
+    <p
+        v-else
+        class="size"
+    >
+      Size: {{ request.size }}
+    </p>
+    <div>
       <div
         v-if="$store.state.username === request.author"
         class="actions"
@@ -35,31 +83,7 @@
           🗑️ Delete
         </button>
       </div>
-    </header>
-    <textarea
-      v-if="editing"
-      class="contact"
-      :value="draftcontact"
-      @input="draftcontact = $event.target.value"
-    />
-    <p
-      v-else
-      class="contact"
-    >
-      Contact me: {{ request.contact }}
-    </p>
-    <textarea
-      v-if="editing"
-      class="description"
-      :value="draftdescription"
-      @input="draftdescription = $event.target.value"
-    />
-    <p
-      v-else
-      class="description"
-    >
-      Request Description: {{ request.description }}
-    </p>
+    </div>
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -85,8 +109,8 @@ export default {
   data() {
     return {
       editing: false, // Whether or not this request is in edit mode
-      draftcontact: this.request.contact, // Potentially-new contact for this request
-      draftdescription: this.request.description, // Potentially-new description for this request
+      draftContact: this.request.contact, // Potentially-new contact for this request
+      draftDescription: this.request.description, // Potentially-new description for this request
       alerts: {} // Displays success/error messages encountered during request modification
     };
   },
@@ -96,16 +120,16 @@ export default {
        * Enables edit mode on this request.
        */
       this.editing = true; // Keeps track of if a request is being edited
-      this.draftcontact = this.request.contact; // The contact of our current "draft" while being edited
-      this.draftdescription = this.request.description; // The description of our current "draft" while being edited
+      this.draftContact = this.request.contact; // The contact of our current "draft" while being edited
+      this.draftDescription = this.request.description; // The description of our current "draft" while being edited
     },
     stopEditing() {
       /**
        * Disables edit mode on this request.
        */
       this.editing = false;
-      this.draftcontact = this.request.contact;
-      this.draftdescription = this.request.description; 
+      this.draftContact = this.request.contact;
+      this.draftDescription = this.request.description;
     },
     deleteRequest() {
       /**
@@ -125,7 +149,7 @@ export default {
       /**
        * Updates request to have the submitted draft content.
        */
-      if ((this.request.contact === this.draftcontact) && (this.request.description === this.draftdescription)){
+      if ((this.request.contact === this.draftContact) && (this.request.description === this.draftDescription)){
         const error = 'Error: Edited request content should be different than current request content.';
         this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
@@ -135,7 +159,7 @@ export default {
       const params = {
         method: 'PATCH',
         message: 'Successfully edited request!',
-        body: JSON.stringify({contact: this.draftcontact, description: this.draftdescription}),
+        body: JSON.stringify({contact: this.draftContact, description: this.draftDescription}),
         callback: () => {
           this.$set(this.alerts, params.message, 'success');
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);

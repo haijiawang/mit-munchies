@@ -13,7 +13,9 @@ export default {
       hasBody: true,
       fields: [
         {id: 'contact', label: 'Contact', value: ''},
-        {id: 'description', label: 'Description', value: ''}
+        {id: 'description', label: 'Description', value: ''},
+        {id: 'color', label: 'Color', value: ''},
+        {id: 'size', label: 'Size', value: ''}
       ],
       title: 'Create a request',
       refreshRequests: true,
