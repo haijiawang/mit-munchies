@@ -1,11 +1,11 @@
 <!-- Form for getting events (all, from user for now) (inline style) -->
 
 <script>
-import InlineForm from '@/components/common/InlineForm.vue';
+import InlineFormEvent from '@/components/common/InlineFormEvent.vue';
 
 export default {
   name: 'GetEventsForm',
-  mixins: [InlineForm],
+  mixins: [InlineFormEvent],
   data() {
     return {coordvalue: this.$store.state.eventFilterCoord, startvalue: this.$store.state.eventFilterStartDate, 
     endvalue: this.$store.state.eventFilterEndDate, locvalue: this.$store.state.eventFilterLoc};

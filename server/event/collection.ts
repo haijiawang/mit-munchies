@@ -27,6 +27,7 @@ class EventCollection {
   static async addOne(coordinatorId: Types.ObjectId | string, description: string, startrange: string,
     endrange: string, donationdate: string, location: string, contact: string): Promise<HydratedDocument<Event>> {
     const date = new Date();
+    location.replace(/\s+/g, ''); // remove all whitespace
     const event = new EventModel({
       coordinatorId,
       dateCreated: date,
@@ -34,7 +35,7 @@ class EventCollection {
       startdate: new Date(startrange),
       enddate: new Date(endrange),
       donationdate: new Date(donationdate),
-      location,
+      location: location.toUpperCase(),
       event: 0,
       contact
     });

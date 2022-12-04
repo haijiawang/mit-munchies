@@ -6,10 +6,10 @@
   >
     <header>
       <h3 class="coordinator">
-        @{{ event.coordinator }}
+        @{{ event.coordinatorId }}
       </h3>
       <div
-        v-if="$store.state.username === event.coordinator"
+        v-if="$store.state.username === event.coordinatorId"
         class="actions"
       >
         <button
