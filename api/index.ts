@@ -77,7 +77,7 @@ app.use('/api/freets', freetRouter);
 app.use('/api/requests', requestRouter);
 app.use('/api/responses', responseRouter)
 app.use('/api/events', eventRouter);
-app.use('api/eventResponses', eventResponseRouter);
+app.use('/api/eventResponses', eventResponseRouter);
 
 // Catch all the other routes and display error message
 app.all('*', (req: Request, res: Response) => {

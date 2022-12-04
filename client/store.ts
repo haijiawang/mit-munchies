@@ -16,7 +16,7 @@ const store = new Vuex.Store({
     eventFilterEndDate: null,
     requests: [], // All requests created in the app
     events: [], // All events created in the app
-    responses: [], // All responses to events/requests created in the app
+    eventResponses: [], // All responses to events/requests created in the app
     username: null, // Username of the logged in user
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
   },
@@ -116,7 +116,14 @@ const store = new Vuex.Store({
        }
       const res = await fetch(url).then(async r => r.json());
       state.events = res;
-    }
+    },
+    updateEventResponses(state, eventResponses) {
+      /**
+       * Update the stored events to the provided events.
+       * @param eventResponses - Events to store
+       */
+      state.eventResponses = eventResponses;
+    },
   },
   // Store data across page refreshes, only discard on browser close
   plugins: [createPersistedState()]
