@@ -21,31 +21,31 @@
             <span v-if="$store.state.eventFilterCoord && $store.state.eventFilterStartDate && $store.state.eventFilterEndDate && $store.state.eventFilterLoc">
               by @{{ $store.state.eventFilterCoord }} in {{ $store.state.eventFilterLoc }} between {{ $store.state.eventFilterStartDate }} and {{ $store.state.eventFilterEndDate }}
             </span>
-            <span v-if="$store.state.eventFilterCoord && $store.state.eventFilterStartDate && $store.state.eventFilterEndDate">
+            <span v-else-if="$store.state.eventFilterCoord && $store.state.eventFilterStartDate && $store.state.eventFilterEndDate">
               by @{{ $store.state.eventFilterCoord }} between {{ $store.state.eventFilterStartDate }} and {{ $store.state.eventFilterEndDate }}
             </span>
-            <span v-if="$store.state.eventFilterCoord && $store.state.eventFilterStartDate">
+            <span v-else-if="$store.state.eventFilterCoord && $store.state.eventFilterStartDate">
               by @{{ $store.state.eventFilterCoord }} on or after {{ $store.state.eventFilterStartDate }}
             </span>
-            <span v-if="$store.state.eventFilterStartDate && $store.state.eventFilterEndDate && $store.state.eventFilterLoc">
+            <span v-else-if="$store.state.eventFilterStartDate && $store.state.eventFilterEndDate && $store.state.eventFilterLoc">
               in {{ $store.state.eventFilterLoc }} between {{ $store.state.eventFilterStartDate }} and {{ $store.state.eventFilterEndDate }}
             </span>
-            <span v-if="$store.state.eventFilterStartDate && $store.state.eventFilterLoc">
+            <span v-else-if="$store.state.eventFilterStartDate && $store.state.eventFilterLoc">
               by @{{ $store.state.eventFilterCoord }} in {{ $store.state.eventFilterLoc }} on or after {{ $store.state.eventFilterStartDate }}
             </span>
-            <span v-if="$store.state.eventFilterCoord && $store.state.eventFilterLoc">
+            <span v-else-if="$store.state.eventFilterCoord && $store.state.eventFilterLoc">
               by @{{ $store.state.eventFilterCoord }} in {{ $store.state.eventFilterLoc }}
             </span>
-            <span v-if="$store.state.eventFilterCoord">
+            <span v-else-if="$store.state.eventFilterCoord">
               by @{{ $store.state.eventFilterCoord }}
             </span>
-            <span v-if="$store.state.eventFilterStartDate && $store.state.eventFilterEndDate">
+            <span v-else-if="$store.state.eventFilterStartDate && $store.state.eventFilterEndDate">
               between {{ $store.state.eventFilterStartDate }} and {{ $store.state.eventFilterEndDate }}
             </span>
-            <span v-if="$store.state.eventFilterStartDate">
+            <span v-else-if="$store.state.eventFilterStartDate">
               on or after {{ $store.state.eventFilterStartDate }}
             </span>   
-            <span v-if="$store.state.eventFilterLoc">
+            <span v-else-if="$store.state.eventFilterLoc">
               in {{ $store.state.eventFilterLoc }}
             </span>        
           </h2>

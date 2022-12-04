@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import RequestsPage from './components/Request/RequestsPage.vue';
 import EventsPage from './components/Event/EventsPage.vue';
 import AccountPage from './components/Account/AccountPage.vue';
+import ProfilePage from './components/Profile/ProfilePage.vue';
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
 
@@ -14,6 +15,7 @@ const routes = [
   {path: '/requests', name: 'Requests', component: RequestsPage}, //?
   {path: '/events', name: 'Events', component: EventsPage},
   {path: '/account', name: 'Account', component: AccountPage},
+  {path: '/profile', name: 'Profile', component: ProfilePage},
   {path: '/login', name: 'Login', component: LoginPage},
   {path: '*', name: 'Not Found', component: NotFound}
 ];
