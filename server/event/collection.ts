@@ -85,6 +85,75 @@ class EventCollection {
   }
 
   /**
+   * Get all the events in a given location and within a given date range
+   *
+   * @param {string} startrange - The start date of the event date range
+   * @param {string} endrange - The end date of the event date range
+   * @param {string} location - TThe location of the events (formatted as "CITY,ST")
+   * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
+   */
+   static async findAllByDateAndLocation(startrange: string, endrange: string = null, location: string): Promise<Array<HydratedDocument<Event>>> {
+    location.replace(/\s+/g, ''); // remove all whitespace
+    const start = new Date(startrange);
+    if(endrange!==null && endrange!==(null as string)){
+      const end = new Date(endrange);
+      return EventModel.find({$and: [{location: location.toUpperCase()}, {$or: [{startdate:{$gte:start, $lt:end}}, {enddate:{$gte:start, $lt:end}}]}]}).sort({startdate: -1}).populate('coordinatorId'); // TODO: Double check date range
+    }
+    return EventModel.find({$and: [{location: location.toUpperCase()}, {startdate: {$gte:start}}]}).sort({startdate: -1}).populate('coordinatorId');
+  }
+
+  /**
+   * Get all the events in a given date range and by a specific coordinator
+   *
+   * @param {string} startrange - The start date of the event date range
+   * @param {string} endrange - The end date of the event date range
+   * @param {string} username - The username of coordinator of the events
+   * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
+   */
+   static async findAllByDateAndCoordinator(startrange: string, endrange: string = null, username: string): Promise<Array<HydratedDocument<Event>>> {
+    const coordinator = await UserCollection.findOneByUsername(username);
+    const start = new Date(startrange);
+    if(endrange!==null && endrange!==(null as string)){
+      const end = new Date(endrange);
+      return EventModel.find({$and: [{coordinatorId: coordinator._id}, {$or: [{startdate:{$gte:start, $lt:end}}, {enddate:{$gte:start, $lt:end}}]}]}).sort({startdate: -1}).populate('coordinatorId'); // TODO: Double check date range
+    }
+    return EventModel.find({startdate: {$gte:start}}).sort({startdate: -1}).populate('coordinatorId');
+  }
+
+  /**
+   * Get all the events in a given location and with a given coordinator
+   *
+   * @param {string} location - TThe location of the events (formatted as "CITY,ST")
+   * @param {string} username - The username of coordinator of the events
+   * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
+   */
+   static async findAllByLocationAndCoordinator(location: string, username: string): Promise<Array<HydratedDocument<Event>>> {
+    location.replace(/\s+/g, ''); // remove all whitespace
+    const coordinator = await UserCollection.findOneByUsername(username);
+    return EventModel.find({$and: [{coordinatorId: coordinator._id}, {location: location.toUpperCase()}]}).sort({startdate: -1}).populate('coordinatorId'); // standardize all uppercase
+  }
+
+  /**
+   * Get all the events in a given location, within a given date range, and by a given coordinator
+   *
+   * @param {string} startrange - The start date of the event date range
+   * @param {string} endrange - The end date of the event date range
+   * @param {string} location - TThe location of the events (formatted as "CITY,ST")
+   * @param {string} username - The username of coordinator of the events
+   * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
+   */
+   static async findAllByAllFilters(startrange: string, endrange: string = null, location: string, username: string): Promise<Array<HydratedDocument<Event>>> {
+    location.replace(/\s+/g, ''); // remove all whitespace
+    const coordinator = await UserCollection.findOneByUsername(username);
+    const start = new Date(startrange);
+    if(endrange!==null && endrange!==(null as string)){
+      const end = new Date(endrange);
+      return EventModel.find({$and: [{location: location.toUpperCase()}, {coordinatorId: coordinator._id}, {$or: [{startdate:{$gte:start, $lt:end}}, {enddate:{$gte:start, $lt:end}}]}]}).sort({startdate: -1}).populate('coordinatorId'); // TODO: Double check date range
+    }
+    return EventModel.find({$and: [{location: location.toUpperCase()}, {coordinatorId: coordinator._id}, {startdate: {$gte:start}}]}).sort({startdate: -1}).populate('coordinatorId');
+  }
+
+  /**
    * Get all the events in a given location
    *
    * @param {string} startrange - The start date of the event date range
