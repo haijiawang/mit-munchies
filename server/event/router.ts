@@ -67,7 +67,7 @@ router.get(
     }
     eventValidator.isCoordinatorExists; 
     eventValidator.isValidDatesQuery;
-    eventValidator.isValidLocation;
+    eventValidator.isValidLocationQuery;
 
     // Filter by location, date, and coordinator
     let end = (req.query.endrange !== undefined) ? req.query.endrange : null;
@@ -82,7 +82,7 @@ router.get(
       return;
     }
     eventValidator.isCoordinatorExists; 
-    eventValidator.isValidLocation;
+    eventValidator.isValidLocationQuery;
 
     // Filter by location and coordinator
     const events = await EventCollection.findAllByLocationAndCoordinator(req.query.location as string, req.query.coordinator as string);
@@ -108,7 +108,7 @@ router.get(
       next();
       return;
     }
-    eventValidator.isValidLocation; 
+    eventValidator.isValidLocationQuery; 
     eventValidator.isValidDatesQuery;
 
     // Filter by location and dates
@@ -144,7 +144,7 @@ router.get(
   },
   // Events by location
   async (req: Request, res: Response) => {
-    eventValidator.isValidLocation; 
+    eventValidator.isValidLocationQuery; 
 
     const locEvents = await EventCollection.findAllByLocation(req.query.location as string);
     const response = locEvents.map(util.constructEventResponse);
@@ -177,12 +177,11 @@ router.post(
     eventValidator.isValidContent, 
     eventValidator.isValidDatesBody,
     eventValidator.isValidDonationDate,
-    eventValidator.isValidLocation
+    eventValidator.isValidLocationBody
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const event = await EventCollection.addOne(userId, req.body.description, req.body.startdate, req.body.enddate,
-      req.body.donactiondate, req.body.location, req.body.contact);
+    const event = await EventCollection.addOne(userId, req.body.description, req.body.startrange, req.body.endrange, req.body.donationdate, req.body.location, req.body.contact);
 
     res.status(201).json({
       message: 'Your event was created successfully.',
@@ -260,7 +259,7 @@ router.patch(
     eventValidator.isValidContent; 
     eventValidator.isValidDatesBody;
     eventValidator.isValidDonationDate;
-    eventValidator.isValidLocation;
+    eventValidator.isValidLocationBody;
 
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const event = await EventCollection.updateOne(userId, req.body.description, req.body.startdate, req.body.enddate,

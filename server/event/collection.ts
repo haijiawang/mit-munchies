@@ -17,22 +17,22 @@ class EventCollection {
    *
    * @param {string} coordinatorId - The id of the coordinator of the event
    * @param {string} description - The description of the event request
-   * @param {string} startdate - The start date of the event
-   * @param {string} enddate - The end date of the event
+   * @param {string} startrange - The start date of the event
+   * @param {string} endrange - The end date of the event
    * @param {string} donationdate - The last day for accepting donations
    * @param {string} location - The location of the event
    * @param {string} contact - The preferred contact information for the event
    * @return {Promise<HydratedDocument<Event>>} - The newly created event
    */
-  static async addOne(coordinatorId: Types.ObjectId | string, description: string, startdate: string,
-    enddate: string, donationdate: string, location: string, contact: string): Promise<HydratedDocument<Event>> {
+  static async addOne(coordinatorId: Types.ObjectId | string, description: string, startrange: string,
+    endrange: string, donationdate: string, location: string, contact: string): Promise<HydratedDocument<Event>> {
     const date = new Date();
     const event = new EventModel({
       coordinatorId,
       dateCreated: date,
       description,
-      startdate: new Date(startdate),
-      enddate: new Date(enddate),
+      startdate: new Date(startrange),
+      enddate: new Date(endrange),
       donationdate: new Date(donationdate),
       location,
       event: 0,

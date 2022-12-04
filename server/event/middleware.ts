@@ -35,13 +35,15 @@ const states = new Set<string>([ 'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT',
  const isValidDatesQuery = async (req: Request, res: Response, next: NextFunction) => {
   if(!req.query.startrange){
     res.status(400).json({
-      error: `No start date provided for finding events.`
+      error: `No start date provided.`
     });
     return;
   }
 
-  const start = new Date(req.query.startrange.toString());
-  if (!(start instanceof Date) || isNaN(start.getTime())){ // is startrange valid
+  try{
+    var start = new Date(req.query.startrange as string);
+  }
+  catch{ // is startrange valid
     res.status(404).json({
       error: `Start date ${req.query.startrange} for event is not a valid date.`
     });
@@ -49,8 +51,10 @@ const states = new Set<string>([ 'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT',
   }
 
   if(req.query.endrange!==undefined && req.query.endrange!==(null as string)){
-    const end = new Date(req.query.endrange.toString());
-    if (!(end instanceof Date) || isNaN(end.getTime())){ // is endrange valid
+    try{
+      var end = new Date(req.query.endrange as string);
+    }
+    catch{ // is endrange valid
       res.status(404).json({
         error: `End date ${req.query.endrange} for event is not a valid date.`
       });
@@ -81,13 +85,15 @@ const states = new Set<string>([ 'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT',
  const isValidDatesBody = async (req: Request, res: Response, next: NextFunction) => {
   if(!req.body.startrange){
     res.status(400).json({
-      error: `No start date provided for finding events.`
+      error: `No start date provided.`
     });
     return;
   }
 
-  const start = new Date(req.body.startrange.toString());
-  if (!(start instanceof Date) || isNaN(start.getTime())){ // is startrange valid
+  try{
+    var start = new Date(req.body.startrange);
+  }
+  catch{ // is startrange valid
     res.status(404).json({
       error: `Start date ${req.body.startrange} for event is not a valid date.`
     });
@@ -95,8 +101,10 @@ const states = new Set<string>([ 'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT',
   }
 
   if(req.body.endrange!==undefined && req.body.endrange!==(null as string)){
-    const end = new Date(req.body.endrange.toString());
-    if (!(end instanceof Date) || isNaN(end.getTime())){ // is endrange valid
+    try{
+      var end = new Date(req.body.endrange);
+    }
+    catch{ // is endrange valid
       res.status(404).json({
         error: `End date ${req.body.endrange} for event is not a valid date.`
       });
@@ -124,7 +132,7 @@ const states = new Set<string>([ 'AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT',
 /**
  * Checks if the location in req.query for an event is valid. 
  */
-const isValidLocation = async (req: Request, res: Response, next: NextFunction) => {
+const isValidLocationQuery = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.query.location){
     res.status(400).json({
       error: `No event location provided.`
@@ -140,9 +148,38 @@ const isValidLocation = async (req: Request, res: Response, next: NextFunction) 
     return;  
   }
 
-  if (!states.has(st)){
+  if (!states.has(st.trim())){
     res.status(404).json({
-      error: `Location state is not a valid state.`
+      error: `Location state ${st} is not a valid state.`
+    });
+    return;  
+  }
+
+  next();
+};
+
+/**
+ * Checks if the location in req.body for an event is valid. 
+ */
+ const isValidLocationBody = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body.location){
+    res.status(400).json({
+      error: `No event location provided.`
+    });
+    return;  
+  }
+
+  const [city, st] = req.body.location.toString().split(',');
+  if (!city.trim() || !st.trim()){
+    res.status(404).json({
+      error: `Incomplete location details provided.`
+    });
+    return;  
+  }
+
+  if (!states.has(st.trim())){
+    res.status(404).json({
+      error: `Location state ${st} is not a valid state.`
     });
     return;  
   }
@@ -154,10 +191,10 @@ const isValidLocation = async (req: Request, res: Response, next: NextFunction) 
  * Checks if the appropriate fields have been filled in for each required parameter of an event. 
  */
 const isValidContent = (req: Request, res: Response, next: NextFunction) => {
-  const {description, startdate, enddate, donationdate, location, contact} = req.body as {description: string, 
-    startdate: string, enddate: string, donationdate: string, location: string, contact: string};
+  const {description, startrange, endrange, donationdate, location, contact} = req.body as {description: string, 
+    startrange: string, endrange: string, donationdate: string, location: string, contact: string};
 
-  if (!description.trim() || !startdate.trim() || !enddate.trim() || !donationdate.trim() ||
+  if (!description.trim() || !startrange.trim() || !endrange.trim() || !donationdate.trim() ||
   !location.trim() || !contact.trim()) {
     res.status(400).json({
       error: 'Required event information missing.'
@@ -179,7 +216,7 @@ const isValidDonationDate = async (req: Request, res: Response, next: NextFuncti
     return;
   }
 
-  const date = new Date(req.body.donactiondate.toString());
+  const date = new Date(req.body.donationdate.toString());
   if (!(date instanceof Date) || isNaN(date.getTime())){ 
     res.status(404).json({
       error: `Donation date ${req.body.donationdate} for event is not a valid date.`
@@ -241,7 +278,8 @@ export {
   isCoordinatorExists,
   isValidDatesQuery,
   isValidDatesBody,
-  isValidLocation,
+  isValidLocationQuery,
+  isValidLocationBody,
   isValidContent,
   isValidDonationDate,
   isEventExists,

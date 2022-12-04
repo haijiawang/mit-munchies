@@ -14,6 +14,17 @@
         Home
       </router-link>
       <router-link
+        to="/requests"
+      >
+        Requests
+      </router-link>
+
+      <router-link
+        to="/events"
+      >
+        Events
+      </router-link>
+      <router-link
         v-if="$store.state.username"
         to="/account"
       >

@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import FreetsPage from './components/Freet/FreetsPage.vue';
+// import FreetsPage from './components/Freet/FreetsPage.vue';
 import RequestsPage from './components/Request/RequestsPage.vue';
+import EventsPage from './components/Event/EventsPage.vue';
 import AccountPage from './components/Account/AccountPage.vue';
 import LoginPage from './components/Login/LoginPage.vue';
 import NotFound from './NotFound.vue';
@@ -10,6 +11,8 @@ Vue.use(VueRouter);
 
 const routes = [
   {path: '/', name: 'Home', component: RequestsPage},
+  {path: '/requests', name: 'Requests', component: RequestsPage}, //?
+  {path: '/events', name: 'Events', component: EventsPage},
   {path: '/account', name: 'Account', component: AccountPage},
   {path: '/login', name: 'Login', component: LoginPage},
   {path: '*', name: 'Not Found', component: NotFound}

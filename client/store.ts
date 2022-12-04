@@ -10,7 +10,13 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     filter: null, // Username to filter shown requests by (null = show all) // TODO: Update for different kinds of filtering
+    eventFilterCoord: null,
+    eventFilterLoc: null,
+    eventFilterStartDate: null,
+    eventFilterEndDate: null,
     requests: [], // All requests created in the app
+    events: [], // All events created in the app
+    responses: [], // All responses to events/requests created in the app
     username: null, // Username of the logged in user
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
   },
@@ -52,6 +58,64 @@ const store = new Vuex.Store({
       const url = state.filter ? `/api/users/${state.filter}/requests` : '/api/requests'; // TODO: Update for different types of filtering
       const res = await fetch(url).then(async r => r.json());
       state.requests = res;
+    },
+    updateEventCoord(state, eventFilterCoord) {
+      /**
+       * Update the stored filter to the provided filter.
+       * @param eventFilterCoord - Events filter
+       */
+      state.eventFilterCoord = eventFilterCoord;
+    },
+    updateEventStart(state, eventFilterStartDate) {
+      /**
+       * Update the stored filter to the provided filter.
+       * @param eventFilterStartDate - Events filter
+       */
+      state.eventFilterStartDate = eventFilterStartDate;
+    },
+    updateEventEnd(state, eventFilterEndDate) {
+      /**
+       * Update the stored filter to the provided filter.
+       * @param eventFilterEndDate - Events filter
+       */
+      state.eventFilterEndDate = eventFilterEndDate;
+    },
+    updateEventLocation(state, eventFilterLoc) {
+      /**
+       * Update the stored filter to the provided filter.
+       * @param eventFilterLoc - Events filter
+       */
+      state.eventFilterLoc = eventFilterLoc;
+    },
+    updateEvents(state, events) {
+      /**
+       * Update the stored events to the provided events.
+       * @param event - Events to store
+       */
+      state.events = events;
+    },
+    async refreshEvents(state) {
+      /**
+       * Request the server for the currently available events.
+       */
+       var url = '/api/events';
+       if (state.eventFilterCoord && state.eventFilterStartDate && state.eventFilterEndDate && state.eventFilterLoc){
+         url = `/api/events?coordinator=${state.eventFilterCoord}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}&location=${state.eventFilterLoc}`;
+       }else if (state.eventFilterCoord && state.eventFilterStartDate){
+         url = `/api/events?coordinator=${state.eventFilterCoord}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
+       }else if (state.eventFilterCoord && state.eventFilterLoc){
+         url = `/api/events?coordinator=${state.eventFilterCoord}&location=${state.eventFilterLoc}`;
+       }else if (state.eventFilterLoc && state.eventFilterStartDate){
+         url = `/api/events?location=${state.eventFilterLoc}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
+       }else if (state.eventFilterCoord){
+         url = `/api/events?coordinator=${state.eventFilterCoord}`;
+       }else if (state.eventFilterStartDate){
+         url = `/api/events?startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
+       }else if (state.eventFilterLoc){
+         url = `/api/events?location=${state.eventFilterLoc}`;
+       }
+      const res = await fetch(url).then(async r => r.json());
+      state.events = res;
     }
   },
   // Store data across page refreshes, only discard on browser close

@@ -125,8 +125,7 @@ export default {
       /**
        * Updates request to have the submitted draft content.
        */
-      if ((this.request.contact === this.draftcontact) && (this.request.description === this.draftdescription)
-        && (this.request.startdate === this.draftstart) && (this.request.enddate === this.draftend)) {
+      if ((this.request.contact === this.draftcontact) && (this.request.description === this.draftdescription)){
         const error = 'Error: Edited request content should be different than current request content.';
         this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
