@@ -24,6 +24,14 @@
       >
         Events
       </router-link>
+
+      <router-link
+        v-if="$store.state.username"
+        to="/profile"
+      >
+        Profile
+      </router-link>
+
       <router-link
         v-if="$store.state.username"
         to="/account"
