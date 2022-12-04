@@ -14,18 +14,18 @@ type ResponseResponse = {
 const formatDate = (date: Date): string => moment(date).format('MMMM Do YYYY, h:mm:ss a');
 
 const constructResponseResponse = (response: HydratedDocument<Response>): ResponseResponse => {
-    const requestCopy: Response = {
+    const responseCopy: Response = {
         ...response.toObject({
             versionKey: false
         })
     }
     return {
-        ...requestCopy,
-        _id: requestCopy._id.toString(),
-        author: requestCopy.author.toString(),
-        requestId: requestCopy.requestId.toString(),
-        contact: requestCopy.contact,
-        description: requestCopy.description,
+        ...responseCopy,
+        _id: responseCopy._id.toString(),
+        author: responseCopy.author.toString(),
+        requestId: responseCopy.requestId.toString(),
+        contact: responseCopy.contact,
+        description: responseCopy.description,
         dateCreated: formatDate(response.dateCreated)
     }
 }
