@@ -251,16 +251,8 @@ export default {
 
 <style scoped>
 .request {
-<<<<<<< HEAD
-    border: 1px solid #111;
-    padding: 20px;
-    position: relative;
-    border-radius: 15px;
-    margin-bottom: 15px;
-=======
   border: 1px solid #111;
   padding: 20px;
   position: relative;
->>>>>>> response-thread
 }
 </style>
