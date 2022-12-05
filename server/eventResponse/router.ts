@@ -20,8 +20,8 @@ const router = express.Router()
     ],
     async (req: Request, res: Response) => {
         const allResponses = await EventResponseCollection.findAll();
-        allResponses.map(util.constructEventResponseResponse);
-        res.status(200).json(allResponses);
+        const response = allResponses.map(util.constructEventResponseResponse);
+        res.status(200).json(response);
     }
 )
 
@@ -36,8 +36,8 @@ router.get(
     ],
     async (req: Request, res: Response) => {
         const allResponses = await EventResponseCollection.findByEventId(req.params.requestId);
-        allResponses.map(util.constructEventResponseResponse);
-        res.status(200).json(allResponses);
+        const response = allResponses.map(util.constructEventResponseResponse);
+        res.status(200).json(response);
     }
 )
 
@@ -52,9 +52,9 @@ router.get(
     ],
     async (req: Request, res: Response) => {
         const allResponses = await EventResponseCollection.findByAuthorId(req.params.userId);
-        allResponses.map(util.constructEventResponseResponse);
+        const response = allResponses.map(util.constructEventResponseResponse);
         res.status(200).json({
-            responses: allResponses
+            responses: response
         });
     }
 )

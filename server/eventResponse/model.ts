@@ -1,10 +1,21 @@
 import type { Types } from 'mongoose';
 import { Schema, model } from 'mongoose';
+import type {User} from '../user/model';
+import type {Event} from '../event/model';
 
 export type EventResponse = {
     _id: Types.ObjectId,
     author: Types.ObjectId,
     eventId: Types.ObjectId,
+    contact: string;
+    description: string;
+    dateCreated: Date;
+};
+
+export type PopulatedEventResponse = {
+    _id: Types.ObjectId,
+    author: User,
+    eventId: Event,
     contact: string;
     description: string;
     dateCreated: Date;
@@ -18,7 +29,8 @@ const EventResponseSchema = new Schema<EventResponse>({
     },
     eventId: {
         type: Schema.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'Event'
     },
     contact: {
         type: String,
