@@ -36,6 +36,9 @@
           begin collection donations.
         </p>
         <p>Happy Thrifting! ☺︎</p>
+        <div class="source">
+          Image Source: https://www.pinterest.com/pin/285415695122035438/
+        </div>
       </div>
     </div>
   </main>
@@ -64,5 +67,9 @@ body {
 }
 .container__text {
   display: inline;
+}
+
+.source {
+  font-size: 10px;
 }
 </style>
