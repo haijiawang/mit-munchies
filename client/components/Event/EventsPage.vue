@@ -66,7 +66,7 @@
         </div>
       </header>
       <section v-if="$store.state.events.length">
-        <EventComponent
+        <EventRequestComponent
           v-for="event in $store.state.events"
           :key="event.id"
           :event="event"
@@ -81,12 +81,13 @@
 
 <script>
 import EventComponent from "@/components/Event/EventComponent.vue";
+import EventRequestComponent from "@/components/Event/EventRequestComponent.vue";
 import CreateEventForm from "@/components/Event/CreateEventForm.vue";
 import GetEventsForm from "@/components/Event/GetEventsForm.vue";
 
 export default {
   name: "EventsPage",
-  components: { EventComponent, GetEventsForm, CreateEventForm },
+  components: { EventComponent, EventRequestComponent, GetEventsForm, CreateEventForm },
   mounted() {
     this.$refs.getEventsForm.submit();
   },
