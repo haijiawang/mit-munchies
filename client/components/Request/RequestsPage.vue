@@ -81,6 +81,7 @@ header > * {
 
 button {
   margin-right: 10px;
+  color: #ffffff;
 }
 
 section .scrollbox {

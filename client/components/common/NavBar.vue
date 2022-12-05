@@ -6,7 +6,7 @@
   <nav>
     <div class="left">
       <h1 class="title">
-        Re-Thrift 🛍
+        re-thrift
       </h1>
     </div>
     <div class="right">
@@ -60,7 +60,7 @@
 <style scoped>
 nav {
     padding: 1vw 2vw;
-    background-color: #ccc;
+    background-color: #E7D2CC;
     display: flex;
     justify-content: space-between;
     align-items: center;
