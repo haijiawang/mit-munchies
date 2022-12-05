@@ -1,6 +1,6 @@
-import type {Types} from 'mongoose';
-import {Schema, model} from 'mongoose';
-import type {User} from '../user/model';
+import type { Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { User } from '../user/model';
 
 /**
  * This file defines the properties stored in an Event
@@ -18,6 +18,7 @@ export type Event = {
   location: string;
   event: number;
   contact: string;
+  images: Array<string>;
 };
 
 export type PopulatedEvent = {
@@ -31,6 +32,7 @@ export type PopulatedEvent = {
   location: string;
   event: number;
   contact: string;
+  images: Array<string>;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -84,6 +86,10 @@ const EventSchema = new Schema<Event>({
     type: String,
     required: false // Not required but users can opt into using their profile contact information (required)
   },
+  images: {
+    type: [String],
+    required: false
+  }
 });
 
 const EventModel = model<Event>('Event', EventSchema);

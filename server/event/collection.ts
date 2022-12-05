@@ -1,5 +1,5 @@
-import type {HydratedDocument, Types} from 'mongoose';
-import type {Event} from './model';
+import type { HydratedDocument, Types } from 'mongoose';
+import type { Event } from './model';
 import EventModel from './model';
 import UserCollection from '../user/collection';
 
@@ -37,7 +37,8 @@ class EventCollection {
       donationdate: new Date(donationdate),
       location: location.toUpperCase(),
       event: 0,
-      contact
+      contact,
+      images: []
     });
     await event.save(); // Saves event to MongoDB
     return event.populate('coordinatorId');
@@ -50,7 +51,7 @@ class EventCollection {
    * @return {Promise<HydratedDocument<Event>> | Promise<null> } - The event with the given eventId, if any
    */
   static async findOne(eventId: Types.ObjectId | string): Promise<HydratedDocument<Event>> {
-    return EventModel.findOne({_id: eventId}).populate('coordinatorId');
+    return EventModel.findOne({ _id: eventId }).populate('coordinatorId');
   }
 
   /**
@@ -60,7 +61,7 @@ class EventCollection {
    */
   static async findAll(): Promise<Array<HydratedDocument<Event>>> {
     // Retrieves events and sorts them by start date (decreasing)
-    return EventModel.find({}).sort({startdate: -1}).populate('coordinatorId');
+    return EventModel.find({}).sort({ startdate: -1 }).populate('coordinatorId');
   }
 
   /**
@@ -71,7 +72,7 @@ class EventCollection {
    */
   static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Event>>> {
     const coordinator = await UserCollection.findOneByUsername(username);
-    return EventModel.find({coordinatorId: coordinator._id}).sort({startdate: -1}).populate('coordinatorId');
+    return EventModel.find({ coordinatorId: coordinator._id }).sort({ startdate: -1 }).populate('coordinatorId');
   }
 
   /**
@@ -80,9 +81,9 @@ class EventCollection {
    * @param {string} location - The location of the events (formatted as "CITY,ST")
    * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
    */
-   static async findAllByLocation(location: string): Promise<Array<HydratedDocument<Event>>> {
+  static async findAllByLocation(location: string): Promise<Array<HydratedDocument<Event>>> {
     location.replace(/\s+/g, ''); // remove all whitespace
-    return EventModel.find({location: location.toUpperCase()}).sort({startdate: -1}).populate('coordinatorId'); // standardize all uppercase
+    return EventModel.find({ location: location.toUpperCase() }).sort({ startdate: -1 }).populate('coordinatorId'); // standardize all uppercase
   }
 
   /**
@@ -93,14 +94,14 @@ class EventCollection {
    * @param {string} location - TThe location of the events (formatted as "CITY,ST")
    * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
    */
-   static async findAllByDateAndLocation(startrange: string, endrange: string = null, location: string): Promise<Array<HydratedDocument<Event>>> {
+  static async findAllByDateAndLocation(startrange: string, endrange: string = null, location: string): Promise<Array<HydratedDocument<Event>>> {
     location.replace(/\s+/g, ''); // remove all whitespace
     const start = new Date(startrange);
-    if(endrange!==null && endrange!==(null as string)){
+    if (endrange !== null && endrange !== (null as string)) {
       const end = new Date(endrange);
-      return EventModel.find({$and: [{location: location.toUpperCase()}, {$or: [{startdate:{$gte:start, $lt:end}}, {enddate:{$gte:start, $lt:end}}]}]}).sort({startdate: -1}).populate('coordinatorId'); // TODO: Double check date range
+      return EventModel.find({ $and: [{ location: location.toUpperCase() }, { $or: [{ startdate: { $gte: start, $lt: end } }, { enddate: { $gte: start, $lt: end } }] }] }).sort({ startdate: -1 }).populate('coordinatorId'); // TODO: Double check date range
     }
-    return EventModel.find({$and: [{location: location.toUpperCase()}, {startdate: {$gte:start}}]}).sort({startdate: -1}).populate('coordinatorId');
+    return EventModel.find({ $and: [{ location: location.toUpperCase() }, { startdate: { $gte: start } }] }).sort({ startdate: -1 }).populate('coordinatorId');
   }
 
   /**
@@ -111,14 +112,14 @@ class EventCollection {
    * @param {string} username - The username of coordinator of the events
    * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
    */
-   static async findAllByDateAndCoordinator(startrange: string, endrange: string = null, username: string): Promise<Array<HydratedDocument<Event>>> {
+  static async findAllByDateAndCoordinator(startrange: string, endrange: string = null, username: string): Promise<Array<HydratedDocument<Event>>> {
     const coordinator = await UserCollection.findOneByUsername(username);
     const start = new Date(startrange);
-    if(endrange!==null && endrange!==(null as string)){
+    if (endrange !== null && endrange !== (null as string)) {
       const end = new Date(endrange);
-      return EventModel.find({$and: [{coordinatorId: coordinator._id}, {$or: [{startdate:{$gte:start, $lt:end}}, {enddate:{$gte:start, $lt:end}}]}]}).sort({startdate: -1}).populate('coordinatorId'); // TODO: Double check date range
+      return EventModel.find({ $and: [{ coordinatorId: coordinator._id }, { $or: [{ startdate: { $gte: start, $lt: end } }, { enddate: { $gte: start, $lt: end } }] }] }).sort({ startdate: -1 }).populate('coordinatorId'); // TODO: Double check date range
     }
-    return EventModel.find({startdate: {$gte:start}}).sort({startdate: -1}).populate('coordinatorId');
+    return EventModel.find({ startdate: { $gte: start } }).sort({ startdate: -1 }).populate('coordinatorId');
   }
 
   /**
@@ -128,10 +129,10 @@ class EventCollection {
    * @param {string} username - The username of coordinator of the events
    * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
    */
-   static async findAllByLocationAndCoordinator(location: string, username: string): Promise<Array<HydratedDocument<Event>>> {
+  static async findAllByLocationAndCoordinator(location: string, username: string): Promise<Array<HydratedDocument<Event>>> {
     location.replace(/\s+/g, ''); // remove all whitespace
     const coordinator = await UserCollection.findOneByUsername(username);
-    return EventModel.find({$and: [{coordinatorId: coordinator._id}, {location: location.toUpperCase()}]}).sort({startdate: -1}).populate('coordinatorId'); // standardize all uppercase
+    return EventModel.find({ $and: [{ coordinatorId: coordinator._id }, { location: location.toUpperCase() }] }).sort({ startdate: -1 }).populate('coordinatorId'); // standardize all uppercase
   }
 
   /**
@@ -143,15 +144,15 @@ class EventCollection {
    * @param {string} username - The username of coordinator of the events
    * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
    */
-   static async findAllByAllFilters(startrange: string, endrange: string = null, location: string, username: string): Promise<Array<HydratedDocument<Event>>> {
+  static async findAllByAllFilters(startrange: string, endrange: string = null, location: string, username: string): Promise<Array<HydratedDocument<Event>>> {
     location.replace(/\s+/g, ''); // remove all whitespace
     const coordinator = await UserCollection.findOneByUsername(username);
     const start = new Date(startrange);
-    if(endrange!==null && endrange!==(null as string)){
+    if (endrange !== null && endrange !== (null as string)) {
       const end = new Date(endrange);
-      return EventModel.find({$and: [{location: location.toUpperCase()}, {coordinatorId: coordinator._id}, {$or: [{startdate:{$gte:start, $lt:end}}, {enddate:{$gte:start, $lt:end}}]}]}).sort({startdate: -1}).populate('coordinatorId'); // TODO: Double check date range
+      return EventModel.find({ $and: [{ location: location.toUpperCase() }, { coordinatorId: coordinator._id }, { $or: [{ startdate: { $gte: start, $lt: end } }, { enddate: { $gte: start, $lt: end } }] }] }).sort({ startdate: -1 }).populate('coordinatorId'); // TODO: Double check date range
     }
-    return EventModel.find({$and: [{location: location.toUpperCase()}, {coordinatorId: coordinator._id}, {startdate: {$gte:start}}]}).sort({startdate: -1}).populate('coordinatorId');
+    return EventModel.find({ $and: [{ location: location.toUpperCase() }, { coordinatorId: coordinator._id }, { startdate: { $gte: start } }] }).sort({ startdate: -1 }).populate('coordinatorId');
   }
 
   /**
@@ -161,13 +162,13 @@ class EventCollection {
    * @param {string} endrange - The end date of the event date range
    * @return {Promise<HydratedDocument<Event>[]>} - An array of all of the events
    */
-   static async findAllByDateRange(startrange: string, endrange: string = null): Promise<Array<HydratedDocument<Event>>> {
+  static async findAllByDateRange(startrange: string, endrange: string = null): Promise<Array<HydratedDocument<Event>>> {
     const start = new Date(startrange);
-    if(endrange!==null && endrange!==(null as string)){
+    if (endrange !== null && endrange !== (null as string)) {
       const end = new Date(endrange);
-      return EventModel.find({$or: [{startdate:{$gte:start, $lt:end}}, {enddate:{$gte:start, $lt:end}}]}).sort({startdate: -1}).populate('coordinatorId'); // TODO: Double check date range
+      return EventModel.find({ $or: [{ startdate: { $gte: start, $lt: end } }, { enddate: { $gte: start, $lt: end } }] }).sort({ startdate: -1 }).populate('coordinatorId'); // TODO: Double check date range
     }
-    return EventModel.find({startdate: {$gte:start}}).sort({startdate: -1}).populate('coordinatorId');
+    return EventModel.find({ startdate: { $gte: start } }).sort({ startdate: -1 }).populate('coordinatorId');
   }
 
   /**
@@ -184,13 +185,13 @@ class EventCollection {
    */
   static async updateOne(eventId: Types.ObjectId | string, description: string = null, startdate: string = null,
     enddate: string = null, donationdate: string = null, location: string = null, contact: string = null): Promise<HydratedDocument<Event>> {
-    const event = await EventModel.findOne({_id: eventId});
-    if(description !== null && description !== "") event.description = description;
-    if(startdate !== null && startdate !== "") event.startdate = new Date(startdate);
-    if(enddate !== null && enddate !== "") event.enddate = new Date(enddate);
-    if(donationdate !== null && donationdate !== "") event.donationdate = new Date(donationdate);
-    if(location !== null && location !== "") event.location = location;
-    if(contact !== null && contact !== "") event.contact = contact;
+    const event = await EventModel.findOne({ _id: eventId });
+    if (description !== null && description !== "") event.description = description;
+    if (startdate !== null && startdate !== "") event.startdate = new Date(startdate);
+    if (enddate !== null && enddate !== "") event.enddate = new Date(enddate);
+    if (donationdate !== null && donationdate !== "") event.donationdate = new Date(donationdate);
+    if (location !== null && location !== "") event.location = location;
+    if (contact !== null && contact !== "") event.contact = contact;
     await event.save();
     return event.populate('coordinatorId');
   }
@@ -202,8 +203,8 @@ class EventCollection {
    * @param {number} eventflag - The status to push the event to
    * @return {Promise<HydratedDocument<Event>>} - The newly updated event
    */
-   static async updateEventOne(eventId: Types.ObjectId | string, eventflag: number): Promise<HydratedDocument<Event>> {
-    const event = await EventModel.findOne({_id: eventId});
+  static async updateEventOne(eventId: Types.ObjectId | string, eventflag: number): Promise<HydratedDocument<Event>> {
+    const event = await EventModel.findOne({ _id: eventId });
     event.event = eventflag;
     await event.save();
     return event.populate('coordinatorId');
@@ -216,7 +217,7 @@ class EventCollection {
    * @return {Promise<Boolean>} - true if the event has been deleted, false otherwise
    */
   static async deleteOne(eventId: Types.ObjectId | string): Promise<boolean> {
-    const event = await EventModel.deleteOne({_id: eventId});
+    const event = await EventModel.deleteOne({ _id: eventId });
     return event !== null;
   }
 
@@ -226,7 +227,7 @@ class EventCollection {
    * @param {string} coordinatorId - The id of coordinator of events
    */
   static async deleteMany(coordinatorId: Types.ObjectId | string): Promise<void> {
-    await EventModel.deleteMany({coordinatorId});
+    await EventModel.deleteMany({ coordinatorId });
   }
 }
 

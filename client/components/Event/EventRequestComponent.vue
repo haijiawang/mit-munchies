@@ -63,52 +63,52 @@
     <p v-else class="contact">Contact Me: {{ event.contact }}</p>
 
     <section v-if="$store.state.username">
-    <div v-if="$store.state.username !== event.coordinatorId">
+      <div v-if="$store.state.username !== event.coordinatorId">
+        <div v-if="this.responding">
+          <button @click="submitResponse">Submit</button>
+        </div>
+        <div v-else>
+          <button @click="initResponse">Respond</button>
+        </div>
+      </div>
       <div v-if="this.responding">
-        <button @click="submitResponse">Submit</button>
-      </div>
-      <div v-else>
-        <button @click="initResponse">Respond</button>
-      </div>
-    </div>
-    <div v-if="this.responding">
-      Response Contact:
-      <textarea
-        class="responsecontact"
-        :value="draftresponsecontact"
-        @input="draftresponsecontact = $event.target.value"
-      />
+        Response Contact:
+        <textarea
+          class="responsecontact"
+          :value="draftresponsecontact"
+          @input="draftresponsecontact = $event.target.value"
+        />
 
-      Response Description:
-      <textarea
-        class="responsedescription"
-        :value="draftresponsedescription"
-        @input="draftresponsedescription = $event.target.value"
-      />
+        Response Description:
+        <textarea
+          class="responsedescription"
+          :value="draftresponsedescription"
+          @input="draftresponsedescription = $event.target.value"
+        />
 
-      Submit an Image:
-      <v-layout row>
-        <v-flex md6 offset-sm3>
-          <div>
+        Submit an Image:
+        <v-layout row>
+          <v-flex md6 offset-sm3>
             <div>
-              <button @click="click1">Upload Image</button>
-              <input
-                type="file"
-                ref="input1"
-                style="display: none"
-                @change="previewImage"
-                accept="image/*"
-              />
-            </div>
+              <div>
+                <button @click="click1">Upload Image</button>
+                <input
+                  type="file"
+                  ref="input1"
+                  style="display: none"
+                  @change="previewImage"
+                  accept="image/*"
+                />
+              </div>
 
-            <div v-if="imageData != null">
-              <img class="preview" height="268" width="356" :src="img1" />
-              <br />
+              <div v-if="imageData != null">
+                <img class="preview" height="268" width="356" :src="img1" />
+                <br />
+              </div>
             </div>
-          </div>
-        </v-flex>
-      </v-layout>
-    </div>
+          </v-flex>
+        </v-layout>
+      </div>
     </section>
 
     <section class="alerts">
@@ -344,7 +344,7 @@ export default {
 
         this.responding = false;
         //this.$store.commit('updateEventResponses', res);
-        this.$store.commit('refreshEventResponses');
+        this.$store.commit("refreshEventResponses");
 
         params.callback();
       } catch (e) {

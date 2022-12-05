@@ -1,6 +1,6 @@
-import type {Types} from 'mongoose';
-import {Schema, model} from 'mongoose';
-import type {User} from '../user/model';
+import type { Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import type { User } from '../user/model';
 
 /**
  * This file defines the properties stored in a Freet
@@ -16,6 +16,7 @@ export type Request = {
   dateCreated: Date;
   color: string;
   size: string;
+  images: Array<string>
 };
 
 export type PopulatedRequest = {
@@ -26,6 +27,7 @@ export type PopulatedRequest = {
   dateCreated: Date;
   color: string;
   size: string;
+  images: Array<string>
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -65,6 +67,10 @@ const RequestSchema = new Schema<Request>({
   size: {
     type: String,
     required: true
+  },
+  images: {
+    type: [String],
+    required: false
   }
 });
 
