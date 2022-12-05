@@ -117,12 +117,20 @@ const store = new Vuex.Store({
       const res = await fetch(url).then(async r => r.json());
       state.events = res;
     },
-    updateEventResponses(state, eventResponses) {
+    updateEventResponses(state, events) {
       /**
        * Update the stored events to the provided events.
-       * @param eventResponses - Events to store
+       * @param event - Events to store
        */
-      state.eventResponses = eventResponses;
+      state.eventResponses = events;
+    },
+    async refreshEventResponses(state) {
+      /**
+       * Request the server for the currently available requests.
+       */
+      const url = '/api/eventResponses';
+      const res = await fetch(url).then(async r => r.json());
+      state.eventResponses = res;
     },
   },
   // Store data across page refreshes, only discard on browser close
