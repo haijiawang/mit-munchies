@@ -88,7 +88,7 @@ const EventSchema = new Schema<Event>({
   },
   images: {
     type: [String],
-    required: false
+    required: true
   }
 });
 

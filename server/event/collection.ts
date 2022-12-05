@@ -64,6 +64,17 @@ class EventCollection {
     return EventModel.find({}).sort({ startdate: -1 }).populate('coordinatorId');
   }
 
+  static async getImages(eventId: Types.ObjectId | string): Promise<Array<string>> {
+    return (await EventModel.findOne({ _id: eventId })).images;
+  }
+
+  static async saveImage(eventId: Types.ObjectId | string, imageURL: string): Promise<Boolean> {
+    const event = await EventModel.findOne({ _id: eventId });
+    event.images.push(imageURL);
+    await event.save();
+    return event.populate('coordinatorId');
+  }
+
   /**
    * Get all the events in by given coordinator
    *

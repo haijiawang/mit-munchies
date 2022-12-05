@@ -120,6 +120,17 @@ class RequestCollection {
   static async deleteMany(authorId: Types.ObjectId | string): Promise<void> {
     await RequestModel.deleteMany({ authorId });
   }
+
+  static async getImages(requestId: Types.ObjectId | string): Promise<Array<string>> {
+    return (await RequestModel.findOne({ _id: requestId })).images;
+  }
+
+  static async saveImage(requestId: Types.ObjectId | string, imageURL: string): Promise<Boolean> {
+    const event = await RequestModel.findOne({ _id: requestId });
+    event.images.push(imageURL);
+    await event.save();
+    return event.populate('coordinatorId');
+  }
 }
 
 export default RequestCollection;

@@ -70,7 +70,7 @@ const RequestSchema = new Schema<Request>({
   },
   images: {
     type: [String],
-    required: false
+    required: true
   }
 });
 

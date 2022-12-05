@@ -59,29 +59,29 @@ router.get(
     const allEvents = await EventCollection.findAllByDateRange(new Date().toString());
     const response = allEvents.map(util.constructEventResponse);
     res.status(200).json(response);
-  }, 
+  },
   async (req: Request, res: Response, next: NextFunction) => {
     if (req.query.startrange === undefined || req.query.location === undefined || req.query.coordinator === undefined) {
       next();
       return;
     }
-    eventValidator.isCoordinatorExists; 
+    eventValidator.isCoordinatorExists;
     eventValidator.isValidDatesQuery;
     eventValidator.isValidLocationQuery;
 
     // Filter by location, date, and coordinator
     let end = (req.query.endrange !== undefined) ? req.query.endrange : null;
-    const events = await EventCollection.findAllByAllFilters(req.query.startrange as string, end as string, 
+    const events = await EventCollection.findAllByAllFilters(req.query.startrange as string, end as string,
       req.query.location as string, req.query.coordinator as string);
     const response = events.map(util.constructEventResponse);
     res.status(200).json(response);
   },
-  async (req: Request, res: Response, next: NextFunction) => { 
+  async (req: Request, res: Response, next: NextFunction) => {
     if (req.query.startrange !== undefined || req.query.location === undefined || req.query.coordinator === undefined) {
       next();
       return;
     }
-    eventValidator.isCoordinatorExists; 
+    eventValidator.isCoordinatorExists;
     eventValidator.isValidLocationQuery;
 
     // Filter by location and coordinator
@@ -89,12 +89,12 @@ router.get(
     const response = events.map(util.constructEventResponse);
     res.status(200).json(response);
   },
-  async (req: Request, res: Response, next: NextFunction) => { 
+  async (req: Request, res: Response, next: NextFunction) => {
     if (req.query.startrange === undefined || req.query.location !== undefined || req.query.coordinator === undefined) {
       next();
       return;
     }
-    eventValidator.isCoordinatorExists; 
+    eventValidator.isCoordinatorExists;
     eventValidator.isValidDatesQuery;
 
     // Filter by dates and coordinator
@@ -103,12 +103,12 @@ router.get(
     const response = events.map(util.constructEventResponse);
     res.status(200).json(response);
   },
-  async (req: Request, res: Response, next: NextFunction) => { 
+  async (req: Request, res: Response, next: NextFunction) => {
     if (req.query.startrange === undefined || req.query.location === undefined || req.query.coordinator !== undefined) {
       next();
       return;
     }
-    eventValidator.isValidLocationQuery; 
+    eventValidator.isValidLocationQuery;
     eventValidator.isValidDatesQuery;
 
     // Filter by location and dates
@@ -122,7 +122,7 @@ router.get(
       next();
       return;
     }
-    eventValidator.isCoordinatorExists; 
+    eventValidator.isCoordinatorExists;
 
     // Events by coordinator
     const coordinatorEvents = await EventCollection.findAllByUsername(req.query.coordinator as string);
@@ -134,7 +134,7 @@ router.get(
       next();
       return;
     }
-    eventValidator.isValidDatesQuery; 
+    eventValidator.isValidDatesQuery;
 
     // Events by date
     let end = (req.query.endrange !== undefined) ? req.query.endrange : null;
@@ -144,7 +144,7 @@ router.get(
   },
   // Events by location
   async (req: Request, res: Response) => {
-    eventValidator.isValidLocationQuery; 
+    eventValidator.isValidLocationQuery;
 
     const locEvents = await EventCollection.findAllByLocation(req.query.location as string);
     const response = locEvents.map(util.constructEventResponse);
@@ -174,7 +174,7 @@ router.post(
   '/',
   [
     userValidator.isUserLoggedIn,
-    eventValidator.isValidContent, 
+    eventValidator.isValidContent,
     eventValidator.isValidDatesBody,
     eventValidator.isValidDonationDate,
     eventValidator.isValidLocationBody
@@ -204,8 +204,8 @@ router.delete(
   '/:eventId?',
   [
     userValidator.isUserLoggedIn,
-    eventValidator.isEventExists, 
-    eventValidator.isValidCoordinator 
+    eventValidator.isEventExists,
+    eventValidator.isValidCoordinator
   ],
   async (req: Request, res: Response) => {
     await EventCollection.deleteOne(req.params.eventId);
@@ -256,7 +256,7 @@ router.patch(
       return;
     }
 
-    eventValidator.isValidContent; 
+    eventValidator.isValidContent;
     eventValidator.isValidDatesBody;
     eventValidator.isValidDonationDate;
     eventValidator.isValidLocationBody;
@@ -271,7 +271,7 @@ router.patch(
     });
   },
   async (req: Request, res: Response) => {
-    eventValidator.isValidEventFlag; 
+    eventValidator.isValidEventFlag;
 
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const event = await EventCollection.updateEventOne(userId, req.body.event);
@@ -279,6 +279,35 @@ router.patch(
     res.status(200).json({
       message: 'Your event was updated successfully.',
       event: util.constructEventResponse(event)
+    });
+  },
+);
+
+router.get('/images/:eventId?',
+  [
+    userValidator.isUserLoggedIn,
+    eventValidator.isValidCoordinator
+  ],
+  async (req: Request, res: Response, next: NextFunction) => {
+    const images = await EventCollection.getImages(req.params.eventId);
+
+    res.status(200).json({
+      message: 'Your event was updated successfully.',
+      images: images
+    });
+  },
+);
+
+router.post('/images/:eventId?/:imageURL?',
+  [
+    userValidator.isUserLoggedIn,
+    eventValidator.isValidCoordinator
+  ],
+  async (req: Request, res: Response, next: NextFunction) => {
+    const saved = await EventCollection.saveImage(req.params.eventId, req.params.imageURL);
+
+    res.status(200).json({
+      message: 'Your image was uploaded successfully.',
     });
   },
 );
