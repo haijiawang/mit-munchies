@@ -34,7 +34,7 @@
     </p>
     <div>
       <div
-        v-if="$store.state.username === eventResponse.author.username"
+        v-if="$store.state.username === eventResponse.author"
         class="actions"
       >
         <button

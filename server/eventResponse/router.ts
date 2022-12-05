@@ -79,39 +79,40 @@ router.post(
     }
 )
 
-/** 
- * Delete all responses belongong to an eventId
- */
-router.delete(
-    '/:eventId?',
-    [
-        userValidator.isUserLoggedIn,
-        eventValidator.isEventExists
-    ],
-    async (req: Request, res: Response) => {
-        await EventResponseCollection.deleteByEventId(req.params.eventId);
-        res.status(200).json({
-            message: 'All responses for this request were deleted successfully'
-        })
-    }
-)
+// Added functionality: not central to main code, will add back in later if needed
+// /** 
+//  * Delete all responses belongong to an eventId
+//  */
+// router.delete(
+//     '/:eventId?',
+//     [
+//         userValidator.isUserLoggedIn,
+//         eventValidator.isEventExists
+//     ],
+//     async (req: Request, res: Response) => {
+//         await EventResponseCollection.deleteByEventId(req.params.eventId);
+//         res.status(200).json({
+//             message: 'All responses for this request were deleted successfully'
+//         })
+//     }
+// )
 
-/** 
- * Delete all responses belonging to an author 
- */
-router.delete(
-    '/:userId?',
-    [
-        userValidator.isUserLoggedIn,
-        userValidator.isUserIdExists
-    ],
-    async (req: Request, res: Response) => {
-        await EventResponseCollection.deleteByUserId(req.params.userId);
-        res.status(200).json({
-            message: `All responses written by the author with ${req.params.userId} have been deleted.`
-        })
-    }
-)
+// /** 
+//  * Delete all responses belonging to an author 
+//  */
+// router.delete(
+//     '/:userId?',
+//     [
+//         userValidator.isUserLoggedIn,
+//         userValidator.isUserIdExists
+//     ],
+//     async (req: Request, res: Response) => {
+//         await EventResponseCollection.deleteByUserId(req.params.userId);
+//         res.status(200).json({
+//             message: `All responses written by the author with ${req.params.userId} have been deleted.`
+//         })
+//     }
+// )
 
 /**
  * Delete a specific response, specified by ID 
