@@ -34,7 +34,7 @@
     </p>
     <div>
       <div
-        v-if="$store.state.username === request.author"
+        v-if="$store.state.username === eventResponse.author.username"
         class="actions"
       >
         <button
@@ -77,16 +77,16 @@ export default {
   name: 'EventResponseComponent',
   props: {
     // Data from the stored request
-    request: {
+    eventResponse: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       editing: false, // Whether or not this request is in edit mode
-      draftContact: this.request.contact, // Potentially-new contact for this request
-      draftDescription: this.request.description, // Potentially-new description for this request
+      draftContact: this.eventResponse.contact, // Potentially-new contact for this request
+      draftDescription: this.eventResponse.description, // Potentially-new description for this request
       alerts: {} // Displays success/error messages encountered during request modification
     };
   },
@@ -96,16 +96,16 @@ export default {
        * Enables edit mode on this request.
        */
       this.editing = true; // Keeps track of if a request is being edited
-      this.draftContact = this.request.contact; // The contact of our current "draft" while being edited
-      this.draftDescription = this.request.description; // The description of our current "draft" while being edited
+      this.draftContact = this.eventResponse.contact; // The contact of our current "draft" while being edited
+      this.draftDescription = this.eventResponse.description; // The description of our current "draft" while being edited
     },
     stopEditing() {
       /**
        * Disables edit mode on this request.
        */
       this.editing = false;
-      this.draftContact = this.request.contact;
-      this.draftDescription = this.request.description;
+      this.draftContact = this.eventResponse.contact;
+      this.draftDescription = this.eventResponse.description;
     },
     deleteRequest() {
       /**
@@ -115,7 +115,7 @@ export default {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully deleted request!', status: 'success'
+            message: 'Successfully deleted event response!', status: 'success'
           });
         }
       };
@@ -125,8 +125,8 @@ export default {
       /**
        * Updates request to have the submitted draft content.
        */
-      if ((this.request.contact === this.draftContact) && (this.request.description === this.draftDescription)){
-        const error = 'Error: Edited request content should be different than current request content.';
+      if ((this.eventResponse.contact === this.draftContact) && (this.eventResponse.description === this.draftDescription)){
+        const error = 'Error: Edited response content should be different than current response content.';
         this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
@@ -134,7 +134,7 @@ export default {
 
       const params = {
         method: 'PATCH',
-        message: 'Successfully edited request!',
+        message: 'Successfully edited event response!',
         body: JSON.stringify({contact: this.draftContact, description: this.draftDescription}),
         callback: () => {
           this.$set(this.alerts, params.message, 'success');
@@ -172,13 +172,13 @@ export default {
         this.$set(this.alerts, e, 'error');
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-.request {
+.eventResponse {
     border: 1px solid #111;
     padding: 20px;
     position: relative;

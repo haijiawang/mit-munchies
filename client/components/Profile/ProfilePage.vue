@@ -12,6 +12,12 @@
       <header>
         <h2>Events</h2>
       </header>
+      <div class="right">
+        <GetEventsFormBlank
+          ref="getEventsFormBlank"
+          button="🔄 Get events"
+        />
+      </div>
       <section v-if="$store.state.events.length">
         <EventComponent
           v-for="event in $store.state.events"
@@ -46,9 +52,16 @@
       <header>
         <h2>Responses</h2>
       </header>
+      <div class="right">
+        <GetEventResponsesForm
+          ref="getEventResponsesForm"
+          button="🔄 Get responses"
+        />
+      </div>
       <section v-if="$store.state.eventResponses.length">
         <EventResponseComponent
           v-for="response in $store.state.eventResponses"
+          v-if="response.author === $store.state.username"
           :key="response.id"
           :eventResponse="response"
         />
@@ -65,9 +78,15 @@
 import EventComponent from "@/components/Event/EventComponent.vue";
 import RequestComponent from "@/components/Request/RequestComponent.vue";
 import EventResponseComponent from "@/components/EventResponse/EventResponseComponent.vue";
+import GetEventsFormBlank from "@/components/Event/GetEventsFormBlank.vue";
+import GetEventResponsesForm from "@/components/EventResponse/GetEventResponsesForm.vue";
 
 export default {
   name: "ProfilePage",
-  components: { EventComponent, RequestComponent, EventResponseComponent },
+  components: { EventComponent, RequestComponent, EventResponseComponent, GetEventsFormBlank, GetEventResponsesForm },
+  mounted() {
+    this.$refs.getEventsFormBlank.submit();
+    this.$refs.getEventResponsesForm.submit();
+  },
 };
 </script>

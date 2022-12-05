@@ -99,6 +99,7 @@
 </template>
 
 <script>
+
 export default {
   name: "EventRequestComponent",
   props: {
@@ -217,12 +218,13 @@ export default {
 
       try {
         const r = await fetch(`/api/events/${this.event._id}`, options);
+        const res = await r.json();
         if (!r.ok) {
-          const res = await r.json();
           throw new Error(res.error);
         }
 
         this.editing = false;
+        //this.$store.commit("updateEvents", res);
         this.$store.commit("refreshEvents");
 
         params.callback();
@@ -266,12 +268,13 @@ export default {
 
       try {
         const r = await fetch(`/api/eventResponses/${this.event._id}`, options);
+        const res = await r.json();
         if (!r.ok) {
-          const res = await r.json();
           throw new Error(res.error);
         }
 
         this.responding = false;
+        //this.$store.commit('updateEventResponses', res);
         this.$store.commit('refreshEventResponses');
 
         params.callback();
