@@ -10,8 +10,14 @@
     </section>
     <section v-else>
       <header>
-        <h2>Upcoming Events</h2>
+        <h2>Welcome to Re-Thrift!</h2>
       </header>
+      <article>
+        <h3>
+          <router-link to="/login"> Sign in </router-link>
+          to create events and requests, or respond to donations.
+        </h3>
+      </article>
     </section>
     <section>
       <header>
@@ -31,7 +37,7 @@
               in {{ $store.state.eventFilterLoc }} between {{ $store.state.eventFilterStartDate }} and {{ $store.state.eventFilterEndDate }}
             </span>
             <span v-else-if="$store.state.eventFilterStartDate && $store.state.eventFilterLoc">
-              by @{{ $store.state.eventFilterCoord }} in {{ $store.state.eventFilterLoc }} on or after {{ $store.state.eventFilterStartDate }}
+              in {{ $store.state.eventFilterLoc }} on or after {{ $store.state.eventFilterStartDate }}
             </span>
             <span v-else-if="$store.state.eventFilterCoord && $store.state.eventFilterLoc">
               by @{{ $store.state.eventFilterCoord }} in {{ $store.state.eventFilterLoc }}

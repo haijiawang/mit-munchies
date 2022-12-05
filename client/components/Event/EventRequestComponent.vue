@@ -62,6 +62,7 @@
     />
     <p v-else class="contact">Contact Me: {{ event.contact }}</p>
 
+    <section v-if="$store.state.username">
     <div v-if="$store.state.username !== event.coordinatorId">
       <div v-if="this.responding">
         <button @click="submitResponse">Submit</button>
@@ -85,6 +86,7 @@
         @input="draftresponsedescription = $event.target.value"
       />
     </div>
+    </section>
 
     <section class="alerts">
       <article

@@ -15,16 +15,22 @@ export default {
       var url = '/api/events';
       if (this.coordvalue && this.startvalue && this.endvalue && this.locvalue){
         url = `/api/events?coordinator=${this.coordvalue}&startrange=${this.startvalue}&endrange=${this.endvalue}&location=${this.locvalue}`;
-      }else if (this.coordvalue && this.startvalue){
+      }else if (this.coordvalue && this.startvalue && this.endvalue){
         url = `/api/events?coordinator=${this.coordvalue}&startrange=${this.startvalue}&endrange=${this.endvalue}`;
+      }else if (this.coordvalue && this.startvalue){
+        url = `/api/events?coordinator=${this.coordvalue}&startrange=${this.startvalue}`;
       }else if (this.coordvalue && this.locvalue){
         url = `/api/events?coordinator=${this.coordvalue}&location=${this.locvalue}`;
-      }else if (this.locvalue && this.startvalue){
+      }else if (this.locvalue && this.startvalue && this.endvalue){
         url = `/api/events?location=${this.locvalue}&startrange=${this.startvalue}&endrange=${this.endvalue}`;
+      }else if (this.locvalue && this.startvalue){
+        url = `/api/events?location=${this.locvalue}&startrange=${this.startvalue}`;
       }else if (this.coordvalue){
         url = `/api/events?coordinator=${this.coordvalue}`;
-      }else if (this.startvalue){
+      }else if (this.startvalue && this.endvalue){
         url = `/api/events?startrange=${this.startvalue}&endrange=${this.endvalue}`;
+      }else if (this.startvalue){
+        url = `/api/events?startrange=${this.startvalue}`;
       }else if (this.locvalue){
         url = `/api/events?location=${this.locvalue}`;
       }
