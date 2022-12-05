@@ -4,6 +4,10 @@ import EventResponseModel from './model';
 import UserCollection from '../user/collection';
 
 class EventResponseCollection {
+    static async findAll(): Promise<Array<HydratedDocument<EventResponse>>> {
+        return EventResponseModel.find({}).sort({ dateCreated: -1 }).populate('author');
+    }
+
     static async findByEventId(eId: Types.ObjectId | string): Promise<Array<HydratedDocument<EventResponse>>> {
         return EventResponseModel.find({ eventId: eId }).sort({ dateCreated: -1 }).populate('author');
     }

@@ -311,6 +311,7 @@ export default {
         }
 
         this.responding = false;
+        this.$store.commit('refreshEventResponses');
 
         params.callback();
       } catch (e) {

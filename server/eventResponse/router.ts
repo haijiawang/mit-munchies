@@ -6,8 +6,24 @@ import * as eventValidator from '../event/middleware';
 import * as eventResponseValidator from './middleware';
 // import * as freetValidator from '../freet/middleware';
 import * as util from './util';
+import { constructEventResponseResponse } from 'server/eventResponse/util';
 
 const router = express.Router()
+
+/**
+ * Get all response for a request item 
+ */
+ router.get(
+    '/',
+    [
+        userValidator.isUserLoggedIn
+    ],
+    async (req: Request, res: Response) => {
+        const allResponses = await EventResponseCollection.findAll();
+        allResponses.map(util.constructEventResponseResponse);
+        res.status(200).json(allResponses);
+    }
+)
 
 /**
  * Get all response for a request item 
@@ -20,9 +36,8 @@ router.get(
     ],
     async (req: Request, res: Response) => {
         const allResponses = await EventResponseCollection.findByEventId(req.params.requestId);
-        res.status(200).json({
-            responses: allResponses
-        });
+        allResponses.map(util.constructEventResponseResponse);
+        res.status(200).json(allResponses);
     }
 )
 
@@ -37,6 +52,7 @@ router.get(
     ],
     async (req: Request, res: Response) => {
         const allResponses = await EventResponseCollection.findByAuthorId(req.params.userId);
+        allResponses.map(util.constructEventResponseResponse);
         res.status(200).json({
             responses: allResponses
         });

@@ -1,16 +1,40 @@
-<!-- Reusable component representing a single freet and its actions -->
+<!-- Reusable component representing a single request and its actions -->
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
   <article
-    class="freet"
+    class="eventResponse"
   >
-    <header>
-      <h3 class="author">
-        @{{ freet.author }}
-      </h3>
+    <h3 class="author">
+      @{{ eventResponse.author }}
+    </h3>
+    <textarea
+        v-if="editing"
+        class="contact"
+        :value="draftContact"
+        @input="draftContact = $event.target.value"
+    />
+    <p
+        v-else
+        class="contact"
+    >
+      Contact: {{ eventResponse.contact }}
+    </p>
+    <textarea
+        v-if="editing"
+        class="description"
+        :value="draftDescription"
+        @input="draftDescription = $event.target.value"
+    />
+    <p
+        v-else
+        class="description"
+    >
+      Response Description: {{ eventResponse.description }}
+    </p>
+    <div>
       <div
-        v-if="$store.state.username === freet.author"
+        v-if="$store.state.username === request.author"
         class="actions"
       >
         <button
@@ -31,27 +55,11 @@
         >
           ✏️ Edit
         </button>
-        <button @click="deleteFreet">
+        <button @click="deleteRequest">
           🗑️ Delete
         </button>
       </div>
-    </header>
-    <textarea
-      v-if="editing"
-      class="content"
-      :value="draft"
-      @input="draft = $event.target.value"
-    />
-    <p
-      v-else
-      class="content"
-    >
-      {{ freet.content }}
-    </p>
-    <p class="info">
-      Posted at {{ freet.dateModified }}
-      <i v-if="freet.edited">(edited)</i>
-    </p>
+    </div>
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -66,45 +74,48 @@
 
 <script>
 export default {
-  name: 'FreetComponent',
+  name: 'EventResponseComponent',
   props: {
-    // Data from the stored freet
-    freet: {
+    // Data from the stored request
+    request: {
       type: Object,
       required: true
     }
   },
   data() {
     return {
-      editing: false, // Whether or not this freet is in edit mode
-      draft: this.freet.content, // Potentially-new content for this freet
-      alerts: {} // Displays success/error messages encountered during freet modification
+      editing: false, // Whether or not this request is in edit mode
+      draftContact: this.request.contact, // Potentially-new contact for this request
+      draftDescription: this.request.description, // Potentially-new description for this request
+      alerts: {} // Displays success/error messages encountered during request modification
     };
   },
   methods: {
     startEditing() {
       /**
-       * Enables edit mode on this freet.
+       * Enables edit mode on this request.
        */
-      this.editing = true; // Keeps track of if a freet is being edited
-      this.draft = this.freet.content; // The content of our current "draft" while being edited
+      this.editing = true; // Keeps track of if a request is being edited
+      this.draftContact = this.request.contact; // The contact of our current "draft" while being edited
+      this.draftDescription = this.request.description; // The description of our current "draft" while being edited
     },
     stopEditing() {
       /**
-       * Disables edit mode on this freet.
+       * Disables edit mode on this request.
        */
       this.editing = false;
-      this.draft = this.freet.content;
+      this.draftContact = this.request.contact;
+      this.draftDescription = this.request.description;
     },
-    deleteFreet() {
+    deleteRequest() {
       /**
-       * Deletes this freet.
+       * Deletes this request.
        */
       const params = {
         method: 'DELETE',
         callback: () => {
           this.$store.commit('alert', {
-            message: 'Successfully deleted freet!', status: 'success'
+            message: 'Successfully deleted request!', status: 'success'
           });
         }
       };
@@ -112,10 +123,10 @@ export default {
     },
     submitEdit() {
       /**
-       * Updates freet to have the submitted draft content.
+       * Updates request to have the submitted draft content.
        */
-      if (this.freet.content === this.draft) {
-        const error = 'Error: Edited freet content should be different than current freet content.';
+      if ((this.request.contact === this.draftContact) && (this.request.description === this.draftDescription)){
+        const error = 'Error: Edited request content should be different than current request content.';
         this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
@@ -123,8 +134,8 @@ export default {
 
       const params = {
         method: 'PATCH',
-        message: 'Successfully edited freet!',
-        body: JSON.stringify({content: this.draft}),
+        message: 'Successfully edited request!',
+        body: JSON.stringify({contact: this.draftContact, description: this.draftDescription}),
         callback: () => {
           this.$set(this.alerts, params.message, 'success');
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
@@ -134,7 +145,7 @@ export default {
     },
     async request(params) {
       /**
-       * Submits a request to the freet's endpoint
+       * Submits a request to the request's endpoint
        * @param params - Options for the request
        * @param params.body - Body for the request, if it exists
        * @param params.callback - Function to run if the the request succeeds
@@ -147,14 +158,14 @@ export default {
       }
 
       try {
-        const r = await fetch(`/api/freets/${this.freet._id}`, options);
+        const r = await fetch(`/api/eventResponses/${this.eventResponse._id}`, options);
         if (!r.ok) {
           const res = await r.json();
           throw new Error(res.error);
         }
 
         this.editing = false;
-        this.$store.commit('refreshFreets');
+        this.$store.commit('refreshEventResponses');
 
         params.callback();
       } catch (e) {
@@ -167,7 +178,7 @@ export default {
 </script>
 
 <style scoped>
-.freet {
+.request {
     border: 1px solid #111;
     padding: 20px;
     position: relative;
