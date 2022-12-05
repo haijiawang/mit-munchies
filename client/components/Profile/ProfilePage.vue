@@ -21,7 +21,6 @@
       <section v-if="$store.state.events.length">
         <EventComponent
           v-for="event in $store.state.events"
-          v-if="event.coordinatorId === $store.state.username"
           :key="event.id"
           :event="event"
         />
@@ -38,7 +37,6 @@
       <section v-if="$store.state.requests.length">
         <RequestComponent
           v-for="request in $store.state.requests"
-          v-if="request.author === $store.state.username"
           :key="request.id"
           :request="request"
         />
@@ -61,7 +59,6 @@
       <section v-if="$store.state.eventResponses.length">
         <EventResponseComponent
           v-for="response in $store.state.eventResponses"
-          v-if="response.author === $store.state.username"
           :key="response.id"
           :eventResponse="response"
         />
