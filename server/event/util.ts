@@ -1,9 +1,9 @@
-import type {HydratedDocument} from 'mongoose';
+import type { HydratedDocument } from 'mongoose';
 import moment from 'moment';
-import type {Event, PopulatedEvent} from '../event/model';
+import type { Event, PopulatedEvent } from '../event/model';
 
 type EventResponse = {
-  _id: string; 
+  _id: string;
   coordinatorId: string;
   dateCreated: string;
   description: string;
@@ -13,6 +13,7 @@ type EventResponse = {
   location: string;
   event: string; // TODO: Possibly need to change to number, if it can be processed by frontend
   contact: string;
+  images: Array<string>;
 };
 
 /**
@@ -36,7 +37,7 @@ const constructEventResponse = (event: HydratedDocument<Event>): EventResponse =
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
-  const {username} = eventCopy.coordinatorId;
+  const { username } = eventCopy.coordinatorId;
   delete eventCopy.coordinatorId;
   return {
     ...eventCopy,
@@ -49,7 +50,8 @@ const constructEventResponse = (event: HydratedDocument<Event>): EventResponse =
     donationdate: formatDate(eventCopy.donationdate),
     location: eventCopy.location, // TODO: Format if necessary (add space between city and state)
     event: eventCopy.event.toString(),
-    contact: eventCopy.contact
+    contact: eventCopy.contact,
+    images: eventCopy.images
   };
 };
 

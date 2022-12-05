@@ -1,8 +1,8 @@
-import type {HydratedDocument} from 'mongoose';
+import type { HydratedDocument } from 'mongoose';
 import moment from 'moment';
-import type {Freet, PopulatedFreet} from '../freet/model';
-import {Types} from "mongoose";
-import {Request, PopulatedRequest} from "./model";
+import type { Freet, PopulatedFreet } from '../freet/model';
+import { Types } from "mongoose";
+import { Request, PopulatedRequest } from "./model";
 
 // Update this if you add a property to the Freet type!
 type RequestResponse = {
@@ -13,6 +13,7 @@ type RequestResponse = {
   dateCreated: string;
   color: string;
   size: string;
+  images: Array<string>
 };
 
 /**
@@ -36,7 +37,7 @@ const constructRequestResponse = (request: HydratedDocument<Request>): RequestRe
       versionKey: false // Cosmetics; prevents returning of __v property
     })
   };
-  const {username} = requestCopy.author;
+  const { username } = requestCopy.author;
   delete requestCopy.author;
   return {
     ...requestCopy,
@@ -47,6 +48,7 @@ const constructRequestResponse = (request: HydratedDocument<Request>): RequestRe
     dateCreated: formatDate(requestCopy.dateCreated),
     color: requestCopy.color,
     size: requestCopy.size,
+    images: requestCopy.images
   };
 };
 

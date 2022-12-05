@@ -1,4 +1,4 @@
-import type {NextFunction, Request, Response} from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
 import RequestCollection from './collection';
 import * as userValidator from '../user/middleware';
@@ -175,4 +175,33 @@ router.patch(
     }
 );
 
-export {router as requestRouter};
+router.get('/images/:requestId?',
+    [
+        userValidator.isUserLoggedIn,
+        requestValidator.isRequestExists
+    ],
+    async (req: Request, res: Response, next: NextFunction) => {
+        const images = await RequestCollection.getImages(req.params.requestId);
+
+        res.status(200).json({
+            message: 'Your request was updated successfully.',
+            images: images
+        });
+    },
+);
+
+router.post('/images/:requestId?/:imageURL?',
+    [
+        userValidator.isUserLoggedIn,
+        requestValidator.isRequestExists
+    ],
+    async (req: Request, res: Response, next: NextFunction) => {
+        const saved = await RequestCollection.saveImage(req.params.requestId, req.params.imageURL);
+
+        res.status(200).json({
+            message: 'Your image was uploaded successfully.',
+        });
+    },
+);
+
+export { router as requestRouter };

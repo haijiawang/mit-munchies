@@ -1,5 +1,5 @@
-import type {HydratedDocument, Types} from 'mongoose';
-import type {Request} from './model';
+import type { HydratedDocument, Types } from 'mongoose';
+import type { Request } from './model';
 import RequestModel from './model';
 import UserCollection from '../user/collection';
 
@@ -20,9 +20,9 @@ class RequestCollection {
    * @param {string} description - The description of the request
    * @return {Promise<HydratedDocument<Request>>} - The newly created Request
    */
-  static async addOne(requestDetails: {author: string, contact: string, description: string, color: string, size: string}): Promise<HydratedDocument<Request>> {
+  static async addOne(requestDetails: { author: string, contact: string, description: string, color: string, size: string }): Promise<HydratedDocument<Request>> {
     const date = new Date();
-    const {author, contact, description, color, size} = requestDetails;
+    const { author, contact, description, color, size } = requestDetails;
     const request = new RequestModel({
       author,
       contact: contact,
@@ -30,6 +30,7 @@ class RequestCollection {
       dateCreated: date,
       color: color,
       size: size,
+      images: []
     });
     await request.save(); // Saves freet to MongoDB
     return request.populate('author'); //TODO: SHOULD I CHANGE THIS TO AUTHOR?
@@ -42,7 +43,7 @@ class RequestCollection {
    * @return {Promise<HydratedDocument<Request>> | Promise<null> } - The request with the given requestId, if any
    */
   static async findOne(requestId: Types.ObjectId | string): Promise<HydratedDocument<Request>> {
-    return RequestModel.findOne({_id: requestId}).populate('author');
+    return RequestModel.findOne({ _id: requestId }).populate('author');
   }
 
   /**
@@ -52,7 +53,7 @@ class RequestCollection {
    */
   static async findAll(): Promise<Array<HydratedDocument<Request>>> {
     // Retrieves Requests and sorts them from most to least recent
-    return RequestModel.find({}).sort({dateCreated: -1}).populate('author');
+    return RequestModel.find({}).sort({ dateCreated: -1 }).populate('author');
   }
 
   /**
@@ -63,7 +64,7 @@ class RequestCollection {
    */
   static async findAllByUsername(username: string): Promise<Array<HydratedDocument<Request>>> {
     const author = await UserCollection.findOneByUsername(username);
-    return RequestModel.find({author: author._id}).sort({dateCreated: -1}).populate('author');
+    return RequestModel.find({ author: author._id }).sort({ dateCreated: -1 }).populate('author');
   }
 
   /**
@@ -73,7 +74,7 @@ class RequestCollection {
    * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests with the specified color
    */
   static async findAllByColor(color: string): Promise<Array<HydratedDocument<Request>>> {
-    return RequestModel.find({color:color}).sort({dateCreated: -1}).populate('author');
+    return RequestModel.find({ color: color }).sort({ dateCreated: -1 }).populate('author');
   }
 
   /**
@@ -83,7 +84,7 @@ class RequestCollection {
    * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests with the specified color
    */
   static async findAllBySize(size: string): Promise<Array<HydratedDocument<Request>>> {
-    return RequestModel.find({size:size}).sort({dateCreated: -1}).populate('author');
+    return RequestModel.find({ size: size }).sort({ dateCreated: -1 }).populate('author');
   }
 
   /** //TODO: UPDATE THIS
@@ -94,7 +95,7 @@ class RequestCollection {
    * @return {Promise<HydratedDocument<Freet>>} - The newly updated freet
    */
   static async updateOne(requestId: Types.ObjectId | string, description: string): Promise<HydratedDocument<Request>> {
-    const request = await RequestModel.findOne({_id: requestId});
+    const request = await RequestModel.findOne({ _id: requestId });
     request.description = description;
     await request.save();
     return request.populate('author');
@@ -107,7 +108,7 @@ class RequestCollection {
    * @return {Promise<Boolean>} - true if the freet has been deleted, false otherwise
    */
   static async deleteOne(requestId: Types.ObjectId | string): Promise<boolean> {
-    const Request = await RequestModel.deleteOne({_id: requestId});
+    const Request = await RequestModel.deleteOne({ _id: requestId });
     return Request !== null;
   }
 
@@ -117,7 +118,18 @@ class RequestCollection {
    * @param {string} authorId - The id of author of freets
    */
   static async deleteMany(authorId: Types.ObjectId | string): Promise<void> {
-    await RequestModel.deleteMany({authorId});
+    await RequestModel.deleteMany({ authorId });
+  }
+
+  static async getImages(requestId: Types.ObjectId | string): Promise<Array<string>> {
+    return (await RequestModel.findOne({ _id: requestId })).images;
+  }
+
+  static async saveImage(requestId: Types.ObjectId | string, imageURL: string): Promise<Boolean> {
+    const event = await RequestModel.findOne({ _id: requestId });
+    event.images.push(imageURL);
+    await event.save();
+    return event.populate('coordinatorId');
   }
 }
 
