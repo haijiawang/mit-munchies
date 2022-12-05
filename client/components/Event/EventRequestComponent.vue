@@ -1,53 +1,24 @@
 <!-- Reusable component representing a single event and its actions -->
 
 <template>
-  <article
-    class="event"
-  >
+  <article class="event">
     <header>
-      <h3 class="coordinator">
-        @{{ event.coordinatorId }}
-      </h3>
-      <div
-        v-if="$store.state.username === event.coordinatorId"
-        class="actions"
-      >
-        <button
-          v-if="editing"
-          @click="submitEdit"
-        >
-          ✅ Save changes
-        </button>
-        <button
-          v-if="editing"
-          @click="stopEditing"
-        >
-          🚫 Discard changes
-        </button>
-        <button
-          v-if="!editing"
-          @click="startEditing"
-        >
-          ✏️ Edit
-        </button>
-        <button @click="deleteEvent">
-          🗑️ Delete
-        </button>
+      <h3 class="coordinator">@{{ event.coordinatorId }}</h3>
+      <div v-if="$store.state.username === event.coordinatorId" class="actions">
+        <button v-if="editing" @click="submitEdit">✅ Save changes</button>
+        <button v-if="editing" @click="stopEditing">🚫 Discard changes</button>
+        <button v-if="!editing" @click="startEditing">✏️ Edit</button>
+        <button @click="deleteEvent">🗑️ Delete</button>
       </div>
     </header>
-    
+
     <textarea
       v-if="editing"
       class="description"
       :value="draftdescription"
       @input="draftdescription = $event.target.value"
     />
-    <p
-      v-else
-      class="description"
-    >
-      Description: {{ event.description }}
-    </p>
+    <p v-else class="description">Description: {{ event.description }}</p>
 
     <textarea
       v-if="editing"
@@ -55,12 +26,7 @@
       :value="draftstart"
       @input="draftstart = $event.target.value"
     />
-    <p
-      v-else
-      class="startdate"
-    >
-      Event Start: {{ event.startdate }}
-    </p>
+    <p v-else class="startdate">Event Start: {{ event.startdate }}</p>
 
     <textarea
       v-if="editing"
@@ -68,12 +34,7 @@
       :value="draftend"
       @input="draftend = $event.target.value"
     />
-    <p
-      v-else
-      class="enddate"
-    >
-      Event End: {{ event.enddate }}
-    </p>
+    <p v-else class="enddate">Event End: {{ event.enddate }}</p>
 
     <textarea
       v-if="editing"
@@ -81,10 +42,7 @@
       :value="draftdonation"
       @input="draftdonation = $event.target.value"
     />
-    <p
-      v-else
-      class="donationdate"
-    >
+    <p v-else class="donationdate">
       Last Date for Accepting Donations: {{ event.donationdate }}
     </p>
 
@@ -94,12 +52,7 @@
       :value="draftlocation"
       @input="draftlocation = $event.target.value"
     />
-    <p
-      v-else
-      class="location"
-    >
-      Location: {{ event.location }}
-    </p>
+    <p v-else class="location">Location: {{ event.location }}</p>
 
     <textarea
       v-if="editing"
@@ -107,34 +60,25 @@
       :value="draftcontact"
       @input="draftcontact = $event.target.value"
     />
-    <p
-      v-else
-      class="contact"
-    >
-      Contact Me: {{ event.contact }}
-    </p>
+    <p v-else class="contact">Contact Me: {{ event.contact }}</p>
 
     <div v-if="$store.state.username !== event.coordinatorId">
       <div v-if="this.responding">
-        <button @click="submitResponse">
-          Submit
-        </button>
+        <button @click="submitResponse">Submit</button>
       </div>
       <div v-else>
-        <button @click="initResponse">
-          Respond
-        </button>
+        <button @click="initResponse">Respond</button>
       </div>
     </div>
     <div v-if="this.responding">
-      Response Contact: 
+      Response Contact:
       <textarea
         class="responsecontact"
         :value="draftresponsecontact"
         @input="draftresponsecontact = $event.target.value"
       />
 
-      Response Description: 
+      Response Description:
       <textarea
         class="responsedescription"
         :value="draftresponsedescription"
@@ -156,13 +100,13 @@
 
 <script>
 export default {
-  name: 'EventRequestComponent',
+  name: "EventRequestComponent",
   props: {
     // Data from the stored request
     event: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -174,9 +118,9 @@ export default {
       draftlocation: this.event.location,
       draftcontact: this.event.contact, // Potentially-new contact for this request
       draftdescription: this.event.description, // Potentially-new description for this request
-      draftresponsecontact: '', 
-      draftresponsedescription: '', 
-      alerts: {} // Displays success/error messages encountered during request modification
+      draftresponsecontact: "",
+      draftresponsedescription: "",
+      alerts: {}, // Displays success/error messages encountered during request modification
     };
   },
   methods: {
@@ -198,7 +142,7 @@ export default {
        */
       this.editing = false;
       this.draftcontact = this.event.contact;
-      this.draftdescription = this.event.description; 
+      this.draftdescription = this.event.description;
       this.draftstart = this.event.startdate;
       this.draftend = this.event.enddate;
       this.draftdonation = this.event.donationdate;
@@ -209,12 +153,13 @@ export default {
        * Deletes this event.
        */
       const params = {
-        method: 'DELETE',
+        method: "DELETE",
         callback: () => {
-          this.$store.commit('alert', {
-            message: 'Successfully deleted event!', status: 'success'
+          this.$store.commit("alert", {
+            message: "Successfully deleted event!",
+            status: "success",
           });
-        }
+        },
       };
       this.event(params);
     },
@@ -222,25 +167,36 @@ export default {
       /**
        * Updates event to have the submitted draft content.
        */
-      if ((this.event.contact === this.draftcontact) && (this.event.description === this.draftdescription)
-        && (this.event.startdate === this.draftstart) && (this.event.enddate === this.draftend) && 
-        (this.event.location === this.draftlocation) && (this.event.donationdate === this.draftdonation)) {
-
-        const error = 'Error: Edited event content should be different than current event content.';
-        this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
+      if (
+        this.event.contact === this.draftcontact &&
+        this.event.description === this.draftdescription &&
+        this.event.startdate === this.draftstart &&
+        this.event.enddate === this.draftend &&
+        this.event.location === this.draftlocation &&
+        this.event.donationdate === this.draftdonation
+      ) {
+        const error =
+          "Error: Edited event content should be different than current event content.";
+        this.$set(this.alerts, error, "error"); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
       }
 
       const params = {
-        method: 'PATCH',
-        message: 'Successfully edited request!',
-        body: JSON.stringify({contact: this.draftcontact, description: this.draftdescription, startdate: this.draftstart, 
-        enddate: this.draftend, location: this.draftlocation, donationdate: this.draftdonation}),
+        method: "PATCH",
+        message: "Successfully edited request!",
+        body: JSON.stringify({
+          contact: this.draftcontact,
+          description: this.draftdescription,
+          startdate: this.draftstart,
+          enddate: this.draftend,
+          location: this.draftlocation,
+          donationdate: this.draftdonation,
+        }),
         callback: () => {
-          this.$set(this.alerts, params.message, 'success');
+          this.$set(this.alerts, params.message, "success");
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-        }
+        },
       };
       this.request(params);
     },
@@ -252,7 +208,8 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: { "Content-Type": "application/json" },
       };
       if (params.body) {
         options.body = params.body;
@@ -266,11 +223,11 @@ export default {
         }
 
         this.editing = false;
-        this.$store.commit('refreshEvents');
+        this.$store.commit("refreshEvents");
 
         params.callback();
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
+        this.$set(this.alerts, e, "error");
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     },
@@ -279,13 +236,16 @@ export default {
     },
     submitResponse() {
       const params = {
-        method: 'POST',
-        message: 'Successfully created an event response!',
-        body: JSON.stringify({contact: this.draftresponsecontact, description: this.draftresponsedescription}),
+        method: "POST",
+        message: "Successfully created an event response!",
+        body: JSON.stringify({
+          contact: this.draftresponsecontact,
+          description: this.draftresponsedescription,
+        }),
         callback: () => {
-          this.$set(this.alerts, params.message, 'success');
+          this.$set(this.alerts, params.message, "success");
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-        }
+        },
       };
       this.responserequest(params);
     },
@@ -297,7 +257,8 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: { "Content-Type": "application/json" },
       };
       if (params.body) {
         options.body = params.body;
@@ -315,18 +276,20 @@ export default {
 
         params.callback();
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
+        this.$set(this.alerts, e, "error");
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     },
-  }
+  },
 };
 </script>
 
 <style scoped>
 .event {
-    border: 1px solid #111;
-    padding: 20px;
-    position: relative;
+  border: 1px solid #111;
+  padding: 20px;
+  position: relative;
+  border-radius: 15px;
+  margin-bottom: 15px;
 }
 </style>

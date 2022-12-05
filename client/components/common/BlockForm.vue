@@ -129,6 +129,7 @@ form {
   justify-content: space-between;
   margin-bottom: 14px;
   position: relative;
+  border-radius: 15px;
 }
 
 article > div {

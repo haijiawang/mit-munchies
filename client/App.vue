@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@80;100;180;200&display=swap");
 
 * {
   box-sizing: border-box;
@@ -45,7 +45,19 @@ body {
   padding: 0;
   margin: 0;
   font-size: 1.2em;
+  background-color: #f9f8f6;
 }
+
+button {
+  background-color: #fff;
+  color: black;
+  border-radius: 100px;
+  border-color: black; 
+  border: 0.95px solid black;
+  height: 35px;
+  font-weight: 600;
+}
+
 
 main {
   padding: 0 5em 5em;
@@ -63,7 +75,7 @@ main {
 }
 
 .alerts article {
-  border-radius: 5px;
+  border-radius: 100px;
   padding: 10px 20px;
   color: #fff;
 }
@@ -73,10 +85,10 @@ main {
 }
 
 .alerts .error {
-  background-color: rgb(166, 23, 33);
+  background-color: #DE847B;
 }
 
 .alerts .success {
-  background-color: rgb(45, 135, 87);
+  background-color: #B2D2A4;
 }
 </style>
