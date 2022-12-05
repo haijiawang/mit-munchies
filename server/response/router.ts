@@ -10,18 +10,18 @@ import * as util from './util';
 const router = express.Router()
 
 /**
- * Get all response for a request item 
+ * Get all response for a request item
  */
 router.get(
     '/:requestId?',
     [
         userValidator.isUserLoggedIn,
-        requestValidator.isRequestExists
+        // requestValidator.isRequestExists
     ],
     async (req: Request, res: Response) => {
-        const allResponses = await ResponseCollection.findByRequestId(req.params.requestId);
+        const allResponses = await ResponseCollection.findByRequestId(req.query.requestId);
         res.status(200).json({
-            responses: allResponses
+            responses:  allResponses.map(util.constructResponseResponse)
         });
     }
 )
@@ -38,13 +38,14 @@ router.get(
     async (req: Request, res: Response) => {
         const allResponses = await ResponseCollection.findByAuthorId(req.params.userId);
         res.status(200).json({
-            responses: allResponses
+            // responses: allResponses
+            responses: allResponses.map(util.constructResponseResponse)
         });
     }
 )
 
 /**
- * Create a new response to a request 
+ * Create a new response to a request
  */
 router.post(
     '/:requestId?',
@@ -55,7 +56,7 @@ router.post(
     ],
     async (req: Request, res: Response) => {
         const userId = (req.session.userId as string) ?? '';
-        const response = await ResponseCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description, requestId: req.params.requestId.toString() });
+        const response = await ResponseCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description, requestId: req.body.requestId });
         res.status(201).json({
             message: 'Your response was created successfully.',
             response: util.constructResponseResponse(response)
@@ -63,7 +64,7 @@ router.post(
     }
 )
 
-/** 
+/**
  * Delete all responses belongong to a requestId
  */
 router.delete(
@@ -80,8 +81,8 @@ router.delete(
     }
 )
 
-/** 
- * Delete all responses belonging to an author 
+/**
+ * Delete all responses belonging to an author
  */
 router.delete(
     '/:userId?',
@@ -98,7 +99,7 @@ router.delete(
 )
 
 /**
- * Delete a specific response, specified by ID 
+ * Delete a specific response, specified by ID
  */
 router.delete(
     '/:responseId?',

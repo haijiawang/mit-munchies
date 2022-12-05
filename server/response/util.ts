@@ -32,4 +32,4 @@ const constructResponseResponse = (response: HydratedDocument<Response>): Respon
 
 export {
     constructResponseResponse
-}; 
+};

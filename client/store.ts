@@ -14,6 +14,7 @@ const store = new Vuex.Store({
     eventFilterLoc: null,
     eventFilterStartDate: null,
     eventFilterEndDate: null,
+    requestId: null,
     requests: [], // All requests created in the app
     events: [], // All events created in the app
     responses: [], // All responses to events/requests created in the app
@@ -37,6 +38,9 @@ const store = new Vuex.Store({
        */
       state.username = username;
     },
+    updateRequestId(state, requestId){
+      state.requestId = requestId;
+    },
     updateFilter(state, filter) {
       /**
        * Update the stored requests filter to the specified one.
@@ -44,12 +48,27 @@ const store = new Vuex.Store({
        */
       state.filter = filter;
     },
+    updateResponses(state, responses) {
+      /**
+       * Update the stored requests to the provided requests.
+       * @param requests - Requests to store
+       */
+      state.responses = responses;
+    },
     updateRequests(state, requests) {
       /**
        * Update the stored requests to the provided requests.
        * @param requests - Requests to store
        */
       state.requests = requests;
+    },
+    async refreshResponses(state) {
+      /**
+       * Request the server for the currently available responses.
+       */
+      const url = state.filter ? `/api/users/${state.filter}/responses` : '/api/responses'; // TODO: Update for different types of filtering
+      const res = await fetch(url).then(async r => r.json());
+      state.responses = res;
     },
     async refreshRequests(state) {
       /**
