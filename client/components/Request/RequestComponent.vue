@@ -3,7 +3,7 @@
 
 <template>
   <article
-    class="request"
+      class="request"
   >
     <h3 class="author">
       @{{ request.author }}
@@ -58,37 +58,64 @@
     </p>
     <div>
       <div
-        v-if="$store.state.username === request.author"
-        class="actions"
+          v-if="$store.state.username === request.author"
+          class="actions"
       >
         <button
-          v-if="editing"
-          @click="submitEdit"
+            v-if="editing"
+            @click="submitEdit"
         >
           ✅ Save changes
         </button>
         <button
-          v-if="editing"
-          @click="stopEditing"
+            v-if="editing"
+            @click="stopEditing"
         >
           🚫 Discard changes
         </button>
         <button
-          v-if="!editing"
-          @click="startEditing"
+            v-if="!editing"
+            @click="startEditing"
         >
           ✏️ Edit
         </button>
         <button @click="deleteRequest">
           🗑️ Delete
         </button>
+        <button @click="respondToRequest">
+          🗣 Respond
+        </button>
+        <button @click="viewResponses">
+          👀 View Responses
+        </button>
       </div>
     </div>
+    <CreateResponseForm
+        v-if="responding"/>
+    <div class="right">
+      <GetResponsesForm
+          ref="getResponsesForm"
+          value="response"
+          placeholder="🔍 Filter by responses (optional)"
+          button="🔄 Get responses"
+      />
+    </div>
+    <section v-if="viewingResponses">
+      <ResponseComponent
+          v-if="$store.state.responses.length"
+          v-for="response in $store.state.responses"
+          :key="response.id"
+          :response="response"
+      />
+      <article v-else>
+        <h3>No responses found.</h3>
+      </article>
+    </section>
     <section class="alerts">
       <article
-        v-for="(status, alert, index) in alerts"
-        :key="index"
-        :class="status"
+          v-for="(status, alert, index) in alerts"
+          :key="index"
+          :class="status"
       >
         <p>{{ alert }}</p>
       </article>
@@ -97,8 +124,16 @@
 </template>
 
 <script>
+import BlockForm from "../common/BlockForm";
+import InlineForm from "../common/InlineForm";
+import CreateResponseForm from "./CreateResponseForm";
+import ResponseComponent from "./ResponseComponent";
+import GetRequestsForm from "./GetRequestsForm";
+import GetResponsesForm from "./GetResponsesForm";
+
 export default {
   name: 'RequestComponent',
+  components: {GetResponsesForm, GetRequestsForm, CreateResponseForm, ResponseComponent, InlineForm, BlockForm},
   props: {
     // Data from the stored request
     request: {
@@ -108,6 +143,8 @@ export default {
   },
   data() {
     return {
+      viewingResponses: false,
+      responding: false,
       editing: false, // Whether or not this request is in edit mode
       draftContact: this.request.contact, // Potentially-new contact for this request
       draftDescription: this.request.description, // Potentially-new description for this request
@@ -115,6 +152,17 @@ export default {
     };
   },
   methods: {
+    respondToRequest() {
+      /**
+       * Enables respond mode on this request.
+       */
+      this.responding = !this.responding; // Keeps track of if a request is being edited
+      this.$store.commit('updateRequestId', this.request._id);
+    },
+    viewResponses() {
+      this.viewingResponses = !this.viewingResponses;
+      this.$store.commit('updateRequestId', this.request._id);
+    },
     startEditing() {
       /**
        * Enables edit mode on this request.
@@ -149,7 +197,7 @@ export default {
       /**
        * Updates request to have the submitted draft content.
        */
-      if ((this.request.contact === this.draftContact) && (this.request.description === this.draftDescription)){
+      if ((this.request.contact === this.draftContact) && (this.request.description === this.draftDescription)) {
         const error = 'Error: Edited request content should be different than current request content.';
         this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
@@ -203,10 +251,16 @@ export default {
 
 <style scoped>
 .request {
+<<<<<<< HEAD
     border: 1px solid #111;
     padding: 20px;
     position: relative;
     border-radius: 15px;
     margin-bottom: 15px;
+=======
+  border: 1px solid #111;
+  padding: 20px;
+  position: relative;
+>>>>>>> response-thread
 }
 </style>

@@ -4,7 +4,7 @@ import ResponseModel from './model';
 import UserCollection from '../user/collection';
 
 class ResponseCollection {
-    static async findByRequestId(rId: Types.ObjectId | string): Promise<Array<HydratedDocument<Response>>> {
+    static async findByRequestId(rId: string | any): Promise<Array<HydratedDocument<Response>>> {
         return ResponseModel.find({ requestId: rId }).sort({ dateCreated: -1 }).populate('author');
     }
 
@@ -48,4 +48,4 @@ class ResponseCollection {
     }
 }
 
-export default ResponseCollection; 
+export default ResponseCollection;

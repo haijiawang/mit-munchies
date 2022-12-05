@@ -6,15 +6,15 @@ import RequestCollection from "./collection";
  * Checks if a freet with freetId is req.params exists
  */
 const isRequestExists = async (req: Request, res: Response, next: NextFunction) => {
-    const validFormat = Types.ObjectId.isValid(req.params.requestId);
-    const request = validFormat ? await RequestCollection.findOne(req.params.requestId) : '';
+    const requestId = req.params.requestId ? req.params.requestId : req.body.requestId;
+    const validFormat = Types.ObjectId.isValid(requestId);
+    const request = validFormat ? await RequestCollection.findOne(requestId) : '';
     if (!request) {
         res.status(404).json({
-            error: `Request with request ID ${req.params.requestId} does not exist.`
+            error: `Request with request ID ${requestId} does not exist.`
         });
         return;
     }
-
     next();
 };
 
