@@ -82,25 +82,65 @@
         <button @click="deleteRequest">
           🗑️ Delete
         </button>
-        <button @click="respondToRequest">
-          🗣 Respond
-        </button>
         <button @click="viewResponses">
           👀 View Responses
         </button>
       </div>
-    </div>
-    <CreateResponseForm
-        v-if="responding"/>
-    <div class="right">
-      <GetResponsesForm
-          ref="getResponsesForm"
-          value="response"
-          placeholder="🔍 Filter by responses (optional)"
-          button="🔄 Get responses"
-      />
+      <div v-else>
+        <div v-if="responding">
+          <button @click="submitResponse">
+            🗣 Submit Response
+          </button>
+
+            Contact for the requestor to reach you:
+            <textarea
+              class="responsecontact"
+              :value="draftresponsecontact"
+              @input="draftresponsecontact = $event.target.value"
+            />
+
+            Description of your donation to this request:
+            <textarea
+              class="responsedescription"
+              :value="draftresponsedescription"
+              @input="draftresponsedescription = $event.target.value"
+            />
+
+            Submit an Image:
+            <v-layout row>
+              <v-flex md6 offset-sm3>
+                <div>
+                  <div>
+                    <button @click="click1">Upload Image</button>
+                    <input
+                      type="file"
+                      ref="input1"
+                      style="display: none"
+                      @change="previewImage"
+                      accept="image/*"
+                    />
+                  </div>
+
+                  <div v-if="imageData != null">
+                    <img class="preview" height="268" width="356" :src="img1" />
+                    <br />
+                  </div>
+                </div>
+              </v-flex>
+            </v-layout>
+
+        </div>
+        <div v-else>
+          <button @click="respondToRequest">
+            🗣 Respond
+          </button>
+        </div>
+      </div>
     </div>
     <section v-if="viewingResponses">
+      <button @click="refreshResponses">
+        🔄 Refresh responses
+      </button>
       <ResponseComponent
           v-if="$store.state.responses.length"
           v-for="response in $store.state.responses"
@@ -148,10 +188,54 @@ export default {
       editing: false, // Whether or not this request is in edit mode
       draftContact: this.request.contact, // Potentially-new contact for this request
       draftDescription: this.request.description, // Potentially-new description for this request
+      draftresponsecontact: "",
+      draftresponsedescription: "",
+      caption: "",
+      img1: "",
+      imageDate: null,
       alerts: {} // Displays success/error messages encountered during request modification
     };
   },
   methods: {
+    create() {
+      const post = {
+        photo: this.img1,
+        caption: this.caption,
+      };
+      console.log(post);
+      firebase
+        .database()
+        .ref("PhotoGallery")
+        .push(post)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    click1() {
+      this.$refs.input1.click();
+    },
+
+    previewImage(event) {
+      this.uploadValue = 0;
+      this.img1 = null;
+      this.imageData = event.target.files[0];
+      this.onUpload();
+    },
+
+    onUpload() {
+      const storage = getStorage();
+      console.log(storage);
+
+      const imgRef = ref(storage, `images/${this.imageData.name}`);
+      uploadBytes(imgRef, this.imageData).then((snapshot) => {
+        getDownloadURL(snapshot.ref).then((url) => console.log(url));
+        console.log("helloo world");
+        console.log(snapshot);
+      });
+    },    
     respondToRequest() {
       /**
        * Enables respond mode on this request.
@@ -244,7 +328,71 @@ export default {
         this.$set(this.alerts, e, 'error');
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
-    }
+    },
+    submitResponse() {
+      const params = {
+        method: "POST",
+        message: "Successfully created an event response!",
+        body: JSON.stringify({
+          contact: this.draftresponsecontact,
+          description: this.draftresponsedescription,
+        }),
+        callback: () => {
+          this.$set(this.alerts, params.message, "success");
+          setTimeout(() => this.$delete(this.alerts, params.message), 3000);
+        },
+      };
+      this.responserequest(params);
+    },
+    async responserequest(params) {
+      /**
+       * Submits a request to the request's endpoint
+       * @param params - Options for the request
+       * @param params.body - Body for the request, if it exists
+       * @param params.callback - Function to run if the the request succeeds
+       */
+      const options = {
+        method: params.method,
+        headers: { "Content-Type": "application/json" },
+      };
+      if (params.body) {
+        options.body = params.body;
+      }
+
+      try {
+        const r = await fetch(`/api/responses/${this.request._id}`, options);
+        const res = await r.json();
+        if (!r.ok) {
+          throw new Error(res.error);
+        }
+
+        this.responding = false;
+        this.$store.commit("refreshResponses");
+        this.$store.commit('updateResponses', res);
+
+        params.callback();
+      } catch (e) {
+        this.$set(this.alerts, e, "error");
+        setTimeout(() => this.$delete(this.alerts, e), 3000);
+      }
+    },
+    async refreshResponses() {
+      const url = this.$store.state.requestId ? `/api/responses?requestId=${this.$store.state.requestId}` : '/api/responses';
+      try {
+        const r = await fetch(url);
+        const res = await r.json();
+        if (!r.ok) {
+          throw new Error(res.error);
+        }
+
+        this.$store.commit('updateResponses', res);
+      } catch (e) {
+        this.$store.commit('refreshResponses');
+
+        this.$set(this.alerts, e, 'error');
+        setTimeout(() => this.$delete(this.alerts, e), 3000);
+      }
+    },
   }
 };
 </script>

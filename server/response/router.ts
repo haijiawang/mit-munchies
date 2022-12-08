@@ -20,9 +20,7 @@ router.get(
     ],
     async (req: Request, res: Response) => {
         const allResponses = await ResponseCollection.findByRequestId(req.query.requestId);
-        res.status(200).json({
-            responses:  allResponses.map(util.constructResponseResponse)
-        });
+        res.status(200).json(allResponses.map(util.constructResponseResponse));
     }
 )
 
@@ -56,7 +54,7 @@ router.post(
     ],
     async (req: Request, res: Response) => {
         const userId = (req.session.userId as string) ?? '';
-        const response = await ResponseCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description, requestId: req.body.requestId });
+        const response = await ResponseCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description, requestId: req.params.requestId });
         res.status(201).json({
             message: 'Your response was created successfully.',
             response: util.constructResponseResponse(response)

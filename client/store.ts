@@ -17,6 +17,7 @@ const store = new Vuex.Store({
     requestId: null,
     requests: [], // All requests created in the app
     events: [], // All events created in the app
+    responses: [],
     eventResponses: [], // All responses to events/requests created in the app
     username: null, // Username of the logged in user
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
@@ -66,7 +67,7 @@ const store = new Vuex.Store({
       /**
        * Request the server for the currently available responses.
        */
-      const url = state.filter ? `/api/users/${state.filter}/responses` : '/api/responses'; // TODO: Update for different types of filtering
+      const url = state.filter ? `/api/responses/${state.requestId}` : '/api/responses'; // Get the request ID
       const res = await fetch(url).then(async r => r.json());
       state.responses = res;
     },
