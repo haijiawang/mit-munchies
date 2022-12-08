@@ -16,6 +16,7 @@ const store = new Vuex.Store({
     eventFilterEndDate: null,
     requestId: null,
     requests: [], // All requests created in the app
+    responses: [],
     events: [], // All events created in the app
     responses: [],
     eventResponses: [], // All responses to events/requests created in the app
@@ -39,7 +40,7 @@ const store = new Vuex.Store({
        */
       state.username = username;
     },
-    updateRequestId(state, requestId){
+    updateRequestId(state, requestId) {
       state.requestId = requestId;
     },
     updateFilter(state, filter) {
@@ -118,22 +119,22 @@ const store = new Vuex.Store({
       /**
        * Request the server for the currently available events.
        */
-       var url = '/api/events';
-       if (state.eventFilterCoord && state.eventFilterStartDate && state.eventFilterEndDate && state.eventFilterLoc){
-         url = `/api/events?coordinator=${state.eventFilterCoord}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}&location=${state.eventFilterLoc}`;
-       }else if (state.eventFilterCoord && state.eventFilterStartDate){
-         url = `/api/events?coordinator=${state.eventFilterCoord}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
-       }else if (state.eventFilterCoord && state.eventFilterLoc){
-         url = `/api/events?coordinator=${state.eventFilterCoord}&location=${state.eventFilterLoc}`;
-       }else if (state.eventFilterLoc && state.eventFilterStartDate){
-         url = `/api/events?location=${state.eventFilterLoc}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
-       }else if (state.eventFilterCoord){
-         url = `/api/events?coordinator=${state.eventFilterCoord}`;
-       }else if (state.eventFilterStartDate){
-         url = `/api/events?startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
-       }else if (state.eventFilterLoc){
-         url = `/api/events?location=${state.eventFilterLoc}`;
-       }
+      var url = '/api/events';
+      if (state.eventFilterCoord && state.eventFilterStartDate && state.eventFilterEndDate && state.eventFilterLoc) {
+        url = `/api/events?coordinator=${state.eventFilterCoord}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}&location=${state.eventFilterLoc}`;
+      } else if (state.eventFilterCoord && state.eventFilterStartDate) {
+        url = `/api/events?coordinator=${state.eventFilterCoord}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
+      } else if (state.eventFilterCoord && state.eventFilterLoc) {
+        url = `/api/events?coordinator=${state.eventFilterCoord}&location=${state.eventFilterLoc}`;
+      } else if (state.eventFilterLoc && state.eventFilterStartDate) {
+        url = `/api/events?location=${state.eventFilterLoc}&startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
+      } else if (state.eventFilterCoord) {
+        url = `/api/events?coordinator=${state.eventFilterCoord}`;
+      } else if (state.eventFilterStartDate) {
+        url = `/api/events?startrange=${state.eventFilterStartDate}&endrange=${state.eventFilterEndDate}`;
+      } else if (state.eventFilterLoc) {
+        url = `/api/events?location=${state.eventFilterLoc}`;
+      }
       const res = await fetch(url).then(async r => r.json());
       state.events = res;
     },
