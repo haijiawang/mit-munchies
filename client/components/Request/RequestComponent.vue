@@ -2,120 +2,74 @@
 <!-- We've tagged some elements with classes; consider writing CSS using those classes to style them... -->
 
 <template>
-  <article
-      class="request"
-  >
-    <h3 class="author">
-      @{{ request.author }}
-    </h3>
+  <article class="request">
+    <h3 class="author">@{{ request.author }}</h3>
     <textarea
-        v-if="editing"
-        class="contact"
-        :value="draftContact"
-        @input="draftContact = $event.target.value"
+      v-if="editing"
+      class="contact"
+      :value="draftContact"
+      @input="draftContact = $event.target.value"
     />
-    <p
-        v-else
-        class="contact"
-    >
-      Contact me: {{ request.contact }}
-    </p>
+    <p v-else class="contact">Contact me: {{ request.contact }}</p>
     <textarea
-        v-if="editing"
-        class="description"
-        :value="draftDescription"
-        @input="draftDescription = $event.target.value"
+      v-if="editing"
+      class="description"
+      :value="draftDescription"
+      @input="draftDescription = $event.target.value"
     />
-    <p
-        v-else
-        class="description"
-    >
+    <p v-else class="description">
       Request Description: {{ request.description }}
     </p>
     <textarea
-        v-if="editing"
-        class="color"
-        :value="draftColor"
-        @input="draftColor = $event.target.value"
+      v-if="editing"
+      class="color"
+      :value="draftColor"
+      @input="draftColor = $event.target.value"
     />
-    <p
-        v-else
-        class="color"
-    >
-      Color: {{ request.color }}
-    </p>
+    <p v-else class="color">Color: {{ request.color }}</p>
     <textarea
-        v-if="editing"
-        class="size"
-        :value="draftSize"
-        @input="draftSize = $event.target.value"
+      v-if="editing"
+      class="size"
+      :value="draftSize"
+      @input="draftSize = $event.target.value"
     />
-    <p
-        v-else
-        class="size"
-    >
-      Size: {{ request.size }}
-    </p>
+    <p v-else class="size">Size: {{ request.size }}</p>
     <div>
-      <div
-          v-if="$store.state.username === request.author"
-          class="actions"
-      >
-        <button
-            v-if="editing"
-            @click="submitEdit"
-        >
-          ✅ Save changes
-        </button>
-        <button
-            v-if="editing"
-            @click="stopEditing"
-        >
-          🚫 Discard changes
-        </button>
-        <button
-            v-if="!editing"
-            @click="startEditing"
-        >
-          ✏️ Edit
-        </button>
-        <button @click="deleteRequest">
-          🗑️ Delete
-        </button>
-        <button @click="respondToRequest">
-          🗣 Respond
-        </button>
-        <button @click="viewResponses">
-          👀 View Responses
-        </button>
+      <div v-if="$store.state.username === request.author" class="actions">
+        <button v-if="editing" @click="submitEdit">✅ Save changes</button>
+        <button v-if="editing" @click="stopEditing">🚫 Discard changes</button>
+        <button v-if="!editing" @click="startEditing">✏️ Edit</button>
+        <button @click="deleteRequest">🗑️ Delete</button>
+        <button @click="respondToRequest">🗣 Respond</button>
+        <button @click="viewResponses">👀 View Responses</button>
       </div>
     </div>
-    <CreateResponseForm
-        v-if="responding"/>
+    <CreateResponseForm v-if="responding" />
     <div class="right">
       <GetResponsesForm
-          ref="getResponsesForm"
-          value="response"
-          placeholder="🔍 Filter by responses (optional)"
-          button="🔄 Get responses"
+        ref="getResponsesForm"
+        value="response"
+        placeholder="🔍 Filter by responses (optional)"
+        button="🔄 Get responses"
       />
     </div>
     <section v-if="viewingResponses">
-      <ResponseComponent
-          v-if="$store.state.responses.length"
+      <div v-if="$store.state.responses.length">
+        <ResponseComponent
           v-for="response in $store.state.responses"
           :key="response.id"
           :response="response"
-      />
+        />
+      </div>
       <article v-else>
         <h3>No responses found.</h3>
       </article>
     </section>
     <section class="alerts">
       <article
-          v-for="(status, alert, index) in alerts"
-          :key="index"
-          :class="status"
+        v-for="(status, alert, index) in alerts"
+        :key="index"
+        :class="status"
       >
         <p>{{ alert }}</p>
       </article>
@@ -132,14 +86,21 @@ import GetRequestsForm from "./GetRequestsForm";
 import GetResponsesForm from "./GetResponsesForm";
 
 export default {
-  name: 'RequestComponent',
-  components: {GetResponsesForm, GetRequestsForm, CreateResponseForm, ResponseComponent, InlineForm, BlockForm},
+  name: "RequestComponent",
+  components: {
+    GetResponsesForm,
+    GetRequestsForm,
+    CreateResponseForm,
+    ResponseComponent,
+    InlineForm,
+    BlockForm,
+  },
   props: {
     // Data from the stored request
     request: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -148,7 +109,7 @@ export default {
       editing: false, // Whether or not this request is in edit mode
       draftContact: this.request.contact, // Potentially-new contact for this request
       draftDescription: this.request.description, // Potentially-new description for this request
-      alerts: {} // Displays success/error messages encountered during request modification
+      alerts: {}, // Displays success/error messages encountered during request modification
     };
   },
   methods: {
@@ -157,11 +118,11 @@ export default {
        * Enables respond mode on this request.
        */
       this.responding = !this.responding; // Keeps track of if a request is being edited
-      this.$store.commit('updateRequestId', this.request._id);
+      this.$store.commit("updateRequestId", this.request._id);
     },
     viewResponses() {
       this.viewingResponses = !this.viewingResponses;
-      this.$store.commit('updateRequestId', this.request._id);
+      this.$store.commit("updateRequestId", this.request._id);
     },
     startEditing() {
       /**
@@ -184,12 +145,13 @@ export default {
        * Deletes this request.
        */
       const params = {
-        method: 'DELETE',
+        method: "DELETE",
         callback: () => {
-          this.$store.commit('alert', {
-            message: 'Successfully deleted request!', status: 'success'
+          this.$store.commit("alert", {
+            message: "Successfully deleted request!",
+            status: "success",
           });
-        }
+        },
       };
       this.request(params);
     },
@@ -197,21 +159,28 @@ export default {
       /**
        * Updates request to have the submitted draft content.
        */
-      if ((this.request.contact === this.draftContact) && (this.request.description === this.draftDescription)) {
-        const error = 'Error: Edited request content should be different than current request content.';
-        this.$set(this.alerts, error, 'error'); // Set an alert to be the error text, timeout of 3000 ms
+      if (
+        this.request.contact === this.draftContact &&
+        this.request.description === this.draftDescription
+      ) {
+        const error =
+          "Error: Edited request content should be different than current request content.";
+        this.$set(this.alerts, error, "error"); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
       }
 
       const params = {
-        method: 'PATCH',
-        message: 'Successfully edited request!',
-        body: JSON.stringify({contact: this.draftContact, description: this.draftDescription}),
+        method: "PATCH",
+        message: "Successfully edited request!",
+        body: JSON.stringify({
+          contact: this.draftContact,
+          description: this.draftDescription,
+        }),
         callback: () => {
-          this.$set(this.alerts, params.message, 'success');
+          this.$set(this.alerts, params.message, "success");
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
-        }
+        },
       };
       this.request(params);
     },
@@ -223,7 +192,8 @@ export default {
        * @param params.callback - Function to run if the the request succeeds
        */
       const options = {
-        method: params.method, headers: {'Content-Type': 'application/json'}
+        method: params.method,
+        headers: { "Content-Type": "application/json" },
       };
       if (params.body) {
         options.body = params.body;
@@ -237,15 +207,15 @@ export default {
         }
 
         this.editing = false;
-        this.$store.commit('refreshRequests');
+        this.$store.commit("refreshRequests");
 
         params.callback();
       } catch (e) {
-        this.$set(this.alerts, e, 'error');
+        this.$set(this.alerts, e, "error");
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -254,5 +224,7 @@ export default {
   border: 1px solid #111;
   padding: 20px;
   position: relative;
+  border-radius: 15px;
+  margin-bottom: 15px;
 }
 </style>

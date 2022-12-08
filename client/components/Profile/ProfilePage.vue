@@ -5,7 +5,11 @@
   <main>
     <section>
       <header>
-        <h2> Active Events, Requests, and Responses for @{{ $store.state.username }}</h2>
+        <h2>
+          Active Events, Requests, and Responses for @{{
+            $store.state.username
+          }}
+        </h2>
       </header>
     </section>
     <section>
@@ -13,10 +17,7 @@
         <h2>Events</h2>
       </header>
       <div class="right">
-        <GetEventsFormBlank
-          ref="getEventsFormBlank"
-          button="🔄 Get events"
-        />
+        <GetEventsFormBlank ref="getEventsFormBlank" button="🔄 Get events" />
       </div>
       <section v-if="$store.state.events.length">
         <EventComponent
@@ -45,7 +46,7 @@
         <h3>No requests found.</h3>
       </article>
     </section>
-    
+
     <section>
       <header>
         <h2>Responses</h2>
@@ -67,7 +68,6 @@
         <h3>No responses found.</h3>
       </article>
     </section>
-
   </main>
 </template>
 
@@ -80,10 +80,16 @@ import GetEventResponsesForm from "@/components/EventResponse/GetEventResponsesF
 
 export default {
   name: "ProfilePage",
-  components: { EventComponent, RequestComponent, EventResponseComponent, GetEventsFormBlank, GetEventResponsesForm },
+  components: {
+    EventComponent,
+    RequestComponent,
+    EventResponseComponent,
+    GetEventsFormBlank,
+    GetEventResponsesForm,
+  },
   mounted() {
-    this.$refs.getEventsFormBlank.submit();
-    this.$refs.getEventResponsesForm.submit();
+    // this.$refs.getEventsFormBlank.submit();
+    // this.$refs.getEventResponsesForm.submit();
   },
 };
 </script>
