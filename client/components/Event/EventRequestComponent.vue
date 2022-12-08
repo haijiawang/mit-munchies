@@ -2,67 +2,94 @@
 
 <template>
   <article class="event">
-    <header>
-      <h3 class="coordinator">@{{ event.coordinatorId }}</h3>
+
+    <!-- START INFO HERE  -->
+    <table cellspacing="0" cellpadding="0">
+    <tr align="left" width="9000000">
+      <th rowspan="1" style="font-size:2vw" width="400"> Title will go here </th>
+
+      <td rowspan="2">
+        <textarea
+          v-if="editing"
+          class="startdate"
+          :value="draftstart"
+          @input="draftstart = $event.target.value"
+        />
+        <p v-else class="startdate" style="font-size:1.1vw"><b><i>Starts:</i></b> {{ event.startdate }}</p>
+
+        <textarea
+          v-if="editing"
+          class="enddate"
+          :value="draftend"
+          @input="draftend = $event.target.value"
+        />
+        <p v-else class="enddate" style="font-size:1.1vw"><b><i>Ends:</i></b> {{ event.enddate }}</p>
+
+        <textarea
+          v-if="editing"
+          class="donationdate"
+          :value="draftdonation"
+          @input="draftdonation = $event.target.value"
+        />
+        <p v-else class="donationdate" style="font-size:1.1vw">
+          <b><i>Last Date for Donations:</i></b> {{ event.donationdate }}
+        </p>
+
+      </td>
+    </tr>
+
+    <tr>
+      <th rowspan="1" align="left"> Coordinated by @{{ event.coordinatorId }} </th>
+    </tr>
+
+    <tr>
+      <td colspan="3" align="left">
+        <textarea
+          v-if="editing"
+          class="description"
+          :value="draftdescription"
+          @input="draftdescription = $event.target.value"
+        />
+        <p v-else class="description"><b>Description:</b> {{ event.description }}</p>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="3" align="left">
+        <textarea
+          v-if="editing"
+          class="location"
+          :value="draftlocation"
+          @input="draftlocation = $event.target.value"
+        />
+        <div v-else style="text-transform:capitalize;">
+          <p class="location"><b>Location:</b> {{ event.location }}</p>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="3" align="left">
+        <textarea
+          v-if="editing"
+          class="contact"
+          :value="draftcontact"
+          @input="draftcontact = $event.target.value"
+        />
+        <p v-else class="contact"><b>Contact {{ event.coordinatorId }}:</b> {{ event.contact }}</p>
+      </td>
+    </tr>
+
+    </table>
+    <!-- END INFO HERE  -->
+
+    <section v-if="$store.state.username">
       <div v-if="$store.state.username === event.coordinatorId" class="actions">
         <button v-if="editing" @click="submitEdit">✅ Save changes</button>
         <button v-if="editing" @click="stopEditing">🚫 Discard changes</button>
         <button v-if="!editing" @click="startEditing">✏️ Edit</button>
         <button @click="deleteEvent">🗑️ Delete</button>
       </div>
-    </header>
-
-    <textarea
-      v-if="editing"
-      class="description"
-      :value="draftdescription"
-      @input="draftdescription = $event.target.value"
-    />
-    <p v-else class="description">Description: {{ event.description }}</p>
-
-    <textarea
-      v-if="editing"
-      class="startdate"
-      :value="draftstart"
-      @input="draftstart = $event.target.value"
-    />
-    <p v-else class="startdate">Event Start: {{ event.startdate }}</p>
-
-    <textarea
-      v-if="editing"
-      class="enddate"
-      :value="draftend"
-      @input="draftend = $event.target.value"
-    />
-    <p v-else class="enddate">Event End: {{ event.enddate }}</p>
-
-    <textarea
-      v-if="editing"
-      class="donationdate"
-      :value="draftdonation"
-      @input="draftdonation = $event.target.value"
-    />
-    <p v-else class="donationdate">
-      Last Date for Accepting Donations: {{ event.donationdate }}
-    </p>
-
-    <textarea
-      v-if="editing"
-      class="location"
-      :value="draftlocation"
-      @input="draftlocation = $event.target.value"
-    />
-    <p v-else class="location">Location: {{ event.location }}</p>
-
-    <textarea
-      v-if="editing"
-      class="contact"
-      :value="draftcontact"
-      @input="draftcontact = $event.target.value"
-    />
-    <p v-else class="contact">Contact Me: {{ event.contact }}</p>
-
-    <section v-if="$store.state.username">
       <div v-if="$store.state.username !== event.coordinatorId">
         <div v-if="this.responding">
           <button @click="submitResponse">Submit</button>
