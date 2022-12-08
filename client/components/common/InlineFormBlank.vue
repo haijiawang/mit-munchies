@@ -3,6 +3,11 @@
 
 <template>
   <form @submit.prevent="submit">
+    <section
+      v-model="value"
+      type="text"
+    >
+    </section>
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -17,7 +22,13 @@
 
 <script>
 export default {
-  name: 'InlineForm',
+  name: 'InlineFormBlank',
+  props: {
+    button: {
+      type: String,
+      default: 'Submit'
+    }
+  },
   data() {
     return {value: '', alerts: {}};
   }

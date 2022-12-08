@@ -17,7 +17,10 @@
         <h2>Events</h2>
       </header>
       <div class="right">
-        <GetEventsFormBlank ref="getEventsFormBlank" button="🔄 Get events" />
+        <GetEventsFormBlank
+          ref="getEventsFormBlank"
+          value="$store.state.username"
+        />
       </div>
       <section v-if="$store.state.events.length">
         <EventComponent
@@ -35,6 +38,12 @@
       <header>
         <h2>Requests</h2>
       </header>
+      <div class="right">
+        <GetRequestsFormBlank
+          ref="getRequestsFormBlank"
+          value="$store.state.username"
+        />
+      </div>
       <section v-if="$store.state.requests.length">
         <RequestComponent
           v-for="request in $store.state.requests"
@@ -76,6 +85,7 @@ import EventComponent from "@/components/Event/EventComponent.vue";
 import RequestComponent from "@/components/Request/RequestComponent.vue";
 import EventResponseComponent from "@/components/EventResponse/EventResponseComponent.vue";
 import GetEventsFormBlank from "@/components/Event/GetEventsFormBlank.vue";
+import GetRequestsFormBlank from "@/components/Request/GetRequestsFormBlank.vue";
 import GetEventResponsesForm from "@/components/EventResponse/GetEventResponsesForm.vue";
 
 export default {
@@ -85,11 +95,13 @@ export default {
     RequestComponent,
     EventResponseComponent,
     GetEventsFormBlank,
+    GetRequestsFormBlank,
     GetEventResponsesForm,
   },
   mounted() {
-    // this.$refs.getEventsFormBlank.submit();
-    // this.$refs.getEventResponsesForm.submit();
+    this.$refs.getEventsFormBlank.submit();
+    this.$refs.getRequestsFormBlank.submit();
+    this.$refs.getEventResponsesForm.submit();
   },
 };
 </script>
