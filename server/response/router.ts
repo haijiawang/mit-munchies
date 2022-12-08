@@ -54,7 +54,7 @@ router.post(
     ],
     async (req: Request, res: Response) => {
         const userId = (req.session.userId as string) ?? '';
-        const response = await ResponseCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description, requestId: req.params.requestId });
+        const response = await ResponseCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description, requestId: req.params.requestId.toString() });
         res.status(201).json({
             message: 'Your response was created successfully.',
             response: util.constructResponseResponse(response)

@@ -18,7 +18,6 @@ const store = new Vuex.Store({
     requests: [], // All requests created in the app
     responses: [],
     events: [], // All events created in the app
-    responses: [],
     eventResponses: [], // All responses to events/requests created in the app
     username: null, // Username of the logged in user
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
