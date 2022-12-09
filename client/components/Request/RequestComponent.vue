@@ -5,36 +5,46 @@
   <article class="request">
     <h3 class="author">@{{ request.author }}</h3>
     <textarea
-      v-if="editing"
-      class="contact"
-      :value="draftContact"
-      @input="draftContact = $event.target.value"
+        v-if="editing"
+        class="contact"
+        :value="draftContact"
+        @input="draftContact = $event.target.value"
     />
     <p v-else class="contact">Contact me: {{ request.contact }}</p>
     <textarea
-      v-if="editing"
-      class="description"
-      :value="draftDescription"
-      @input="draftDescription = $event.target.value"
+        v-if="editing"
+        class="description"
+        :value="draftDescription"
+        @input="draftDescription = $event.target.value"
     />
     <p v-else class="description">
       Request Description: {{ request.description }}
     </p>
     <textarea
-      v-if="editing"
-      class="color"
-      :value="draftColor"
-      @input="draftColor = $event.target.value"
+        v-if="editing"
+        class="color"
+        :value="draftColor"
+        @input="draftColor = $event.target.value"
     />
     <p v-else class="color">Color: {{ request.color }}</p>
     <textarea
-      v-if="editing"
-      class="size"
-      :value="draftSize"
-      @input="draftSize = $event.target.value"
+        v-if="editing"
+        class="size"
+        :value="draftSize"
+        @input="draftSize = $event.target.value"
     />
     <p v-else class="size">Size: {{ request.size }}</p>
     <div>
+      <div
+          class="actions"
+      >
+        <button @click="viewResponses">
+          👀 View Responses
+        </button>
+        <button @click="respondToRequest">
+          🗣 Respond
+        </button>
+      </div>
       <div
           v-if="$store.state.username === request.author"
           class="actions"
@@ -60,70 +70,56 @@
         <button @click="deleteRequest">
           🗑️ Delete
         </button>
-        <button @click="viewResponses">
-          👀 View Responses
-        </button>
       </div>
-      <div v-else>
-        <div v-if="responding">
-          <button @click="submitResponse">
-            🗣 Submit Response
-          </button>
+      <div v-if="responding">
+        <button @click="submitResponse">
+          🗣 Submit Response
+        </button>
 
-            Contact for the requestor to reach you:
-            <textarea
-              class="responsecontact"
-              :value="draftresponsecontact"
-              @input="draftresponsecontact = $event.target.value"
-            />
+        Contact for the requestor to reach you:
+        <textarea
+            class="responsecontact"
+            :value="draftresponsecontact"
+            @input="draftresponsecontact = $event.target.value"
+        />
 
-            Description of your donation to this request:
-            <textarea
-              class="responsedescription"
-              :value="draftresponsedescription"
-              @input="draftresponsedescription = $event.target.value"
-            />
+        Description of your donation to this request:
+        <textarea
+            class="responsedescription"
+            :value="draftresponsedescription"
+            @input="draftresponsedescription = $event.target.value"
+        />
 
-            Submit an Image:
-            <v-layout row>
-              <v-flex md6 offset-sm3>
-                <div>
-                  <div>
-                    <button @click="click1">Upload Image</button>
-                    <input
-                      type="file"
-                      ref="input1"
-                      style="display: none"
-                      @change="previewImage"
-                      accept="image/*"
-                    />
-                  </div>
+        Submit an Image:
+        <v-layout row>
+          <v-flex md6 offset-sm3>
+            <div>
+              <div>
+                <button @click="click1">Upload Image</button>
+                <input
+                    type="file"
+                    ref="input1"
+                    style="display: none"
+                    @change="previewImage"
+                    accept="image/*"
+                />
+              </div>
 
-                  <div v-if="imageData != null">
-                    <img class="preview" height="268" width="356" :src="img1" />
-                    <br />
-                  </div>
-                </div>
-              </v-flex>
-            </v-layout>
-
-        </div>
-        <div v-else>
-          <button @click="respondToRequest">
-            🗣 Respond
-          </button>
-        </div>
+              <div v-if="imageData != null">
+                <img class="preview" height="268" width="356" :src="img1"/>
+                <br/>
+              </div>
+            </div>
+          </v-flex>
+        </v-layout>
       </div>
     </div>
     <section v-if="viewingResponses">
-      <button @click="refreshResponses">
-        🔄 Refresh responses
-      </button>
-      <ResponseComponent
-          v-if="$store.state.responses.length"
-          v-for="response in $store.state.responses"
-          :key="response.id"
-          :response="response"
+      <div v-if="responses.length>0">
+        <ResponseComponent
+            v-for="response in responses"
+            :key="response.id"
+            :response="response"
         />
       </div>
       <article v-else>
@@ -132,9 +128,9 @@
     </section>
     <section class="alerts">
       <article
-        v-for="(status, alert, index) in alerts"
-        :key="index"
-        :class="status"
+          v-for="(status, alert, index) in alerts"
+          :key="index"
+          :class="status"
       >
         <p>{{ alert }}</p>
       </article>
@@ -148,12 +144,10 @@ import InlineForm from "../common/InlineForm";
 import CreateResponseForm from "./CreateResponseForm";
 import ResponseComponent from "./ResponseComponent";
 import GetRequestsForm from "./GetRequestsForm";
-import GetResponsesForm from "./GetResponsesForm";
 
 export default {
   name: "RequestComponent",
   components: {
-    GetResponsesForm,
     GetRequestsForm,
     CreateResponseForm,
     ResponseComponent,
@@ -179,6 +173,7 @@ export default {
       caption: "",
       img1: "",
       imageDate: null,
+      responses: [],
       alerts: {} // Displays success/error messages encountered during request modification
     };
   },
@@ -190,15 +185,15 @@ export default {
       };
       console.log(post);
       firebase
-        .database()
-        .ref("PhotoGallery")
-        .push(post)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          .database()
+          .ref("PhotoGallery")
+          .push(post)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
     },
     click1() {
       this.$refs.input1.click();
@@ -221,7 +216,7 @@ export default {
         console.log("helloo world");
         console.log(snapshot);
       });
-    },    
+    },
     respondToRequest() {
       /**
        * Enables respond mode on this request.
@@ -229,9 +224,11 @@ export default {
       this.responding = !this.responding; // Keeps track of if a request is being edited
       this.$store.commit("updateRequestId", this.request._id);
     },
-    viewResponses() {
+    async viewResponses() {
       this.viewingResponses = !this.viewingResponses;
-      this.$store.commit("updateRequestId", this.request._id);
+      const url = `/api/responses/${this.request._id}`; // Get the request ID
+      const res = await fetch(url).then(async r => r.json());
+      this.responses = res;
     },
     startEditing() {
       /**
@@ -262,18 +259,18 @@ export default {
           });
         },
       };
-      this.request(params);
+      this.submitRequest(params);
     },
     submitEdit() {
       /**
        * Updates request to have the submitted draft content.
        */
       if (
-        this.request.contact === this.draftContact &&
-        this.request.description === this.draftDescription
+          this.request.contact === this.draftContact &&
+          this.request.description === this.draftDescription
       ) {
         const error =
-          "Error: Edited request content should be different than current request content.";
+            "Error: Edited request content should be different than current request content.";
         this.$set(this.alerts, error, "error"); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
@@ -291,9 +288,9 @@ export default {
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         },
       };
-      this.request(params);
+      this.submitRequest(params);
     },
-    async request(params) {
+    async submitRequest(params) {
       /**
        * Submits a request to the request's endpoint
        * @param params - Options for the request
@@ -302,7 +299,7 @@ export default {
        */
       const options = {
         method: params.method,
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
       };
       if (params.body) {
         options.body = params.body;
@@ -337,9 +334,9 @@ export default {
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         },
       };
-      this.responserequest(params);
+      this.responseRequest(params);
     },
-    async responserequest(params) {
+    async responseRequest(params) {
       /**
        * Submits a request to the request's endpoint
        * @param params - Options for the request
@@ -348,14 +345,14 @@ export default {
        */
       const options = {
         method: params.method,
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
       };
       if (params.body) {
         options.body = params.body;
       }
 
       try {
-        const r = await fetch(`/api/responses/${this.request._id}`, options);
+        const r = await fetch(`/api/responses/${this.$store.state.requestId}`, options);
         const res = await r.json();
         if (!r.ok) {
           throw new Error(res.error);
@@ -363,7 +360,7 @@ export default {
 
         this.responding = false;
         this.$store.commit("refreshResponses");
-        this.$store.commit('updateResponses', res);
+        this.$store.commit('updateResponses', this.$store.state.requestId, res);
 
         params.callback();
       } catch (e) {
@@ -371,23 +368,6 @@ export default {
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     },
-    async refreshResponses() {
-      const url = this.$store.state.requestId ? `/api/responses?requestId=${this.$store.state.requestId}` : '/api/responses';
-      try {
-        const r = await fetch(url);
-        const res = await r.json();
-        if (!r.ok) {
-          throw new Error(res.error);
-        }
-
-        this.$store.commit('updateResponses', res);
-      } catch (e) {
-        this.$store.commit('refreshResponses');
-
-        this.$set(this.alerts, e, 'error');
-        setTimeout(() => this.$delete(this.alerts, e), 3000);
-      }
-    }
   }
 };
 </script>

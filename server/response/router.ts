@@ -19,7 +19,7 @@ router.get(
         // requestValidator.isRequestExists
     ],
     async (req: Request, res: Response) => {
-        const allResponses = await ResponseCollection.findByRequestId(req.query.requestId);
+        const allResponses = await ResponseCollection.findByRequestId(req.params.requestId);
         res.status(200).json(allResponses.map(util.constructResponseResponse));
     }
 )

@@ -113,7 +113,7 @@ export default {
           });
         }
       };
-      this.response(params);
+      this.submitResponse(params);
     },
     submitEdit() {
       /**
@@ -135,9 +135,9 @@ export default {
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         }
       };
-      this.response(params);
+      this.submitResponse(params);
     },
-    async response(params) {
+    async submitResponse(params) {
       /**
        * Submits a response to the response's endpoint
        * @param params - Options for the response

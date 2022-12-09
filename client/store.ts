@@ -4,6 +4,10 @@ import createPersistedState from 'vuex-persistedstate';
 
 Vue.use(Vuex);
 
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
+// @ts-ignore
 /**
  * Storage for data that needs to be accessed from various components.
  */
@@ -14,9 +18,7 @@ const store = new Vuex.Store({
     eventFilterLoc: null,
     eventFilterStartDate: null,
     eventFilterEndDate: null,
-    requestId: null,
     requests: [], // All requests created in the app
-    responses: [],
     events: [], // All events created in the app
     eventResponses: [], // All responses to events/requests created in the app
     username: null, // Username of the logged in user
@@ -39,9 +41,6 @@ const store = new Vuex.Store({
        */
       state.username = username;
     },
-    updateRequestId(state, requestId) {
-      state.requestId = requestId;
-    },
     updateFilter(state, filter) {
       /**
        * Update the stored requests filter to the specified one.
@@ -49,27 +48,12 @@ const store = new Vuex.Store({
        */
       state.filter = filter;
     },
-    updateResponses(state, responses) {
-      /**
-       * Update the stored requests to the provided requests.
-       * @param requests - Requests to store
-       */
-      state.responses = responses;
-    },
     updateRequests(state, requests) {
       /**
        * Update the stored requests to the provided requests.
        * @param requests - Requests to store
        */
       state.requests = requests;
-    },
-    async refreshResponses(state) {
-      /**
-       * Request the server for the currently available responses.
-       */
-      const url = state.filter ? `/api/responses/${state.requestId}` : '/api/responses'; // Get the request ID
-      const res = await fetch(url).then(async r => r.json());
-      state.responses = res;
     },
     async refreshRequests(state) {
       /**
