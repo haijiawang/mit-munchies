@@ -222,7 +222,6 @@ export default {
        * Enables respond mode on this request.
        */
       this.responding = !this.responding; // Keeps track of if a request is being edited
-      this.$store.commit("updateRequestId", this.request._id);
     },
     async viewResponses() {
       this.viewingResponses = !this.viewingResponses;

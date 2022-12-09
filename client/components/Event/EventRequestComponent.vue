@@ -5,80 +5,80 @@
 
     <!-- START INFO HERE  -->
     <table cellspacing="0" cellpadding="0">
-    <tr align="left" width="9000000">
-      <th rowspan="1" style="font-size:2vw" width="400"> Title will go here </th>
+      <tr align="left" width="9000000">
+        <th rowspan="1" style="font-size:2vw" width="400"> Title will go here</th>
 
-      <td rowspan="2">
+        <td rowspan="2">
         <textarea
-          v-if="editing"
-          class="startdate"
-          :value="draftstart"
-          @input="draftstart = $event.target.value"
+            v-if="editing"
+            class="startdate"
+            :value="draftstart"
+            @input="draftstart = $event.target.value"
         />
-        <p v-else class="startdate" style="font-size:1.1vw"><b><i>Starts:</i></b> {{ event.startdate }}</p>
+          <p v-else class="startdate" style="font-size:1.1vw"><b><i>Starts:</i></b> {{ event.startdate }}</p>
 
+          <textarea
+              v-if="editing"
+              class="enddate"
+              :value="draftend"
+              @input="draftend = $event.target.value"
+          />
+          <p v-else class="enddate" style="font-size:1.1vw"><b><i>Ends:</i></b> {{ event.enddate }}</p>
+
+          <textarea
+              v-if="editing"
+              class="donationdate"
+              :value="draftdonation"
+              @input="draftdonation = $event.target.value"
+          />
+          <p v-else class="donationdate" style="font-size:1.1vw">
+            <b><i>Last Date for Donations:</i></b> {{ event.donationdate }}
+          </p>
+
+        </td>
+      </tr>
+
+      <tr>
+        <th rowspan="1" align="left"> Coordinated by @{{ event.coordinatorId }}</th>
+      </tr>
+
+      <tr>
+        <td colspan="3" align="left">
         <textarea
-          v-if="editing"
-          class="enddate"
-          :value="draftend"
-          @input="draftend = $event.target.value"
+            v-if="editing"
+            class="description"
+            :value="draftdescription"
+            @input="draftdescription = $event.target.value"
         />
-        <p v-else class="enddate" style="font-size:1.1vw"><b><i>Ends:</i></b> {{ event.enddate }}</p>
+          <p v-else class="description"><b>Description:</b> {{ event.description }}</p>
+        </td>
+      </tr>
 
+      <tr>
+        <td colspan="3" align="left">
         <textarea
-          v-if="editing"
-          class="donationdate"
-          :value="draftdonation"
-          @input="draftdonation = $event.target.value"
+            v-if="editing"
+            class="location"
+            :value="draftlocation"
+            @input="draftlocation = $event.target.value"
         />
-        <p v-else class="donationdate" style="font-size:1.1vw">
-          <b><i>Last Date for Donations:</i></b> {{ event.donationdate }}
-        </p>
+          <div v-else style="text-transform:capitalize;">
+            <p class="location"><b>Location:</b> {{ event.location }}</p>
+          </div>
+        </td>
+      </tr>
 
-      </td>
-    </tr>
-
-    <tr>
-      <th rowspan="1" align="left"> Coordinated by @{{ event.coordinatorId }} </th>
-    </tr>
-
-    <tr>
-      <td colspan="3" align="left">
+      <tr>
+        <td colspan="3" align="left">
         <textarea
-          v-if="editing"
-          class="description"
-          :value="draftdescription"
-          @input="draftdescription = $event.target.value"
+            v-if="editing"
+            class="contact"
+            :value="draftcontact"
+            @input="draftcontact = $event.target.value"
         />
-        <p v-else class="description"><b>Description:</b> {{ event.description }}</p>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="3" align="left">
-        <textarea
-          v-if="editing"
-          class="location"
-          :value="draftlocation"
-          @input="draftlocation = $event.target.value"
-        />
-        <div v-else style="text-transform:capitalize;">
-          <p class="location"><b>Location:</b> {{ event.location }}</p>
-        </div>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="3" align="left">
-        <textarea
-          v-if="editing"
-          class="contact"
-          :value="draftcontact"
-          @input="draftcontact = $event.target.value"
-        />
-        <p v-else class="contact"><b>Contact {{ event.coordinatorId }}:</b> {{ event.contact }}</p>
-      </td>
-    </tr>
+          <p v-else class="contact"><b>Contact {{ event.coordinatorId }}:</b> {{ event.contact }}</p>
+        </td>
+      </tr>
 
     </table>
     <!-- END INFO HERE  -->
@@ -90,27 +90,40 @@
         <button v-if="!editing" @click="startEditing">✏️ Edit</button>
         <button @click="deleteEvent">🗑️ Delete</button>
       </div>
-      <div v-if="$store.state.username !== event.coordinatorId">
-        <div v-if="this.responding">
-          <button @click="submitResponse">Submit</button>
-        </div>
-        <div v-else>
-          <button @click="initResponse">Respond</button>
-        </div>
+      <div v-if="this.responding">
+        <button @click="submitResponse">Submit</button>
       </div>
+      <div>
+        <button @click="viewEventResponses">
+          👀 View Responses
+        </button>
+        <button @click="initResponse">🗣 Respond</button>
+      </div>
+      <section v-if="viewingEventResponses">
+        <div v-if="eventResponses.length>0">
+          <EventResponseComponent
+              v-for="eventResponse in eventResponses"
+              :key="eventResponse.id"
+              :eventResponse="eventResponse"
+          />
+        </div>
+        <article v-else>
+          <h3>No event responses found.</h3>
+        </article>
+      </section>
       <div v-if="this.responding">
         Response Contact:
         <textarea
-          class="responsecontact"
-          :value="draftresponsecontact"
-          @input="draftresponsecontact = $event.target.value"
+            class="responsecontact"
+            :value="draftresponsecontact"
+            @input="draftresponsecontact = $event.target.value"
         />
 
         Response Description:
         <textarea
-          class="responsedescription"
-          :value="draftresponsedescription"
-          @input="draftresponsedescription = $event.target.value"
+            class="responsedescription"
+            :value="draftresponsedescription"
+            @input="draftresponsedescription = $event.target.value"
         />
 
         Submit an Image:
@@ -120,17 +133,17 @@
               <div>
                 <button @click="click1">Upload Image</button>
                 <input
-                  type="file"
-                  ref="input1"
-                  style="display: none"
-                  @change="previewImage"
-                  accept="image/*"
+                    type="file"
+                    ref="input1"
+                    style="display: none"
+                    @change="previewImage"
+                    accept="image/*"
                 />
               </div>
 
               <div v-if="imageData != null">
-                <img class="preview" height="268" width="356" :src="img1" />
-                <br />
+                <img class="preview" height="268" width="356" :src="img1"/>
+                <br/>
               </div>
             </div>
           </v-flex>
@@ -140,9 +153,9 @@
 
     <section class="alerts">
       <article
-        v-for="(status, alert, index) in alerts"
-        :key="index"
-        :class="status"
+          v-for="(status, alert, index) in alerts"
+          :key="index"
+          :class="status"
       >
         <p>{{ alert }}</p>
       </article>
@@ -152,10 +165,14 @@
 
 <script>
 import firebase from "firebase/compat/app";
-import { getStorage, uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import {getStorage, uploadBytes, ref, getDownloadURL} from "firebase/storage";
+import EventResponseComponent from "../EventResponse/EventResponseComponent";
 
 export default {
   name: "EventRequestComponent",
+  components: {
+    EventResponseComponent,
+  },
   props: {
     // Data from the stored request
     event: {
@@ -175,6 +192,8 @@ export default {
       draftdescription: this.event.description, // Potentially-new description for this request
       draftresponsecontact: "",
       draftresponsedescription: "",
+      eventResponses: [],
+      viewingEventResponses: false,
       alerts: {}, // Displays success/error messages encountered during request modification
       caption: "",
       img1: "",
@@ -189,15 +208,15 @@ export default {
       };
       console.log(post);
       firebase
-        .database()
-        .ref("PhotoGallery")
-        .push(post)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+          .database()
+          .ref("PhotoGallery")
+          .push(post)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
     },
     click1() {
       this.$refs.input1.click();
@@ -265,15 +284,15 @@ export default {
        * Updates event to have the submitted draft content.
        */
       if (
-        this.event.contact === this.draftcontact &&
-        this.event.description === this.draftdescription &&
-        this.event.startdate === this.draftstart &&
-        this.event.enddate === this.draftend &&
-        this.event.location === this.draftlocation &&
-        this.event.donationdate === this.draftdonation
+          this.event.contact === this.draftcontact &&
+          this.event.description === this.draftdescription &&
+          this.event.startdate === this.draftstart &&
+          this.event.enddate === this.draftend &&
+          this.event.location === this.draftlocation &&
+          this.event.donationdate === this.draftdonation
       ) {
         const error =
-          "Error: Edited event content should be different than current event content.";
+            "Error: Edited event content should be different than current event content.";
         this.$set(this.alerts, error, "error"); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
@@ -297,6 +316,12 @@ export default {
       };
       this.request(params);
     },
+    async viewEventResponses() {
+      this.viewingEventResponses = !this.viewingEventResponses;
+      const url = `/api/eventResponses/${this.event._id}`; // Get the request ID
+      const res = await fetch(url).then(async r => r.json());
+      this.eventResponses = res;
+    },
     async request(params) {
       /**
        * Submits a request to the request's endpoint
@@ -306,7 +331,7 @@ export default {
        */
       const options = {
         method: params.method,
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
       };
       if (params.body) {
         options.body = params.body;
@@ -330,7 +355,7 @@ export default {
       }
     },
     initResponse() {
-      this.responding = true;
+      this.responding = !this.responding;
     },
     submitResponse() {
       const params = {
@@ -345,9 +370,9 @@ export default {
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         },
       };
-      this.responserequest(params);
+      this.responseRequest(params);
     },
-    async responserequest(params) {
+    async responseRequest(params) {
       /**
        * Submits a request to the request's endpoint
        * @param params - Options for the request
@@ -356,7 +381,7 @@ export default {
        */
       const options = {
         method: params.method,
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
       };
       if (params.body) {
         options.body = params.body;

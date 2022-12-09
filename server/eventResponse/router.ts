@@ -11,7 +11,7 @@ import { constructEventResponseResponse } from 'server/eventResponse/util';
 const router = express.Router()
 
 /**
- * Get all response for a request item 
+ * Get all response for a request item
  */
  router.get(
     '/',
@@ -26,7 +26,7 @@ const router = express.Router()
 )
 
 /**
- * Get all response for a request item 
+ * Get all response for a request item
  */
 router.get(
     '/:eventId?',
@@ -35,7 +35,7 @@ router.get(
         eventValidator.isEventExists
     ],
     async (req: Request, res: Response) => {
-        const allResponses = await EventResponseCollection.findByEventId(req.params.requestId);
+        const allResponses = await EventResponseCollection.findByEventId(req.params.eventId);
         const response = allResponses.map(util.constructEventResponseResponse);
         res.status(200).json(response);
     }
@@ -60,7 +60,7 @@ router.get(
 )
 
 /**
- * Create a new response to an event 
+ * Create a new response to an event
  */
 router.post(
     '/:eventId?',
@@ -80,7 +80,7 @@ router.post(
 )
 
 // Added functionality: not central to main code, will add back in later if needed
-// /** 
+// /**
 //  * Delete all responses belongong to an eventId
 //  */
 // router.delete(
@@ -97,8 +97,8 @@ router.post(
 //     }
 // )
 
-// /** 
-//  * Delete all responses belonging to an author 
+// /**
+//  * Delete all responses belonging to an author
 //  */
 // router.delete(
 //     '/:userId?',
@@ -115,7 +115,7 @@ router.post(
 // )
 
 /**
- * Delete a specific response, specified by ID 
+ * Delete a specific response, specified by ID
  */
 router.delete(
     '/:eventResponseId?',
