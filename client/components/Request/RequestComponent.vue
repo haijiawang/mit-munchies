@@ -10,29 +10,43 @@
         :value="draftContact"
         @input="draftContact = $event.target.value"
     />
-    <p v-else class="contact">Contact me: {{ request.contact }}</p>
+    <div v-else class="field">
+      <p class="fieldTitle">💌 Contact me: </p>
+      <p class="fieldValue">{{ request.contact }}</p>
+    </div>
+    <div></div>
     <textarea
         v-if="editing"
         class="description"
         :value="draftDescription"
         @input="draftDescription = $event.target.value"
     />
-    <p v-else class="description">
-      Request Description: {{ request.description }}
-    </p>
+    <div v-else class="field">
+      <p class="fieldTitle"> 📃 Request Description: </p>
+      <p class="fieldValue">{{ request.description }}</p>
+    </div>
+    <div></div>
     <textarea
         v-if="editing"
         class="color"
         :value="draftColor"
         @input="draftColor = $event.target.value"
     />
-    <p v-else class="color">Color: {{ request.color }}</p>
+    <div v-else class="field">
+      <p class="fieldTitle"> 🎨 Color: </p>
+      <p class="fieldValue">{{ request.color }}</p>
+    </div>
+   <div></div>
     <textarea
         v-if="editing"
         class="size"
         :value="draftSize"
         @input="draftSize = $event.target.value"
     />
+    <div v-else class="field">
+      <p class="fieldTitle"> Size: </p>
+      <p class="fieldValue">{{ request.size }}</p>
+    </div>
     <p v-else class="size">Size: {{ request.size }}</p>
     <div>
       <div
@@ -392,5 +406,28 @@ export default {
   position: relative;
   border-radius: 15px;
   margin-bottom: 15px;
+}
+
+.request .author {
+  font-weight: bold;
+}
+
+.request .field {
+  display: inline-block;
+}
+
+.request .fieldTitle {
+  float: left;
+  margin-right: 5px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.request .fieldValue {
+  float: right;
+  font-weight: 200;
+  font-style: italic;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 </style>

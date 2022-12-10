@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@80;100;180;200&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@80;100;180;200;300;400;500;600;700;800&display=swap");
 
 * {
   box-sizing: border-box;
@@ -52,12 +52,11 @@ button {
   background-color: #fff;
   color: black;
   border-radius: 100px;
-  border-color: black; 
+  border-color: black;
   border: 0.95px solid black;
   height: 35px;
   font-weight: 600;
 }
-
 
 main {
   padding: 0 5em 5em;
@@ -85,10 +84,10 @@ main {
 }
 
 .alerts .error {
-  background-color: #DE847B;
+  background-color: #de847b;
 }
 
 .alerts .success {
-  background-color: #B2D2A4;
+  background-color: #b2d2a4;
 }
 </style>
