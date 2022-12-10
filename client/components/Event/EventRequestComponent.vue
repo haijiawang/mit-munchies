@@ -62,7 +62,7 @@
             :value="draftcontact"
             @input="draftcontact = $event.target.value"
         />
-          <p v-else class="contact" style="font-size:1.1vw"><b>Contact {{ event.coordinatorId }}:</b> {{ event.contact }}</p>
+          <p v-else class="contact" style="font-size:1.1vw"><b>💌 Contact {{ event.coordinatorId }}:</b> {{ event.contact }}</p>
         </td>
       </tr>
 
@@ -74,7 +74,7 @@
             :value="draftdescription"
             @input="draftdescription = $event.target.value"
         />
-          <p v-else class="description"><b>Description:</b> {{ event.description }}</p>
+          <p v-else class="description"><b>📃 Request Description:</b> {{ event.description }}</p>
         </td>
       </tr>
 

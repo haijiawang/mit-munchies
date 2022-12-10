@@ -34,11 +34,11 @@ export default {
       //const email = this.fields[4].value as string;
       const emailList = this.fields[4].value.split("@");
       var site = [];
-      if (emailList.length === 2){
+      if (emailList.length === 2 ){
         site = emailList[1].split(".");
       }else{
         try{
-          throw new Error("Invalid contact: please enter 10-digit phone number or valid email address");
+          throw new Error(`Invalid contact: please enter 10-digit phone number or valid email address ${this.fields[4].value}`);
         }
         catch(e){
           this.$set(this.alerts, e, "error");
@@ -47,9 +47,9 @@ export default {
         }
       }
 
-      if (this.fields[4].value.length !== 10 || site.length !== 2){ // also assert that phone number is entirely made up of digits
+      if (this.fields[4].value.length !== 10 && site.length !== 2){ // also assert that phone number is entirely made up of digits
         try{
-          throw new Error("Invalid contact: please enter 10-digit phone number or valid email address");
+          throw new Error(`Invalid contact: please enter 10-digit phone number or valid email address`);
         }
         catch(e){
           this.$set(this.alerts, e, "error");

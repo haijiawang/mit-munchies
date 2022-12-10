@@ -12,10 +12,10 @@ export default {
       method: 'POST',
       hasBody: true,
       fields: [
-        {id: 'contact', label: 'Contact', value: ''},
-        {id: 'description', label: 'Description', value: ''},
-        {id: 'color', label: 'Color', value: ''},
-        {id: 'size', label: 'Size', value: ''}
+        {id: 'contact', label: 'Contact', value: 'Phone or Email'},
+        {id: 'description', label: 'Description', value: 'Describe the types of donation items you are requesting'},
+        {id: 'color', label: 'Color', value: 'Ex: Red, blue, orange'},
+        {id: 'size', label: 'Size', value: 'Ex: XS, S, M'}
       ],
       title: 'Create a request',
       refreshRequests: true,
