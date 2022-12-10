@@ -15,7 +15,7 @@
             :value="draftstart"
             @input="draftstart = $event.target.value"
         />
-          <p v-else class="startdate" style="font-size:1.1vw"><b><i>Starts:</i></b> {{ event.startdate }}</p>
+          <p v-else class="startdate" style="font-size:1.1vw"><b><i>Starts:</i></b> {{ this.dateFormat(event.startdate) }}</p>
 
           <textarea
               v-if="editing"
@@ -23,7 +23,7 @@
               :value="draftend"
               @input="draftend = $event.target.value"
           />
-          <p v-else class="enddate" style="font-size:1.1vw"><b><i>Ends:</i></b> {{ event.enddate }}</p>
+          <p v-else class="enddate" style="font-size:1.1vw"><b><i>Ends:</i></b> {{ this.dateFormat(event.enddate) }}</p>
 
           <textarea
               v-if="editing"
@@ -32,9 +32,13 @@
               @input="draftdonation = $event.target.value"
           />
           <p v-else class="donationdate" style="font-size:1.1vw">
-            <b><i>Last Date for Donations:</i></b> {{ event.donationdate }}
+            <b><i>Last Date for Donations:</i></b> {{ this.dateFormat(event.donationdate) }}
           </p>
 
+        </td>
+
+        <td rowspan="5">
+          PICTURES WILL GO DOWN THIS COLUMN
         </td>
       </tr>
 
@@ -50,8 +54,8 @@
             :value="draftlocation"
             @input="draftlocation = $event.target.value"
         />
-          <div v-else style="text-transform:lowercase;font-size:1.1vw">
-            <p class="location"><b>Location:</b> {{ event.location }}</p>
+          <div v-else style="text-transform:capitalize;font-size:1.1vw">
+            <p class="location"><b>Location:</b> {{ this.locFormat(event.location) }}</p>
           </div>
         </td>
 
@@ -63,6 +67,19 @@
             @input="draftcontact = $event.target.value"
         />
           <p v-else class="contact" style="font-size:1.1vw"><b>💌 Contact {{ event.coordinatorId }}:</b> {{ event.contact }}</p>
+        </td>
+      </tr>
+
+      <!-- TODO: ADD IF FOR RSVP FORM SUPPLIED -->
+      <tr>
+        <td colspan="3" align="left">
+        <textarea
+            v-if="editing"
+            class="rsvp"
+            :value="draftrsvp"
+            @input="draftrsvp = $event.target.value"
+        />
+          <p v-else class="description" style="font-size:1.1vw"><b>RSVP Site:</b> FIELD WILL GO HERE</p>
         </td>
       </tr>
 
@@ -190,6 +207,7 @@ export default {
       draftdescription: this.event.description, // Potentially-new description for this request
       draftresponsecontact: "",
       draftresponsedescription: "",
+      draftrsvp: "",
       eventResponses: [],
       viewingEventResponses: false,
       alerts: {}, // Displays success/error messages encountered during request modification
@@ -199,6 +217,18 @@ export default {
     };
   },
   methods: {
+    dateFormat(str){
+      const spl = str.split(",");
+      return spl[0];
+    },
+    locFormat(str){
+      const location = str.split(",");
+      var city = location[0];
+      var st = location[1];
+      city = city.charAt(0).toUpperCase() + city.substr(1).toLowerCase();
+      st = st.toUpperCase();
+      return city.concat(", ", st);
+    },
     create() {
       const post = {
         photo: this.img1,
