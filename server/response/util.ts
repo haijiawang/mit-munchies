@@ -9,6 +9,7 @@ type ResponseResponse = {
     contact: string;
     description: string;
     dateCreated: string;
+    imageURL: string;
 }
 
 const formatDate = (date: Date): string => moment(date).format('MMMM Do YYYY, h:mm:ss a');
@@ -26,7 +27,8 @@ const constructResponseResponse = (response: HydratedDocument<Response>): Respon
         requestId: responseCopy.requestId.toString(),
         contact: responseCopy.contact,
         description: responseCopy.description,
-        dateCreated: formatDate(response.dateCreated)
+        dateCreated: formatDate(response.dateCreated),
+        imageURL: responseCopy.imageURL
     }
 }
 

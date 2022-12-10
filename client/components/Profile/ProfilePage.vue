@@ -102,6 +102,8 @@ export default {
     this.$refs.getEventsFormBlank.submit();
     this.$refs.getRequestsFormBlank.submit();
     this.$refs.getEventResponsesForm.submit();
+
+    console.log(this.$store);
   },
 };
 </script>

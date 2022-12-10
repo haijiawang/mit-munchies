@@ -72,10 +72,6 @@
         </button>
       </div>
       <div v-if="responding">
-        <button @click="submitResponse">
-          🗣 Submit Response
-        </button>
-
         Contact for the requestor to reach you:
         <textarea
             class="responsecontact"
@@ -83,12 +79,16 @@
             @input="draftresponsecontact = $event.target.value"
         />
 
+        </br>
+
         Description of your donation to this request:
         <textarea
             class="responsedescription"
             :value="draftresponsedescription"
             @input="draftresponsedescription = $event.target.value"
         />
+
+        </br>
 
         Submit an Image:
         <v-layout row>
@@ -106,12 +106,16 @@
               </div>
 
               <div v-if="imageData != null">
-                <img class="preview" height="268" width="356" :src="img1"/>
+                <img v-if="this.imageUrl" class="preview" height="200" width="200" :src="this.imageUrl"/>
                 <br/>
               </div>
             </div>
           </v-flex>
         </v-layout>
+
+        <button @click="submitResponse">
+          🗣 Submit Response
+        </button>
       </div>
     </div>
     <section v-if="viewingResponses">
@@ -145,6 +149,9 @@ import CreateResponseForm from "./CreateResponseForm";
 import ResponseComponent from "./ResponseComponent";
 import GetRequestsForm from "./GetRequestsForm";
 
+import firebase from "firebase/compat/app";
+import { getStorage, uploadBytes, ref, getDownloadURL } from "firebase/storage";
+
 export default {
   name: "RequestComponent",
   components: {
@@ -170,11 +177,13 @@ export default {
       draftDescription: this.request.description, // Potentially-new description for this request
       draftresponsecontact: "",
       draftresponsedescription: "",
+      imageUrl: "",
+      imageData: "",
       caption: "",
       img1: "",
       imageDate: null,
       responses: [],
-      alerts: {} // Displays success/error messages encountered during request modification
+      alerts: {}, // Displays success/error messages encountered during request modification
     };
   },
   methods: {
@@ -183,17 +192,16 @@ export default {
         photo: this.img1,
         caption: this.caption,
       };
-      console.log(post);
       firebase
-          .database()
-          .ref("PhotoGallery")
-          .push(post)
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .database()
+        .ref("PhotoGallery")
+        .push(post)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     click1() {
       this.$refs.input1.click();
@@ -203,19 +211,22 @@ export default {
       this.uploadValue = 0;
       this.img1 = null;
       this.imageData = event.target.files[0];
-      this.onUpload();
     },
 
-    onUpload() {
+    async onUpload() {
+      console.log("on upload");
       const storage = getStorage();
-      console.log(storage);
 
       const imgRef = ref(storage, `images/${this.imageData.name}`);
-      uploadBytes(imgRef, this.imageData).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => console.log(url));
-        console.log("helloo world");
+      try {
+        const snapshot = await uploadBytes(imgRef, this.imageData);
+        const url = await getDownloadURL(snapshot.ref);
+        this.imageUrl = url;
+        console.log(this.imageUrl);
         console.log(snapshot);
-      });
+      } catch (error) {
+        // Handle errors.
+      }
     },
     respondToRequest() {
       /**
@@ -226,7 +237,7 @@ export default {
     async viewResponses() {
       this.viewingResponses = !this.viewingResponses;
       const url = `/api/responses/${this.request._id}`; // Get the request ID
-      const res = await fetch(url).then(async r => r.json());
+      const res = await fetch(url).then(async (r) => r.json());
       this.responses = res;
     },
     startEditing() {
@@ -265,11 +276,11 @@ export default {
        * Updates request to have the submitted draft content.
        */
       if (
-          this.request.contact === this.draftContact &&
-          this.request.description === this.draftDescription
+        this.request.contact === this.draftContact &&
+        this.request.description === this.draftDescription
       ) {
         const error =
-            "Error: Edited request content should be different than current request content.";
+          "Error: Edited request content should be different than current request content.";
         this.$set(this.alerts, error, "error"); // Set an alert to be the error text, timeout of 3000 ms
         setTimeout(() => this.$delete(this.alerts, error), 3000);
         return;
@@ -298,7 +309,7 @@ export default {
        */
       const options = {
         method: params.method,
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
       };
       if (params.body) {
         options.body = params.body;
@@ -320,13 +331,16 @@ export default {
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     },
-    submitResponse() {
+    async submitResponse() {
+      await this.onUpload();
+      console.log(this.imageURL);
       const params = {
         method: "POST",
         message: "Successfully created an event response!",
         body: JSON.stringify({
           contact: this.draftresponsecontact,
           description: this.draftresponsedescription,
+          imageURL: this.imageUrl,
         }),
         callback: () => {
           this.$set(this.alerts, params.message, "success");
@@ -344,14 +358,14 @@ export default {
        */
       const options = {
         method: params.method,
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
       };
       if (params.body) {
         options.body = params.body;
       }
 
       try {
-        const r = await fetch(`/api/responses/${this.$store.state.requestId}`, options);
+        const r = await fetch(`/api/responses/${this.request._id}`, options);
         const res = await r.json();
         if (!r.ok) {
           throw new Error(res.error);
@@ -359,7 +373,7 @@ export default {
 
         this.responding = false;
         this.$store.commit("refreshResponses");
-        this.$store.commit('updateResponses', this.$store.state.requestId, res);
+        this.$store.commit("updateResponses", this.request._id, res);
 
         params.callback();
       } catch (e) {
@@ -367,7 +381,7 @@ export default {
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     },
-  }
+  },
 };
 </script>
 

@@ -8,6 +8,7 @@ export type Response = {
     contact: string;
     description: string;
     dateCreated: Date;
+    imageURL: string;
 };
 
 const ResponseSchema = new Schema<Response>({
@@ -31,6 +32,10 @@ const ResponseSchema = new Schema<Response>({
     dateCreated: {
         type: Date,
         required: true
+    },
+    imageURL: {
+        type: String,
+        required: false
     }
 })
 
