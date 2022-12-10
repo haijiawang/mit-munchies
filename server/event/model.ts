@@ -7,6 +7,7 @@ import type { User } from '../user/model';
  */
 
 // Type definition for Event on the backend
+// TODO: Add title, phone, email
 export type Event = {
   _id: Types.ObjectId; // MongoDB assigns each object this ID on creation
   coordinatorId: Types.ObjectId;

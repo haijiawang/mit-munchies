@@ -15,8 +15,8 @@ export default {
         {id: 'startrange', label: 'Event Start Date', value: 'yyyy-mm-dd'},
         {id: 'endrange', label: 'Event End Date', value: 'yyyy-mm-dd'},
         {id: 'location', label: 'Event Location', value: 'city, st'},
-        {id: 'description', label: 'Description', value: ''},
-        {id: 'contact', label: 'Contact', value: ''},
+        {id: 'description', label: 'Description', value: 'Describe the types of donation items you are requesting'},
+        {id: 'contact', label: 'Contact', value: 'Phone or email'},
         {id: 'donationdate', label: 'Last Date for Donations', value: 'yyyy-mm-dd'}
       ],
       title: 'Create an event',
@@ -27,6 +27,38 @@ export default {
         setTimeout(() => this.$delete(this.alerts, message), 3000);
       }
     };
-  }
+  },
+  methods: {
+    checkErrors(){
+      const phone = this.fields[4].value.length; // should be 10
+      //const email = this.fields[4].value as string;
+      const emailList = this.fields[4].value.split("@");
+      var site = [];
+      if (emailList.length === 2){
+        site = emailList[1].split(".");
+      }else{
+        try{
+          throw new Error("Invalid contact: please enter 10-digit phone number or valid email address");
+        }
+        catch(e){
+          this.$set(this.alerts, e, "error");
+          setTimeout(() => this.$delete(this.alerts, e), 3000);
+          return 1;
+        }
+      }
+
+      if (this.fields[4].value.length !== 10 || site.length !== 2){ // also assert that phone number is entirely made up of digits
+        try{
+          throw new Error("Invalid contact: please enter 10-digit phone number or valid email address");
+        }
+        catch(e){
+          this.$set(this.alerts, e, "error");
+          setTimeout(() => this.$delete(this.alerts, e), 3000);
+          return 1;
+        }
+      }
+      return 0;
+    },
+  },
 };
 </script>

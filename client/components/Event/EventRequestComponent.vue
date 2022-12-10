@@ -43,6 +43,30 @@
       </tr>
 
       <tr>
+        <td colspan="1" align="left">
+        <textarea
+            v-if="editing"
+            class="location"
+            :value="draftlocation"
+            @input="draftlocation = $event.target.value"
+        />
+          <div v-else style="text-transform:lowercase;font-size:1.1vw">
+            <p class="location"><b>Location:</b> {{ event.location }}</p>
+          </div>
+        </td>
+
+        <td colspan="1" align="left">
+        <textarea
+            v-if="editing"
+            class="contact"
+            :value="draftcontact"
+            @input="draftcontact = $event.target.value"
+        />
+          <p v-else class="contact" style="font-size:1.1vw"><b>Contact {{ event.coordinatorId }}:</b> {{ event.contact }}</p>
+        </td>
+      </tr>
+
+      <tr>
         <td colspan="3" align="left">
         <textarea
             v-if="editing"
@@ -51,32 +75,6 @@
             @input="draftdescription = $event.target.value"
         />
           <p v-else class="description"><b>Description:</b> {{ event.description }}</p>
-        </td>
-      </tr>
-
-      <tr>
-        <td colspan="3" align="left">
-        <textarea
-            v-if="editing"
-            class="location"
-            :value="draftlocation"
-            @input="draftlocation = $event.target.value"
-        />
-          <div v-else style="text-transform:capitalize;">
-            <p class="location"><b>Location:</b> {{ event.location }}</p>
-          </div>
-        </td>
-      </tr>
-
-      <tr>
-        <td colspan="3" align="left">
-        <textarea
-            v-if="editing"
-            class="contact"
-            :value="draftcontact"
-            @input="draftcontact = $event.target.value"
-        />
-          <p v-else class="contact"><b>Contact {{ event.coordinatorId }}:</b> {{ event.contact }}</p>
         </td>
       </tr>
 

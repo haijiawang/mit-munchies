@@ -67,10 +67,17 @@ export default {
     };
   },
   methods: {
+    checkErrors (){
+      // overriden by instantiation
+      return 0;
+    },
     async submit() {
       /**
         * Submits a form with the specified options from data().
         */
+      const e = this.checkErrors();
+      if (e > 0)
+        return; // save preferences and display errors without deleting info
       const options = {
         method: this.method,
         headers: {'Content-Type': 'application/json'},
