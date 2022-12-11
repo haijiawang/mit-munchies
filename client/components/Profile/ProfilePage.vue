@@ -6,12 +6,15 @@
     <section>
       <header>
         <h2>
-          Active Events, Requests, and Responses for @{{
+          @{{
             $store.state.username
-          }}
+          }}'s donation requests and events 
         </h2>
       </header>
     </section>
+    <div class="pageIntroduction">
+        Welcome to your profile page! Here you can find the all the events you have hosted and requests you have made.
+      </div>
     <section>
       <header>
         <h2>Events</h2>
@@ -53,28 +56,6 @@
       </section>
       <article v-else>
         <h3>No requests found.</h3>
-      </article>
-    </section>
-
-    <section>
-      <header>
-        <h2>Responses</h2>
-      </header>
-      <div class="right">
-        <GetEventResponsesForm
-          ref="getEventResponsesForm"
-          button="🔄 Get responses"
-        />
-      </div>
-      <section v-if="$store.state.eventResponses.length">
-        <EventResponseComponent
-          v-for="response in $store.state.eventResponses"
-          :key="response.id"
-          :eventResponse="response"
-        />
-      </section>
-      <article v-else>
-        <h3>No responses found.</h3>
       </article>
     </section>
   </main>
