@@ -3,9 +3,24 @@
 <template>
   <main>
     <section v-if="$store.state.username">
-      <header>
-        <h2>Welcome @{{ $store.state.username }}</h2>
-      </header>
+      <div class="pageIntroduction">
+        If you are a donator: 
+        <ul class="bullets">
+          <li>Browse through all the requests below. </li>
+          <li>If you find someone requesting an item you own, click the "respond" button to let them know!</li>
+        </ul>
+      </div>
+      <div class="pageIntroduction">
+        If you are a thrifter: 
+        <ul class="bullets">
+          <li>Use the "create a request" form below to provide information on what you are looking for! </li>
+          <li>Submit your request for potential donors to see!</li>
+        </ul>
+      </div>
+      <div>
+        Happy Thrifting! ☺︎
+        <br></br>
+      </div>
       <CreateRequestForm />
     </section>
     <section v-else>
@@ -88,5 +103,15 @@ section .scrollbox {
   flex: 1 0 50vh;
   padding: 3%;
   overflow-y: scroll;
+}
+
+.pageIntroduction{
+  margin-top: 20px; 
+  font-weight: 700;
+}
+
+.bullets{
+  font-size: 15px;
+  font-weight: 400
 }
 </style>
