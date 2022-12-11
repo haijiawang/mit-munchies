@@ -23,6 +23,7 @@
           :type="field.id === 'password' ? 'password' : 'text'"
           :name="field.id"
           :value="field.value"
+          :placeholder="field.placeholder"
           @input="field.value = $event.target.value"
         >
       </div>
