@@ -1,11 +1,11 @@
 <!-- Form for creating events (block style) -->
 
 <script>
-import BlockForm from '@/components/common/BlockForm.vue';
+import BlockFormEvents from '@/components/common/BlockFormEvents.vue';
 
 export default {
   name: 'CreateEventForm',
-  mixins: [BlockForm],
+  mixins: [BlockFormEvents],
   data() {
     return {
       url: '/api/events',
@@ -29,8 +29,19 @@ export default {
     };
   },
   methods: {
-    checkErrors(){
-      // CHECK DATE FORMATTING ERRORS
+    checkAllFields(){
+      if (!this.fields[0] || !this.fields[1] || !this.fields[2] || !this.fields[3] || !this.fields[4] || !this.fields[5]){
+          try{
+            throw new Error("Empty fields: please fill in all of the fields.");
+          }catch{
+            this.$set(this.alerts, e, "error");
+            setTimeout(() => this.$delete(this.alerts, e), 3000);
+            return 1;
+          }
+      }
+      return 0;
+    },
+    checkDateFormat(){
       const start = this.fields[0].value;
       const end = this.fields[1].value;
       const donation = this.fields[5].value;
@@ -47,10 +58,9 @@ export default {
         }
         // Also check for if the date is in the right range, and if the month exists
       }
-
-      // CHECK CONTACT ERRORS
+    },
+    checkContact(){
       const phone = this.fields[4].value.length; // should be 10
-      //const email = this.fields[4].value as string;
       const emailList = this.fields[4].value.split("@");
       var site = [];
       if (emailList.length === 2 ){
@@ -78,6 +88,13 @@ export default {
       }
       return 0;
     },
+    checkErrors(){
+      const all = this.checkAllFields(); 
+      const date = this.checkDateFormat();
+      const contact = this.checkContact();
+
+      return all + date + contact;
+    }
   },
 };
 </script>
