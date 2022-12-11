@@ -10,6 +10,7 @@ export type EventResponse = {
     contact: string;
     description: string;
     dateCreated: Date;
+    imageURL: string; 
 };
 
 export type PopulatedEventResponse = {
@@ -19,6 +20,7 @@ export type PopulatedEventResponse = {
     contact: string;
     description: string;
     dateCreated: Date;
+    imageURL: string; 
 };
 
 const EventResponseSchema = new Schema<EventResponse>({
@@ -43,6 +45,10 @@ const EventResponseSchema = new Schema<EventResponse>({
     dateCreated: {
         type: Date,
         required: true
+    }, 
+    imageURL: {
+        type: String, 
+        required: false 
     }
 })
 

@@ -12,12 +12,12 @@ export default {
       method: 'POST',
       hasBody: true,
       fields: [
-        {id: 'startrange', label: 'Event Start Date', value: 'yyyy-mm-dd'},
-        {id: 'endrange', label: 'Event End Date', value: 'yyyy-mm-dd'},
-        {id: 'location', label: 'Event Location', value: 'city, st'},
-        {id: 'description', label: 'Description', value: 'Describe the types of donation items you are requesting'},
-        {id: 'contact', label: 'Contact', value: 'Phone or email'},
-        {id: 'donationdate', label: 'Last Date for Donations', value: 'yyyy-mm-dd'}
+        {id: 'startrange', label: 'Event Start Date', placeholder: 'yyyy-mm-dd'},
+        {id: 'endrange', label: 'Event End Date', placeholder: 'yyyy-mm-dd'},
+        {id: 'location', label: 'Event Location', placeholder: 'city, st'},
+        {id: 'description', label: 'Description', placeholder: 'Describe the types of donation items you are requesting'},
+        {id: 'contact', label: 'Contact', placeholder: 'Phone or email'},
+        {id: 'donationdate', label: 'Last Date for Donations', placeholder: 'yyyy-mm-dd'}
       ],
       title: 'Create an event',
       refreshEvents: true,

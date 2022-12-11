@@ -16,15 +16,16 @@ class EventResponseCollection {
         return EventResponseModel.find({ author: aId }).sort({ dateCreated: -1 }).populate('author').populate('eventId');
     }
 
-    static async addOne(eventResponseDetails: { author: string, contact: string, description: string, eventId: string }): Promise<HydratedDocument<EventResponse>> {
+    static async addOne(eventResponseDetails: { author: string, contact: string, description: string, eventId: string, imageURL: string }): Promise<HydratedDocument<EventResponse>> {
         const date = new Date();
-        const { author, contact, description, eventId } = eventResponseDetails;
+        const { author, contact, description, eventId, imageURL } = eventResponseDetails;
         const response = new EventResponseModel({
             author,
             contact: contact,
             description: description,
             eventId: eventId,
             dateCreated: date,
+            imageURL: imageURL 
         });
         await response.save();
         response.populate('author');

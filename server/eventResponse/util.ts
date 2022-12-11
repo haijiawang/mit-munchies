@@ -9,6 +9,7 @@ type EventResponseResponse = {
     contact: string;
     description: string;
     dateCreated: string;
+    imageURL: string; 
 }
 
 const formatDate = (date: Date): string => moment(date).format('MMMM Do YYYY, h:mm:ss a');
@@ -30,7 +31,8 @@ const constructEventResponseResponse = (eventResponse: HydratedDocument<EventRes
         eventId: _id.toString(),
         contact: eventResponseCopy.contact,
         description: eventResponseCopy.description,
-        dateCreated: formatDate(eventResponse.dateCreated)
+        dateCreated: formatDate(eventResponse.dateCreated), 
+        imageURL: eventResponse.imageURL
     }
 }
 

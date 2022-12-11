@@ -14,24 +14,23 @@
         :value="draftContact"
         @input="draftContact = $event.target.value"
     />
-    <p
-        v-else
-        class="contact"
-    >
-      Contact: {{ eventResponse.contact }}
-    </p>
+    <div v-else class="field">
+      <p class="fieldTitle">💌 Contact me: </p>
+      <p class="fieldValue">{{ eventResponse.contact }}</p>
+    </div>
+    <div></div>
     <textarea
         v-if="editing"
         class="description"
         :value="draftDescription"
         @input="draftDescription = $event.target.value"
     />
-    <p
-        v-else
-        class="description"
-    >
-      Response Description: {{ eventResponse.description }}
-    </p>
+    <div v-else class="field">
+      <p class="fieldTitle"> 📃 Description: </p>
+      <p class="fieldValue">{{ eventResponse.description }}</p>
+    </div>
+    <div></div>
+    <img v-if="eventResponse.imageURL" :src="eventResponse.imageURL" width="200" height="200" />
     <div>
       <div
         v-if="$store.state.username === eventResponse.author"
@@ -182,5 +181,26 @@ export default {
     border: 1px solid #111;
     padding: 20px;
     position: relative;
+    border-radius: 15px; 
+    margin-top: 15px; 
+}
+
+.eventResponse .field {
+  display: inline-block;
+}
+
+.eventResponse .fieldTitle {
+  float: left;
+  margin-right: 5px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.eventResponse .fieldValue {
+  float: right;
+  font-weight: 200;
+  font-style: italic;
+  margin-bottom: 0px;
+  margin-top: 0px;
 }
 </style>

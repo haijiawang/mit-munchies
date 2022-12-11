@@ -163,8 +163,13 @@
             </div>
           </v-flex>
         </v-layout>
+        <button @click="submitResponse">
+          🗣 Submit Response
+        </button>
       </div>
     </section>
+
+    
 
     <section class="alerts">
       <article
@@ -212,8 +217,8 @@ export default {
       viewingEventResponses: false,
       alerts: {}, // Displays success/error messages encountered during request modification
       caption: "",
-      img1: "",
-      imageDate: null,
+      imageUrl: "",
+      imageDate: "",
     };
   },
   methods: {
@@ -234,39 +239,39 @@ export default {
         photo: this.img1,
         caption: this.caption,
       };
-      console.log(post);
       firebase
-          .database()
-          .ref("PhotoGallery")
-          .push(post)
-          .then((response) => {
-            console.log(response);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        .database()
+        .ref("PhotoGallery")
+        .push(post)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     click1() {
       this.$refs.input1.click();
     },
-
     previewImage(event) {
       this.uploadValue = 0;
       this.img1 = null;
       this.imageData = event.target.files[0];
-      this.onUpload();
     },
-
-    onUpload() {
+    async onUpload() {
+      console.log("on upload");
       const storage = getStorage();
-      console.log(storage);
 
       const imgRef = ref(storage, `images/${this.imageData.name}`);
-      uploadBytes(imgRef, this.imageData).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => console.log(url));
-        console.log("helloo world");
+      try {
+        const snapshot = await uploadBytes(imgRef, this.imageData);
+        const url = await getDownloadURL(snapshot.ref);
+        this.imageUrl = url;
+        console.log(this.imageUrl);
         console.log(snapshot);
-      });
+      } catch (error) {
+        // Handle errors.
+      }
     },
     startEditing() {
       /**
@@ -385,13 +390,15 @@ export default {
     initResponse() {
       this.responding = !this.responding;
     },
-    submitResponse() {
+    async submitResponse() {
+      await this.onUpload(); 
       const params = {
         method: "POST",
         message: "Successfully created an event response!",
         body: JSON.stringify({
           contact: this.draftresponsecontact,
           description: this.draftresponsedescription,
+          imageURL: this.imageUrl
         }),
         callback: () => {
           this.$set(this.alerts, params.message, "success");
