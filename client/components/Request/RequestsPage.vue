@@ -3,20 +3,23 @@
 <template>
   <main>
     <section v-if="$store.state.username">
-      <br></br>
+      <header>
+        <h2>@{{ $store.state.username }}'s donations page</h2>
+      </header>
       <button v-on:click="showText = !showText"> Click Here for Help! </button>
-      <div v-if="showText" class="pageIntroduction">
-        If you are a donator: 
-        <ul class="bullets">
-          <li>Browse through all the requests below. </li>
-          <li>If you find someone requesting an item you own, click the "respond" button to let them know!</li>
-        </ul>
-      </div>
       <div v-if="showText" class="pageIntroduction">
         If you are a thrifter: 
         <ul class="bullets">
           <li>Use the "create a request" form below to provide information on what you are looking for! </li>
           <li>Submit your request for potential donors to see!</li>
+        </ul>
+      </div>
+      <div v-if="showText" class="pageIntroduction">
+        If you are a donator: 
+        <ul class="bullets">
+          <li>Browse through all the requests below. </li>
+          <li>If you find someone requesting an item you own, click the "respond" button to let them know!</li>
+          <li>Submit an image to provide further information about what your item looks like. </li>
         </ul>
       </div>
       <div v-if="showText">

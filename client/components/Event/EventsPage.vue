@@ -4,8 +4,29 @@
   <main>
     <section v-if="$store.state.username">
       <header>
-        <h2>Welcome @{{ $store.state.username }}</h2>
+        <h2>@{{ $store.state.username }}'s events page</h2>
       </header>
+      <button v-on:click="showText = !showText"> Click Here for Help! </button>
+      <div v-if="showText" class="pageIntroduction">
+        If you are an event organizer: 
+        <ul class="bullets">
+          <li>Use the "create an event" form below to provide information on your event and what items you need for the event! </li>
+          <li>Submit your event for others to see!</li>
+        </ul>
+      </div>
+      <div v-if="showText" class="pageIntroduction">
+        If you are a donator: 
+        <ul class="bullets">
+          <li>Browse through the events in the events list below! </li>
+          <li>If you find an event that is requesting items you own, click the "respond" button to let them know. </li>
+          <li>Submit an image to provide further information about what your item looks like. </li>
+        </ul>
+      </div>
+      <div v-if="showText">
+        Happy Thrifting! ☺︎
+        <br></br>
+      </div>
+      <br></br>
       <CreateEventForm />
     </section>
     <section v-else>
@@ -94,6 +115,11 @@ import GetEventsForm from "@/components/Event/GetEventsForm.vue";
 export default {
   name: "EventsPage",
   components: { EventComponent, EventRequestComponent, GetEventsForm, CreateEventForm },
+  data(){
+    return {
+      showText: false
+    }
+  },
   mounted() {
     this.$refs.getEventsForm.submit();
   },
@@ -115,11 +141,22 @@ header > * {
 
 button {
   margin-right: 10px;
+  border: 1px solid #111;
 }
 
 section .scrollbox {
   flex: 1 0 50vh;
   padding: 3%;
   overflow-y: scroll;
+}
+
+.pageIntroduction{
+  margin-top: 20px; 
+  font-weight: 700;
+}
+
+.bullets{
+  font-size: 15px;
+  font-weight: 400
 }
 </style>
