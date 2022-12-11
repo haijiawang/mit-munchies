@@ -30,6 +30,25 @@ export default {
   },
   methods: {
     checkErrors(){
+      // CHECK DATE FORMATTING ERRORS
+      const start = this.fields[0].value;
+      const end = this.fields[1].value;
+      const donation = this.fields[5].value;
+
+      for (const date of [start, end, donation]){
+        if(date.length !== 10){
+          try{
+            throw new Error("Invalid date: Dates do not have the proper amount of characters");
+          }catch{
+            this.$set(this.alerts, e, "error");
+            setTimeout(() => this.$delete(this.alerts, e), 3000);
+            return 1;
+          }
+        }
+        // Also check for if the date is in the right range, and if the month exists
+      }
+
+      // CHECK CONTACT ERRORS
       const phone = this.fields[4].value.length; // should be 10
       //const email = this.fields[4].value as string;
       const emailList = this.fields[4].value.split("@");
