@@ -71,7 +71,7 @@ router.post(
     ],
     async (req: Request, res: Response) => {
         const userId = (req.session.userId as string) ?? '';
-        const response = await EventResponseCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description, eventId: req.params.eventId.toString() });
+        const response = await EventResponseCollection.addOne({ author: userId, contact: req.body.contact, description: req.body.description, eventId: req.params.eventId.toString(), imageURL: req.body.imageURL });
         res.status(201).json({
             message: 'Your response was created successfully.',
             response: util.constructEventResponseResponse(response)

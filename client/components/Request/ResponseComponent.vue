@@ -20,7 +20,7 @@
       @input="draftDescription = $event.target.value"
     />
     <div v-else class="field">
-      <p class="fieldTitle"> 📃 Response Description: </p>
+      <p class="fieldTitle"> 📃 Description: </p>
       <p class="fieldValue">{{ response.description }}</p>
     </div>
     <div></div>
