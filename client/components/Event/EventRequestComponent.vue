@@ -71,6 +71,7 @@
       </tr>
 
       <!-- TODO: ADD IF FOR RSVP FORM SUPPLIED -->
+      <!--
       <tr>
         <td colspan="3" align="left">
         <textarea
@@ -82,6 +83,7 @@
           <p v-else class="description" style="font-size:1.1vw"><b>RSVP Site:</b> FIELD WILL GO HERE</p>
         </td>
       </tr>
+      -->
 
       <tr>
         <td colspan="3" align="left">

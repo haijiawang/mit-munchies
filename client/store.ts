@@ -22,6 +22,9 @@ const store = new Vuex.Store({
     events: [], // All events created in the app
     eventResponses: [], // All responses to events/requests created in the app
     username: null, // Username of the logged in user
+    userlocation: null,
+    usercontact: null,
+    userDateJoined: null,
     alerts: {} // global success/error messages encountered during submissions to non-visible forms
   },
   mutations: {
@@ -40,6 +43,27 @@ const store = new Vuex.Store({
        * @param username - new username to set
        */
       state.username = username;
+    },
+    setLocation(state, location) {
+      /**
+       * Update the stored username to the specified one.
+       * @param username - new username to set
+       */
+      state.userlocation = location;
+    },
+    setContact(state, contact) {
+      /**
+       * Update the stored username to the specified one.
+       * @param username - new username to set
+       */
+      state.usercontact = contact;
+    },
+    setDateJoined(state, dateJoined) {
+      /**
+       * Update the stored username to the specified one.
+       * @param username - new username to set
+       */
+      state.userDateJoined = dateJoined;
     },
     updateFilter(state, filter) {
       /**

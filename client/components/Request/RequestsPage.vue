@@ -45,11 +45,15 @@
         </div>
       </header>
       <section v-if="$store.state.requests.length">
-        <RequestComponent
-          v-for="request in $store.state.requests"
-          :key="request.id"
-          :request="request"
-        />
+        <!--<div class="wrapper">-->
+        <!--<div v-for="request in $store.state.requests"-->
+          <RequestComponent
+            v-for="request in $store.state.requests"
+            :key="request.id"
+            :request="request"
+          />
+        <!--</div>-->
+        <!--</div>-->
       </section>
       <article v-else>
         <h3>No requests found.</h3>
@@ -163,5 +167,10 @@ section .scrollbox {
 .rightColumn{
   margin-left: 20px;
   margin-top: 88px; 
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 600px);
 }
 </style>

@@ -14,19 +14,36 @@
     </section>
     <div class="pageIntroduction">
         Welcome to your profile page! Here you can find the all the events you have hosted and requests you have made.
-      </div>
+    </div>
+
+    <!--
+    <GetProfileForm
+      ref="getProfileForm"
+      value="$store.state.username"
+    />
+    <div>
+        Your Location: {{ $store.state.userlocation }}
+    </div>
+    <div>
+      Your Contact: {{ $store.state.usercontact }}
+    </div>
+    <div>
+      Date Joined: {{ $store.state.userDateJoined }}
+    </div>
+    -->
+    
     <section>
-      <header>
-        <h2>Events</h2>
-      </header>
       <div class="right">
         <GetEventsFormBlank
           ref="getEventsFormBlank"
           value="$store.state.username"
         />
       </div>
+      <header>
+        <h2>Events: You have {{ $store.state.events.length }} event(s) active. </h2>
+      </header>
       <section v-if="$store.state.events.length">
-        <EventComponent
+        <EventRequestComponent
           v-for="event in $store.state.events"
           :key="event.id"
           :event="event"
@@ -38,15 +55,15 @@
     </section>
 
     <section>
-      <header>
-        <h2>Requests</h2>
-      </header>
       <div class="right">
         <GetRequestsFormBlank
           ref="getRequestsFormBlank"
           value="$store.state.username"
         />
       </div>
+      <header>
+        <h2>Requests: You have {{ $store.state.requests.length }} request(s) active. </h2>
+      </header>
       <section v-if="$store.state.requests.length">
         <RequestComponent
           v-for="request in $store.state.requests"
@@ -62,27 +79,30 @@
 </template>
 
 <script>
-import EventComponent from "@/components/Event/EventComponent.vue";
+import EventRequestComponent from "@/components/Event/EventRequestComponent.vue";
 import RequestComponent from "@/components/Request/RequestComponent.vue";
 import EventResponseComponent from "@/components/EventResponse/EventResponseComponent.vue";
 import GetEventsFormBlank from "@/components/Event/GetEventsFormBlank.vue";
 import GetRequestsFormBlank from "@/components/Request/GetRequestsFormBlank.vue";
 import GetEventResponsesForm from "@/components/EventResponse/GetEventResponsesForm.vue";
+import GetProfileForm from "@/components/Profile/GetProfileForm.vue";
 
 export default {
   name: "ProfilePage",
   components: {
-    EventComponent,
+    EventRequestComponent,
     RequestComponent,
     EventResponseComponent,
     GetEventsFormBlank,
     GetRequestsFormBlank,
     GetEventResponsesForm,
+    GetProfileForm,
   },
   mounted() {
     this.$refs.getEventsFormBlank.submit();
     this.$refs.getRequestsFormBlank.submit();
     this.$refs.getEventResponsesForm.submit();
+    this.$refs.getProfileForm.submit();
 
     console.log(this.$store);
   },
