@@ -7,7 +7,7 @@
       <header>
         <h2>@{{ $store.state.username }}'s donations page</h2>
       </header>
-      <carousel :per-page="4" :touchDrag="true" :autoplay="true" :autoplayTimeout="2000" :loop="true" :autoplayDirection="backward">
+      <carousel :per-page="4" :touchDrag="true" :autoplay="true" :autoplayTimeout="2000" :loop="true">
       <slide v-for="img in imageURLs" :key="img.imageURL" :src="img.imageURL">
         <img :src="img.imageURL" width="200" height="200"/>
       </slide>
