@@ -1,32 +1,17 @@
 <!-- Default page that also displays requests -->
 
 <template>
+  <div class="grid">
   <main>
     <section v-if="$store.state.username">
       <header>
         <h2>@{{ $store.state.username }}'s donations page</h2>
       </header>
-      <button v-on:click="showText = !showText"> Click Here for Help! </button>
-      <div v-if="showText" class="pageIntroduction">
-        If you are a thrifter: 
-        <ul class="bullets">
-          <li>Use the "create a request" form below to provide information on what you are looking for! </li>
-          <li>Submit your request for potential donors to see!</li>
-        </ul>
-      </div>
-      <div v-if="showText" class="pageIntroduction">
-        If you are a donator: 
-        <ul class="bullets">
-          <li>Browse through all the requests below. </li>
-          <li>If you find someone requesting an item you own, click the "respond" button to let them know!</li>
-          <li>Submit an image to provide further information about what your item looks like. </li>
-        </ul>
-      </div>
-      <div v-if="showText">
-        Happy Thrifting! ☺︎
-        <br></br>
-      </div>
-      <br></br>
+      <carousel :per-page="4" :touchDrag="true" :autoplay="true" :autoplayTimeout="2000" :loop="true" :autoplayDirection="backward">
+      <slide v-for="img in imageURLs" :key="img.imageURL" :src="img.imageURL">
+        <img :src="img.imageURL" width="200" height="200"/>
+      </slide>
+      </carousel>
       <CreateRequestForm />
     </section>
     <section v-else>
@@ -71,24 +56,65 @@
       </article>
     </section>
   </main>
+  <div v-if="$store.state.username" class="rightColumn">
+    <button v-on:click="showText = !showText"> Click Here for Help! </button>
+      <div v-if="showText" class="pageIntroduction">
+        If you are a thrifter: 
+        <ul class="bullets">
+          <li>Use the "create a request" form below to provide information on what you are looking for! </li>
+          <li>Submit your request for potential donors to see!</li>
+        </ul>
+      </div>
+      <div v-if="showText" class="pageIntroduction">
+        If you are a donator: 
+        <ul class="bullets">
+          <li>Browse through all the requests below. </li>
+          <li>If you find someone requesting an item you own, click the "respond" button to let them know!</li>
+          <li>Submit an image to provide further information about what your item looks like. </li>
+        </ul>
+      </div>
+      <div v-if="showText">
+        Happy Thrifting! ☺︎
+        <br></br>
+      </div>
+  </div>
+  </div>
 </template>
 
 <script>
 import RequestComponent from "@/components/Request/RequestComponent.vue";
 import CreateRequestForm from "@/components/Request/CreateRequestForm.vue";
 import GetRequestsForm from "@/components/Request/GetRequestsForm.vue";
+import { Carousel, Slide } from 'vue-carousel';
 
 export default {
   name: "RequestsPage",
-  components: { RequestComponent, GetRequestsForm, CreateRequestForm },
+  components: { RequestComponent, GetRequestsForm, CreateRequestForm,  Carousel,
+    Slide },
   data(){
     return {
-      showText: false
+      showText: false,
+      imageURLs: []
     };
   },
   mounted() {
     this.$refs.getRequestsForm.submit();
+    this.fetchImages(); 
   },
+  methods: {
+    async fetchImages(){
+      const url = '/api/responses';
+      try{
+        const r = await fetch(url); 
+        var res = await r.json(); 
+        res = res.filter((obj) => obj.imageURL != null && obj.imageURL.length > 0); 
+        this.imageURLs = res; 
+        console.log(this.imageURLs);
+      }catch(e){
+        console.log(e); 
+      }
+    }
+  }
 };
 </script>
 
@@ -119,10 +145,23 @@ section .scrollbox {
 .pageIntroduction{
   margin-top: 20px; 
   font-weight: 700;
+  margin-right: 50px;
 }
 
 .bullets{
   font-size: 15px;
-  font-weight: 400
+  font-weight: 400;
+  margin-right: 50px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 8fr 3fr;
+  column-gap: 2px;
+  row-gap: 1em;
+}
+
+.rightColumn{
+  margin-left: 20px;
+  margin-top: 88px; 
 }
 </style>

@@ -1,32 +1,17 @@
 <!-- Default page that also displays requests -->
 
 <template>
+  <div class="grid">
   <main>
     <section v-if="$store.state.username">
       <header>
         <h2>@{{ $store.state.username }}'s events page</h2>
       </header>
-      <button v-on:click="showText = !showText"> Click Here for Help! </button>
-      <div v-if="showText" class="pageIntroduction">
-        If you are an event organizer: 
-        <ul class="bullets">
-          <li>Use the "create an event" form below to provide information on your event and what items you need for the event! </li>
-          <li>Submit your event for others to see!</li>
-        </ul>
-      </div>
-      <div v-if="showText" class="pageIntroduction">
-        If you are a donator: 
-        <ul class="bullets">
-          <li>Browse through the events in the events list below! </li>
-          <li>If you find an event that is requesting items you own, click the "respond" button to let them know. </li>
-          <li>Submit an image to provide further information about what your item looks like. </li>
-        </ul>
-      </div>
-      <div v-if="showText">
-        Happy Thrifting! ☺︎
-        <br></br>
-      </div>
-      <br></br>
+      <carousel :per-page="4" :touchDrag="true" :autoplay="true" :autoplayTimeout="2000" :loop="true" :autoplayDirection="backward">
+      <slide v-for="img in imageURLs" :key="img.imageURL" :src="img.imageURL">
+        <img :src="img.imageURL" width="200" height="200"/>
+      </slide>
+      </carousel>
       <CreateEventForm />
     </section>
     <section v-else>
@@ -104,6 +89,29 @@
       </article>
     </section>
   </main>
+  <div v-if="$store.state.username" class="rightColumn">
+    <button v-on:click="showText = !showText"> Click Here for Help! </button>
+      <div v-if="showText" class="pageIntroduction">
+        If you are an event organizer: 
+        <ul class="bullets">
+          <li>Use the "create an event" form below to provide information on your event and what items you need for the event! </li>
+          <li>Submit your event for others to see!</li>
+        </ul>
+      </div>
+      <div v-if="showText" class="pageIntroduction">
+        If you are a donator: 
+        <ul class="bullets">
+          <li>Browse through the events in the events list below! </li>
+          <li>If you find an event that is requesting items you own, click the "respond" button to let them know. </li>
+          <li>Submit an image to provide further information about what your item looks like. </li>
+        </ul>
+      </div>
+      <div v-if="showText">
+        Happy Thrifting! ☺︎
+        <br></br>
+      </div>
+  </div>
+  </div>
 </template>
 
 <script>
@@ -111,18 +119,35 @@ import EventComponent from "@/components/Event/EventComponent.vue";
 import EventRequestComponent from "@/components/Event/EventRequestComponent.vue";
 import CreateEventForm from "@/components/Event/CreateEventForm.vue";
 import GetEventsForm from "@/components/Event/GetEventsForm.vue";
+import { Carousel, Slide } from 'vue-carousel';
 
 export default {
   name: "EventsPage",
-  components: { EventComponent, EventRequestComponent, GetEventsForm, CreateEventForm },
+  components: { EventComponent, EventRequestComponent, GetEventsForm, CreateEventForm , Carousel, Slide},
   data(){
     return {
-      showText: false
+      showText: false,
+      imageURLS: []
     }
   },
   mounted() {
     this.$refs.getEventsForm.submit();
+    this.fetchImages(); 
   },
+  methods: {
+    async fetchImages(){
+      const url = '/api/eventResponses';
+      try{
+        const r = await fetch(url); 
+        var res = await r.json(); 
+        res = res.filter((obj) => obj.imageURL != null && obj.imageURL.length > 0); 
+        this.imageURLs = res; 
+        console.log(this.imageURLs);
+      }catch(e){
+        console.log(e); 
+      }
+    }
+  }
 };
 </script>
 
@@ -158,5 +183,22 @@ section .scrollbox {
 .bullets{
   font-size: 15px;
   font-weight: 400
+}
+.grid {
+  display: grid;
+  grid-template-columns: 8fr 3fr;
+  column-gap: 2px;
+  row-gap: 1em;
+}
+
+.rightColumn{
+  margin-left: 20px;
+  margin-top: 88px; 
+}
+
+.pageIntroduction{
+  margin-top: 20px; 
+  font-weight: 700;
+  margin-right: 50px;
 }
 </style>
