@@ -7,8 +7,8 @@
       <header>
         <h2>@{{ $store.state.username }}'s events page</h2>
       </header>
-      <carousel :per-page="4" :touchDrag="true" :autoplay="true" :autoplayTimeout="2000" :loop="true" :autoplayDirection="backward">
-      <slide v-for="img in imageURLs" :key="img.imageURL" :src="img.imageURL">
+      <carousel :per-page="4" :touchDrag="true" :autoplay="true" :autoplayTimeout="2000" :loop="true">
+      <slide v-for="img in urls" :key="img.imageURL" :src="img.imageURL">
         <img :src="img.imageURL" width="200" height="200"/>
       </slide>
       </carousel>
@@ -127,12 +127,13 @@ export default {
   data(){
     return {
       showText: false,
-      imageURLS: []
+      urls: [],
     }
   },
   mounted() {
     this.$refs.getEventsForm.submit();
     this.fetchImages(); 
+    console.log(this.urls); 
   },
   methods: {
     async fetchImages(){
@@ -141,8 +142,8 @@ export default {
         const r = await fetch(url); 
         var res = await r.json(); 
         res = res.filter((obj) => obj.imageURL != null && obj.imageURL.length > 0); 
-        this.imageURLs = res; 
-        console.log(this.imageURLs);
+        this.urls = res; 
+        console.log(this.urls);
       }catch(e){
         console.log(e); 
       }
