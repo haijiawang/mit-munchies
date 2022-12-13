@@ -1,5 +1,4 @@
 <!-- Form for creating requests (block style) -->
-
 <script>
 import BlockForm from '@/components/common/BlockForm.vue';
 
