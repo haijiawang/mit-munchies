@@ -3,31 +3,44 @@
 
 <template>
   <form @submit.prevent="submit">
-    <input
-      v-model="coordvalue"
-      type="text"
-      :placeholder="coordplaceholder"
-    >
-    <input
-      v-model="startvalue"
-      type="text"
-      :placeholder="startplaceholder"
-    >
-    <input
-      v-model="endvalue"
-      type="text"
-      :placeholder="endplaceholder"
-    >
-    <input
-      v-model="locvalue"
-      type="text"
-      :placeholder="locplaceholder"
-    >
-    <button
-      type="submit"
-    >
-      {{ button }}
-    </button>
+    <table cellspacing="0" cellpadding="10">
+      <tr>
+        <td width="40">
+          Start and end search range:
+          <date-pick
+            v-model="startvalue"
+            :inputAttributes="{size: 10}"
+          ></date-pick>
+          <date-pick
+            v-model="endvalue"
+            :inputAttributes="{size: 10}"
+          ></date-pick>
+        </td>
+
+        <td width="20">
+          <input
+            v-model="coordvalue"
+            type="text"
+            :placeholder="coordplaceholder"
+            :size="30"
+          >
+          <input
+            v-model="locvalue"
+            type="text"
+            :placeholder="locplaceholder"
+            :size="30"
+          >
+        </td>
+
+        <td width="200">
+          <button
+            type="submit"
+          >
+          {{ button }}
+          </button>
+        </td>
+      </tr>
+    </table>
     <section class="alerts">
       <article
         v-for="(status, alert, index) in alerts"
@@ -41,6 +54,10 @@
 </template>
 
 <script>
+import DatePicker from '@/components/common/DatePicker.vue';
+import DatePick from 'vue-date-pick';
+import 'vue-date-pick/dist/vueDatePick.css';
+
 export default {
   name: 'InlineFormEvent',
   props: {
@@ -62,12 +79,16 @@ export default {
     },
     button: {
       type: String,
-      default: 'Submit'
+      default: 'Submit',
     }
   },
   data() {
-    return {coordvalue: '', startvalue: '', endvalue: '', locvalue: '', alerts: {}};
-  }
+    return {coordvalue: '', 
+    startvalue: (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate(), 
+    endvalue: (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate(), 
+    locvalue: '', alerts: {}, date: new Date()};
+  },
+  components: { DatePicker, DatePick },
 };
 </script>
 

@@ -69,10 +69,10 @@
             startvalue="start"
             endvalue="end"
             locvalue="location"
-            coordplaceholder="🔍 Filter by event coordinator (optional)"
+            coordplaceholder="🔍 Coordinator username (@)"
             startplaceholder="🔍 Filter by event start date (optional)"
             endplaceholder="🔍 Filter by event end date (optional)"
-            locplaceholder="🔍 Filter by event location (optional)"
+            locplaceholder="🔍 Location (ex: Boston, MA)"
             button="🔄 Get events"
           />
         </div>

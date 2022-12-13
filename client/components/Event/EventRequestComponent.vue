@@ -36,10 +36,6 @@
           </p>
 
         </td>
-
-        <td rowspan="5">
-          PICTURES WILL GO DOWN THIS COLUMN
-        </td>
       </tr>
 
       <tr>

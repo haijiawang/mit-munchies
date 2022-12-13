@@ -1,5 +1,9 @@
 <template>
-    <date-pick v-model="date"></date-pick>
+    <date-pick 
+        v-model="date"
+        :hasInputElement="true"
+    ></date-pick>
+
 </template>
 
 <script>
@@ -9,8 +13,7 @@ import 'vue-date-pick/dist/vueDatePick.css';
 export default {
     components: {DatePick},
     data: () => ({
-        date: '2019-01-01'
+        date: ''
     }),
-    
 };
 </script>
