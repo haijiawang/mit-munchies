@@ -22,10 +22,12 @@ class EventCollection {
    * @param {string} donationdate - The last day for accepting donations
    * @param {string} location - The location of the event
    * @param {string} contact - The preferred contact information for the event
+   * @param {string} title - Title for the event
+   * @param {string} url - URL for the event RSVP (optional)
    * @return {Promise<HydratedDocument<Event>>} - The newly created event
    */
   static async addOne(coordinatorId: Types.ObjectId | string, description: string, startrange: string,
-    endrange: string, donationdate: string, location: string, contact: string): Promise<HydratedDocument<Event>> {
+    endrange: string, donationdate: string, location: string, contact: string, title: string, url: string = null): Promise<HydratedDocument<Event>> {
     const date = new Date();
     location.replace(/\s+/g, ''); // remove all whitespace
     const event = new EventModel({
@@ -38,7 +40,9 @@ class EventCollection {
       location: location.toUpperCase(),
       event: 0,
       contact,
-      images: []
+      images: [],
+      title: title,
+      url: url
     });
     await event.save(); // Saves event to MongoDB
     return event.populate('coordinatorId');
@@ -195,7 +199,8 @@ class EventCollection {
    * @return {Promise<HydratedDocument<Event>>} - The newly updated event
    */
   static async updateOne(eventId: Types.ObjectId | string, description: string = null, startdate: string = null,
-    enddate: string = null, donationdate: string = null, location: string = null, contact: string = null): Promise<HydratedDocument<Event>> {
+    enddate: string = null, donationdate: string = null, location: string = null, contact: string = null, title: string = null,
+    url: string = null): Promise<HydratedDocument<Event>> {
     const event = await EventModel.findOne({ _id: eventId });
     if (description !== null && description !== "") event.description = description;
     if (startdate !== null && startdate !== "") event.startdate = new Date(startdate);
@@ -203,6 +208,8 @@ class EventCollection {
     if (donationdate !== null && donationdate !== "") event.donationdate = new Date(donationdate);
     if (location !== null && location !== "") event.location = location;
     if (contact !== null && contact !== "") event.contact = contact;
+    if (title !== null && title !== "") event.title = title;
+    if (url !== null && url !== "") event.url = url;
     await event.save();
     return event.populate('coordinatorId');
   }

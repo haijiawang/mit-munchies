@@ -14,6 +14,8 @@ type EventResponse = {
   event: string; // TODO: Possibly need to change to number, if it can be processed by frontend
   contact: string;
   images: Array<string>;
+  title: string;
+  url: string;
 };
 
 /**
@@ -51,7 +53,9 @@ const constructEventResponse = (event: HydratedDocument<Event>): EventResponse =
     location: eventCopy.location, // TODO: Format if necessary (add space between city and state)
     event: eventCopy.event.toString(),
     contact: eventCopy.contact,
-    images: eventCopy.images
+    images: eventCopy.images,
+    title: eventCopy.title,
+    url: eventCopy.url
   };
 };
 

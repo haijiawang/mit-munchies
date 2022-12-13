@@ -6,7 +6,17 @@
     <!-- START INFO HERE  -->
     <table cellspacing="0" cellpadding="0">
       <tr align="left" width="9000000">
-        <th rowspan="1" style="font-size:2vw" width="400"> Title will go here</th>
+        <th rowspan="1" style="font-size:2vw" width="400"> 
+          <textarea
+              v-if="editing"
+              class="title"
+              :value="drafttitle"
+              @input="drafttitle = $event.target.value"
+          />
+          <p v-else>
+            {{ event.title }} <!--LINK URL HERE!!!!!!!!!!-->
+          </p>
+        </th>
 
         <td rowspan="2">
         <textarea

@@ -163,6 +163,8 @@ router.get(
  * @param {string} description - The description of the items the coordinator is looking for to be donated
  * @param {string} contact - The contact method (phone or email) by which the coordinator wants to setup donation drop offs
  * @param {string} donationdate - Last date for accepting donations, formatted as "yyyy-mm-dd"
+ * @param {string} title - Title for the event
+ * @param {string} url - URL to RSVP for this event
  * @return {EventResponse} - The created event
  * @throws {403} - If the user is not logged in
  * @throws {400} - If the any of the event content is empty
@@ -181,7 +183,7 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const event = await EventCollection.addOne(userId, req.body.description, req.body.startrange, req.body.endrange, req.body.donationdate, req.body.location, req.body.contact);
+    const event = await EventCollection.addOne(userId, req.body.description, req.body.startrange, req.body.endrange, req.body.donationdate, req.body.location, req.body.contact, req.body.title, req.body.url);
 
     res.status(201).json({
       message: 'Your event was created successfully.',
@@ -263,7 +265,7 @@ router.patch(
 
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
     const event = await EventCollection.updateOne(userId, req.body.description, req.body.startdate, req.body.enddate,
-      req.body.donationdate, req.body.location, req.body.contact);
+      req.body.donationdate, req.body.location, req.body.contact, req.body.title, req.body.url);
 
     res.status(200).json({
       message: 'Your event was updated successfully.',

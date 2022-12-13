@@ -2,6 +2,7 @@ import type { HydratedDocument, Types } from 'mongoose';
 import type { EventResponse } from './model';
 import EventResponseModel from './model';
 import UserCollection from '../user/collection';
+import { toEditorSettings } from 'typescript';
 
 class EventResponseCollection {
     static async findAll(): Promise<Array<HydratedDocument<EventResponse>>> {
@@ -25,7 +26,7 @@ class EventResponseCollection {
             description: description,
             eventId: eventId,
             dateCreated: date,
-            imageURL: imageURL 
+            imageURL: imageURL
         });
         await response.save();
         response.populate('author');
