@@ -8,6 +8,8 @@
       v-if="fields.length"
     >
 
+    <DatePicker/>
+
     <table>
     <tr>
       <td>
@@ -111,6 +113,7 @@
 </template>
 
 <script>
+import DatePicker from '@/components/common/DatePicker.vue';
 
 export default {
   name: 'BlockFormEvents',
@@ -129,6 +132,7 @@ export default {
       callback: null // Function to run after successful form submission
     };
   },
+  components: { DatePicker },
   methods: {
     checkErrors (){
       // overriden by instantiation
