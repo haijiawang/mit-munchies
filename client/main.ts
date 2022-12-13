@@ -4,7 +4,6 @@ import router from './router';
 import store from './store';
 import firebase from 'firebase/compat/app';
 
-
 Vue.config.productionTip = false;
 
 new Vue({
@@ -20,7 +19,7 @@ new Vue({
       messagingSenderId: "709056402623",
       appId: "1:709056402623:web:ae045610e8dd98be4c220a"
     }
-    // initialize firebase 
+    // initialize firebase
     firebase.initializeApp(firebaseConfig)
   }
 }).$mount('#app');

@@ -5,42 +5,89 @@
   <form @submit.prevent="submit">
     <h3>{{ title }}</h3>
     <article
-      v-if="fields.length"
+        v-if="fields.length"
     >
       <div
-        v-for="field in fields"
-        :key="field.id"
+          v-for="field in fields"
+          :key="field.id"
       >
-        <label :for="field.id">{{ field.label }}:</label>
-        <textarea
-          v-if="field.id === 'content'"
-          :name="field.id"
-          :value="field.value"
-          @input="field.value = $event.target.value"
-        />
-        <input
-          v-else
-          :type="field.id === 'password' ? 'password' : 'text'"
-          :name="field.id"
-          :value="field.value"
-          :placeholder="field.placeholder"
-          @input="field.value = $event.target.value"
+        <label :for="field.id"/>
+        <div
+            v-if="field.id==='color'"
+            :name="field.id"
+            :value="field.value"
+            @input="field.value = $event.target.value">
+          <label>{{ field.label }}: </label>
+          <select
+              name="color"
+              id="color"
+              class="np-color-select-input"
+          >
+            <option value="red">Red</option>
+            <option value="orange">Orange</option>
+            <option value="yellow">Yellow</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+            <option value="purple">Purple</option>
+            <option value="pink">Pink</option>
+            <option value="black">Black</option>
+            <option value="white">White</option>
+          </select>
+        </div>
+        <div
+            v-else-if="field.id==='size'"
+            :name="field.id"
+            :value="field.value"
+            @input="field.value = $event.target.value">
+          <label>{{ field.label }}: </label>
+          <select
+              name="size"
+              id="size"
+              class="np-size-select-input"
+          >
+            <option value="xSmall">XSmall</option>
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+            <option value="xLarge">XLarge</option>
+          </select>
+        </div>
+        <div
+            v-else-if="field.id === 'content'"
         >
+          <label>{{ field.label }}: </label>
+          <textarea
+              :name="field.id"
+              :value="field.value"
+              @input="field.value = $event.target.value"
+          />
+        </div>
+        <p v-else>
+          <label>{{ field.label }}: </label>
+          <input
+              :size = 125
+              :type="field.id === 'password' ? 'password' : 'text'"
+              :name="field.id"
+              :value="field.value"
+              :placeholder="field.placeholder"
+              @input="field.value = $event.target.value"
+          >
+        </p>
       </div>
     </article>
     <article v-else>
       <p>{{ content }}</p>
     </article>
     <button
-      type="submit"
+        type="submit"
     >
       {{ title }}
     </button>
     <section class="alerts">
       <article
-        v-for="(status, alert, index) in alerts"
-        :key="index"
-        :class="status"
+          v-for="(status, alert, index) in alerts"
+          :key="index"
+          :class="status"
       >
         <p>{{ alert }}</p>
       </article>
@@ -64,18 +111,22 @@ export default {
       refreshRequests: false, // Whether or not stored freets should be updated after form submission
       refreshEvents: false, // Whether or not stored freets should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
-      callback: null // Function to run after successful form submission
+      callback: null, // Function to run after successful form submission
+      activeDropdown: false, //dropdown starts closed
     };
   },
   methods: {
-    checkErrors (){
+    toggle() {
+      this.activeDropdown = !this.activeDropdown
+    },
+    checkErrors() {
       // overriden by instantiation
       return 0;
     },
     async submit() {
       /**
-        * Submits a form with the specified options from data().
-        */
+       * Submits a form with the specified options from data().
+       */
       const e = this.checkErrors();
       if (e > 0)
         return; // save preferences and display errors without deleting info
@@ -86,11 +137,11 @@ export default {
       };
       if (this.hasBody) {
         options.body = JSON.stringify(Object.fromEntries(
-          this.fields.map(field => {
-            const {id, value} = field;
-            field.value = '';
-            return [id, value];
-          })
+            this.fields.map(field => {
+              const {id, value} = field;
+              field.value = '';
+              return [id, value];
+            })
         ));
       }
 
@@ -159,7 +210,7 @@ form h3 {
 }
 
 textarea {
-   font-family: inherit;
-   font-size: inherit;
+  font-family: inherit;
+  font-size: inherit;
 }
 </style>
