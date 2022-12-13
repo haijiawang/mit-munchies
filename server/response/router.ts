@@ -10,6 +10,22 @@ import * as util from './util';
 const router = express.Router()
 
 /**
+ * Get all responses
+ */
+ router.get(
+    '/',
+    [
+        userValidator.isUserLoggedIn,
+        // requestValidator.isRequestExists
+    ],
+    async (req: Request, res: Response) => {
+        const allResponses = await ResponseCollection.findAll();
+        console.log(allResponses);
+        res.status(200).json(allResponses.map(util.constructResponseResponse));
+    }
+)
+
+/**
  * Get all response for a request item
  */
 router.get(

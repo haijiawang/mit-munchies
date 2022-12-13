@@ -4,6 +4,10 @@ import ResponseModel from './model';
 import UserCollection from '../user/collection';
 
 class ResponseCollection {
+    static async findAll(): Promise<Array<HydratedDocument<Response>>> {
+        return ResponseModel.find().sort({ dateCreated: -1 }).populate('author');
+    }
+
     static async findByRequestId(rId: string | any): Promise<Array<HydratedDocument<Response>>> {
         return ResponseModel.find({ requestId: rId }).sort({ dateCreated: -1 }).populate('author');
     }
