@@ -25,7 +25,7 @@
               :value="draftstart"
               @input="draftstart = $event.target.value"
           />
-          <p v-else class="startdate" style="font-size:1.1vw"><b><i>Starts:</i></b> {{ this.dateFormat(event.startdate) }}</p>
+          <p v-else class="startdate" style="font-size:1.1vw">📆 <b><i>Starts:</i></b> {{ this.dateFormat(event.startdate) }}</p>
 
           <textarea
               v-if="editing"
@@ -33,7 +33,7 @@
               :value="draftend"
               @input="draftend = $event.target.value"
           />
-          <p v-else class="enddate" style="font-size:1.1vw"><b><i>Ends:</i></b> {{ this.dateFormat(event.enddate) }}</p>
+          <p v-else class="enddate" style="font-size:1.1vw">📆 <b><i>Ends:</i></b> {{ this.dateFormat(event.enddate) }}</p>
 
           <textarea
               v-if="editing"
@@ -42,7 +42,7 @@
               @input="draftdonation = $event.target.value"
           />
           <p v-else class="donationdate" style="font-size:1.1vw">
-            <b><i>Last Date for Donations:</i></b> {{ this.dateFormat(event.donationdate) }}
+            📆 <b><i>Last Date for Donations:</i></b> {{ this.dateFormat(event.donationdate) }}
           </p>
 
         </td>
@@ -61,7 +61,7 @@
             @input="draftlocation = $event.target.value"
         />
           <div v-else style="text-transform:capitalize;font-size:1.1vw">
-            <p class="location"><b>Location:</b> {{ this.locFormat(event.location) }}</p>
+            <p class="location">🏠 <b>Location:</b> {{ this.locFormat(event.location) }}</p>
           </div>
         </td>
 
@@ -84,7 +84,7 @@
             :value="drafturl"
             @input="drafturl = $event.target.value"
         />
-          <p v-else class="url" style="font-size:1.1vw"><b>RSVP URL:</b> {{ event.url }}</p>
+          <p v-else class="url" style="font-size:1.1vw"><b>🔗 RSVP URL:</b> {{ event.url }}</p>
         </td>
       </tr>
 

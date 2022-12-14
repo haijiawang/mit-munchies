@@ -102,4 +102,8 @@ input {
     padding: 0 5px;
     min-width: 200px;
 }
+
+button {
+  width: 120px;
+}
 </style>
