@@ -1,7 +1,5 @@
 import type { HydratedDocument } from 'mongoose';
 import moment from 'moment';
-import type { Freet, PopulatedFreet } from '../freet/model';
-import { Types } from "mongoose";
 import { Request, PopulatedRequest } from "./model";
 
 // Update this if you add a property to the Freet type!

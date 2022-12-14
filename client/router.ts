@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-// import FreetsPage from './components/Freet/FreetsPage.vue';
 import HomePage from './components/Home/HomePage.vue';
 import RequestsPage from './components/Request/RequestsPage.vue';
 import EventsPage from './components/Event/EventsPage.vue';

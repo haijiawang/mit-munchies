@@ -6,7 +6,7 @@
     <!-- START INFO HERE  -->
     <table cellspacing="0" cellpadding="0">
       <tr align="left" width="9000000">
-        <th rowspan="1" style="font-size:2vw" width="400"> 
+        <th rowspan="1" style="font-size:2vw" width="400">
           <textarea
               v-if="editing"
               class="title"
@@ -110,9 +110,6 @@
         <button v-if="!editing" @click="startEditing">✏️ Edit</button>
         <button @click="deleteEvent">🗑️ Delete</button>
       </div>
-      <div v-if="this.responding">
-        <button @click="submitResponse">Submit</button>
-      </div>
       <div>
         <button @click="viewEventResponses">
           👀 View Responses
@@ -168,13 +165,15 @@
             </div>
           </v-flex>
         </v-layout>
-        <button @click="submitResponse">
+        <button
+            v-if="this.responding"
+            @click="submitResponse">
           🗣 Submit Response
         </button>
       </div>
     </section>
 
-    
+
 
     <section class="alerts">
       <article
@@ -415,7 +414,7 @@ export default {
       this.responding = !this.responding;
     },
     async submitResponse() {
-      await this.onUpload(); 
+      await this.onUpload();
       const params = {
         method: "POST",
         message: "Successfully created an event response!",
@@ -429,7 +428,7 @@ export default {
           setTimeout(() => this.$delete(this.alerts, params.message), 3000);
         },
       };
-      this.responseRequest(params);
+      await this.responseRequest(params);
     },
     async responseRequest(params) {
       /**

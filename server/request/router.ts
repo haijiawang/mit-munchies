@@ -113,7 +113,7 @@ router.get(
         const authorRequests = await RequestCollection.findAllByUsername(req.query.author as string);
         const response = authorRequests.map(util.constructRequestResponse);
         res.status(200).json(response);
-    } 
+    }
 );
 
 // /**
@@ -235,7 +235,8 @@ router.patch(
         requestValidator.isValidRequestContent
     ],
     async (req: Request, res: Response) => {
-        const request = await RequestCollection.updateOne(req.params.freetId, req.body.content);
+        console.log("ROUTER", req.body.description, req.params.requestId)
+        const request = await RequestCollection.updateOne(req.params.requestId, req.body.description);
         res.status(200).json({
             message: 'Your request was updated successfully.',
             request: util.constructRequestResponse(request)

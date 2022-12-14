@@ -4,7 +4,6 @@ import ResponseCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as requestValidator from '../request/middleware';
 import * as responseValidator from './middleware';
-// import * as freetValidator from '../freet/middleware';
 import * as util from './util';
 
 const router = express.Router()

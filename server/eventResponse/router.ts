@@ -4,9 +4,7 @@ import EventResponseCollection from './collection';
 import * as userValidator from '../user/middleware';
 import * as eventValidator from '../event/middleware';
 import * as eventResponseValidator from './middleware';
-// import * as freetValidator from '../freet/middleware';
 import * as util from './util';
-import { constructEventResponseResponse } from 'server/eventResponse/util';
 
 const router = express.Router()
 

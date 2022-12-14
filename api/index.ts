@@ -8,7 +8,6 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import * as userValidator from '../server/user/middleware';
 import { userRouter } from '../server/user/router';
-import { freetRouter } from '../server/freet/router';
 import { requestRouter } from "../server/request/router";
 import { responseRouter } from '../server/response/router';
 import { eventRouter } from "../server/event/router";
@@ -73,7 +72,6 @@ app.use(userValidator.isCurrentSessionUserExists);
 
 // Add routers from routes folder
 app.use('/api/users', userRouter);
-app.use('/api/freets', freetRouter);
 app.use('/api/requests', requestRouter);
 app.use('/api/responses', responseRouter)
 app.use('/api/events', eventRouter);

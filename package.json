@@ -30,10 +30,11 @@
         "ts-loader": "^9.4.2",
         "vue": "^2.7.14",
         "vue-carousel": "^0.18.0",
-        "vue-date-pick": "^1.5.1",
         "vue-clickaway": "^2.2.2",
+        "vue-date-pick": "^1.5.1",
         "vue-router": "^3.6.5",
         "vuefire": "^3.0.0-alpha.13",
+        "vuejs-datepicker": "^1.6.2",
         "vuex": "^3.6.2",
         "vuex-persistedstate": "^4.1.0"
     },

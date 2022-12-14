@@ -368,7 +368,7 @@ export default {
       console.log(this.imageURL);
       const params = {
         method: "POST",
-        message: "Successfully created an event response!",
+        message: "Successfully created a response!",
         body: JSON.stringify({
           contact: this.draftresponsecontact,
           description: this.draftresponsedescription,
