@@ -14,6 +14,8 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
   state: {
     filter: null, // Username to filter shown requests by (null = show all) // TODO: Update for different kinds of filtering
+    colorFilter: null,
+    sizeFilter: null,
     eventFilterCoord: null,
     eventFilterLoc: null,
     eventFilterStartDate: null,
@@ -71,6 +73,20 @@ const store = new Vuex.Store({
        * @param filter - Username of the user to fitler requests by
        */
       state.filter = filter;
+    },
+    updateColorFilter(state, filter) {
+      /**
+       * Update the stored requests filter to the specified one.
+       * @param filter - Username of the user to fitler requests by
+       */
+      state.colorFilter = filter;
+    },
+    updateSizeFilter(state, filter) {
+      /**
+       * Update the stored requests filter to the specified one.
+       * @param filter - Username of the user to fitler requests by
+       */
+      state.sizeFilter = filter;
     },
     updateRequests(state, requests) {
       /**

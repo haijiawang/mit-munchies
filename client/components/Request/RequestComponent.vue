@@ -4,50 +4,68 @@
 <template>
   <article class="request">
     <h3 class="author">@{{ request.author }}</h3>
-    <textarea
-        v-if="editing"
-        class="contact"
-        :value="draftContact"
-        @input="draftContact = $event.target.value"
-    />
-    <div v-else class="field">
-      <p class="fieldTitle">💌 Contact me: </p>
-      <p class="fieldValue">{{ request.contact }}</p>
-    </div>
-    <div></div>
-    <textarea
-        v-if="editing"
-        class="description"
-        :value="draftDescription"
-        @input="draftDescription = $event.target.value"
-    />
-    <div v-else class="field">
-      <p class="fieldTitle"> 📃 Request Description: </p>
-      <p class="fieldValue">{{ request.description }}</p>
-    </div>
-    <div></div>
-    <textarea
-        v-if="editing"
-        class="color"
-        :value="draftColor"
-        @input="draftColor = $event.target.value"
-    />
-    <div v-else class="field">
-      <p class="fieldTitle"> 🎨 Color: </p>
-      <p class="fieldValue">{{ request.color }}</p>
-    </div>
-   <div></div>
-    <textarea
-        v-if="editing"
-        class="size"
-        :value="draftSize"
-        @input="draftSize = $event.target.value"
-    />
-    <div v-else class="field">
-      <p class="fieldTitle"> Size: </p>
-      <p class="fieldValue">{{ request.size }}</p>
-    </div>
-    <p v-else class="size">Size: {{ request.size }}</p>
+
+    <table cellpadding="5">
+      <tr>
+        <td>
+          <textarea
+              v-if="editing"
+              class="contact"
+              :value="draftContact"
+              @input="draftContact = $event.target.value"
+          />
+          <div v-else class="field">
+            <p class="fieldTitle">💌 Contact me: </p>
+            <p class="fieldValue">{{ request.contact }}</p>
+          </div>
+          <div></div>
+        </td>
+
+        <td>
+          <textarea
+              v-if="editing"
+              class="color"
+              :value="draftColor"
+              @input="draftColor = $event.target.value"
+          />
+          <div v-else class="field">
+            <p class="fieldTitle"> 🎨 Color: </p>
+            <p class="fieldValue">{{ request.color }}</p>
+          </div>
+        <div></div>
+        </td>
+
+        <td>
+          <textarea
+              v-if="editing"
+              class="size"
+              :value="draftSize"
+              @input="draftSize = $event.target.value"
+          />
+          <div v-else class="field">
+            <p class="fieldTitle">👕 Size: </p>
+            <p class="fieldValue">{{ request.size }}</p>
+          </div>
+          <p v-else class="size">Size: {{ request.size }}</p>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="3">
+          <textarea
+              v-if="editing"
+              class="description"
+              :value="draftDescription"
+              @input="draftDescription = $event.target.value"
+          />
+          <div v-else class="field">
+            <p class="fieldTitle"> 📃 Request Description: </p>
+            <p class="fieldValue">{{ request.description }}</p>
+          </div>
+          <div></div>
+        </td>
+      </tr>
+    </table>
+
     <div>
       <div
           class="actions"
