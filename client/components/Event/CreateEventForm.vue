@@ -19,7 +19,7 @@ export default {
         {id: 'contact', label: 'Contact', placeholder: 'Phone or email'},
         {id: 'donationdate', label: 'Last Date for Donations', value: (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate()},
         {id: 'title', label: 'Title of Event', placeholder: 'Event Title'},
-        {id: 'url', label: 'RSVP URL for event (optional)', placeholder: 'https://eventbrite.com/example'}
+        {id: 'url', label: 'RSVP URL', placeholder: 'Optional: ex: https://eventbrite.com/example'}
       ],
       title: 'Create an event',
       refreshEvents: true,

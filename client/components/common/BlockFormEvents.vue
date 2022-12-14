@@ -11,6 +11,33 @@
     <table>
     <tr>
       <td>
+        <label>{{ fields[6].label }}: </label>
+        <input
+          :size="20"
+          :type="fields[6].id === 'password' ? 'password' : 'text'"
+          :name="fields[6].id"
+          :value="fields[6].value"
+          :placeholder="fields[6].placeholder"
+          @input="fields[6].value = $event.target.value"
+        >
+      </td>
+
+      <td colspan="2">
+        <label>{{ fields[7].label }}: </label>
+        <input
+          :size="80"
+          :type="fields[7].id === 'password' ? 'password' : 'text'"
+          :name="fields[7].id"
+          :value="fields[7].value"
+          :placeholder="fields[7].placeholder"
+          @input="fields[7].value = $event.target.value"
+        >
+      </td>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
         <label>{{ fields[0].label }}: </label>
         <date-pick
           v-model="fields[0].value"
@@ -49,7 +76,7 @@
       </td>
 
       <td>
-        <label>{{ fields[4].label }}: </label>
+        <label>{{ fields[4].label }}: <br></label>
         <input
           :size="25"
           :type="fields[4].id === 'password' ? 'password' : 'text'"
@@ -65,7 +92,7 @@
       <td colspan="3">
         <label>{{ fields[3].label }}: </label>
         <input
-          :size="128"
+          :size="141"
           :type="fields[3].id === 'password' ? 'password' : 'text'"
           :name="fields[3].id"
           :value="fields[3].value"

@@ -14,17 +14,17 @@
               @input="drafttitle = $event.target.value"
           />
           <p v-else>
-            {{ event.title }} <!--LINK URL HERE!!!!!!!!!!-->
+            {{ event.title }}
           </p>
         </th>
 
         <td rowspan="2">
-        <textarea
-            v-if="editing"
-            class="startdate"
-            :value="draftstart"
-            @input="draftstart = $event.target.value"
-        />
+          <textarea
+              v-if="editing"
+              class="startdate"
+              :value="draftstart"
+              @input="draftstart = $event.target.value"
+          />
           <p v-else class="startdate" style="font-size:1.1vw"><b><i>Starts:</i></b> {{ this.dateFormat(event.startdate) }}</p>
 
           <textarea
@@ -76,20 +76,17 @@
         </td>
       </tr>
 
-      <!-- TODO: ADD IF FOR RSVP FORM SUPPLIED -->
-      <!--
       <tr>
         <td colspan="3" align="left">
         <textarea
             v-if="editing"
-            class="rsvp"
-            :value="draftrsvp"
-            @input="draftrsvp = $event.target.value"
+            class="url"
+            :value="drafturl"
+            @input="drafturl = $event.target.value"
         />
-          <p v-else class="description" style="font-size:1.1vw"><b>RSVP Site:</b> FIELD WILL GO HERE</p>
+          <p v-else class="url" style="font-size:1.1vw"><b>RSVP URL:</b> {{ event.url }}</p>
         </td>
       </tr>
-      -->
 
       <tr>
         <td colspan="3" align="left">
@@ -195,6 +192,9 @@
 import firebase from "firebase/compat/app";
 import {getStorage, uploadBytes, ref, getDownloadURL} from "firebase/storage";
 import EventResponseComponent from "../EventResponse/EventResponseComponent";
+import DatePicker from '@/components/common/DatePicker.vue';
+import DatePick from 'vue-date-pick';
+import 'vue-date-pick/dist/vueDatePick.css';
 
 export default {
   name: "EventRequestComponent",
@@ -212,27 +212,35 @@ export default {
     return {
       editing: false, // Whether or not this request is in edit mode
       responding: false,
-      draftstart: this.event.startdate,
-      draftend: this.event.enddate,
-      draftdonation: this.event.donationdate,
+      draftstart: this.draftDateFormat(this.event.startdate),
+      draftend: this.draftDateFormat(this.event.enddate),
+      draftdonation: this.draftDateFormat(this.event.donationdate),
       draftlocation: this.event.location,
       draftcontact: this.event.contact, // Potentially-new contact for this request
       draftdescription: this.event.description, // Potentially-new description for this request
       draftresponsecontact: "",
       draftresponsedescription: "",
-      draftrsvp: "",
+      drafturl: this.event.url,
       eventResponses: [],
       viewingEventResponses: false,
       alerts: {}, // Displays success/error messages encountered during request modification
       caption: "",
       imageUrl: "",
       imageDate: "",
+      drafttitle: this.event.title
     };
   },
   methods: {
     dateFormat(str){
       const spl = str.split(",");
       return spl[0];
+    },
+    draftDateFormat(str){
+      const spl = str.split(",");
+      const date = spl[0];
+      const spldate = date.split(" ");
+      const s = spldate[0] + " " + spldate[1].slice(0, spldate[1].length-2) + ", " + spldate[2];
+      return s;
     },
     locFormat(str){
       const location = str.split(",");
@@ -288,10 +296,12 @@ export default {
       this.editing = true; // Keeps track of if a request is being edited
       this.draftcontact = this.event.contact; // The contact of our current "draft" while being edited
       this.draftdescription = this.event.description; // The description of our current "draft" while being edited
-      this.draftstart = this.event.startdate;
-      this.draftend = this.event.enddate;
-      this.draftdonation = this.event.donationdate;
+      this.draftstart = this.draftDateFormat(this.event.startdate);
+      this.draftend = this.draftDateFormat(this.event.enddate);
+      this.draftdonation = this.draftDateFormat(this.event.donationdate);
       this.draftlocation = this.event.location;
+      this.drafttitle = this.event.title;
+      this.drafturl = this.event.url;
     },
     stopEditing() {
       /**
@@ -300,10 +310,12 @@ export default {
       this.editing = false;
       this.draftcontact = this.event.contact;
       this.draftdescription = this.event.description;
-      this.draftstart = this.event.startdate;
-      this.draftend = this.event.enddate;
-      this.draftdonation = this.event.donationdate;
+      this.draftstart = this.draftDateFormat(this.event.startdate);
+      this.draftend = this.draftDateFormat(this.event.enddate);
+      this.draftdonation = this.draftDateFormat(this.event.donationdate);
       this.draftlocation = this.event.location;
+      this.drafttitle = this.event.title;
+      this.drafturl = this.event.url;
     },
     deleteEvent() {
       /**
@@ -330,7 +342,9 @@ export default {
           this.event.startdate === this.draftstart &&
           this.event.enddate === this.draftend &&
           this.event.location === this.draftlocation &&
-          this.event.donationdate === this.draftdonation
+          this.event.donationdate === this.draftdonation &&
+          this.event.title === this.drafttitle &&
+          this.event.url === this.drafturl
       ) {
         const error =
             "Error: Edited event content should be different than current event content.";
@@ -349,6 +363,8 @@ export default {
           enddate: this.draftend,
           location: this.draftlocation,
           donationdate: this.draftdonation,
+          title: this.drafttitle,
+          url: this.drafturl
         }),
         callback: () => {
           this.$set(this.alerts, params.message, "success");

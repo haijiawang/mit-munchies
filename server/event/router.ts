@@ -264,7 +264,7 @@ router.patch(
     eventValidator.isValidLocationBody;
 
     const userId = (req.session.userId as string) ?? ''; // Will not be an empty string since its validated in isUserLoggedIn
-    const event = await EventCollection.updateOne(userId, req.body.description, req.body.startdate, req.body.enddate,
+    const event = await EventCollection.updateOne(req.params.eventId, req.body.description, req.body.startdate, req.body.enddate,
       req.body.donationdate, req.body.location, req.body.contact, req.body.title, req.body.url);
 
     res.status(200).json({
