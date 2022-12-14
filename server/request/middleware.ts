@@ -46,9 +46,6 @@ const isValidRequestContent = (req: Request, res: Response, next: NextFunction) 
  */
 const isValidRequestModifier = async (req: Request, res: Response, next: NextFunction) => {
     const request = await RequestCollection.findOne(req.params.requestId);
-    console.log("ra", request.author._id);
-    console.log("ra", request.author._id.toString() == req.session.userId);
-    console.log("rsu", req.session.userId);
     const userId = request.author._id.toString(); //TODO
     if (req.session.userId !== userId) {
         res.status(403).json({

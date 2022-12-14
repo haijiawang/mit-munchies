@@ -19,7 +19,6 @@ const router = express.Router()
     ],
     async (req: Request, res: Response) => {
         const allResponses = await ResponseCollection.findAll();
-        console.log(allResponses);
         res.status(200).json(allResponses.map(util.constructResponseResponse));
     }
 )

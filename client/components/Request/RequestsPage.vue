@@ -83,14 +83,14 @@
   <div v-if="$store.state.username" class="rightColumn">
     <button v-on:click="showText = !showText"> Click Here for Help! </button>
       <div v-if="showText" class="pageIntroduction">
-        If you are a thrifter: 
+        If you are a thrifter:
         <ul class="bullets">
           <li>Use the "create a request" form below to provide information on what you are looking for! </li>
           <li>Submit your request for potential donors to see!</li>
         </ul>
       </div>
       <div v-if="showText" class="pageIntroduction">
-        If you are a donator: 
+        If you are a donator:
         <ul class="bullets">
           <li>Browse through all the requests below. </li>
           <li>If you find someone requesting an item you own, click the "respond" button to let them know!</li>
@@ -123,19 +123,18 @@ export default {
   },
   mounted() {
     this.$refs.getRequestsForm.submit();
-    this.fetchImages(); 
+    this.fetchImages();
   },
   methods: {
     async fetchImages(){
       const url = '/api/responses';
       try{
-        const r = await fetch(url); 
-        var res = await r.json(); 
-        res = res.filter((obj) => obj.imageURL != null && obj.imageURL.length > 0); 
-        this.imageURLs = res; 
-        console.log(this.imageURLs);
+        const r = await fetch(url);
+        var res = await r.json();
+        res = res.filter((obj) => obj.imageURL != null && obj.imageURL.length > 0);
+        this.imageURLs = res;
       }catch(e){
-        console.log(e); 
+        console.log(e);
       }
     }
   }
@@ -167,7 +166,7 @@ section .scrollbox {
 }
 
 .pageIntroduction{
-  margin-top: 20px; 
+  margin-top: 20px;
   font-weight: 700;
   margin-right: 50px;
 }
@@ -186,7 +185,7 @@ section .scrollbox {
 
 .rightColumn{
   margin-left: 20px;
-  margin-top: 88px; 
+  margin-top: 88px;
 }
 
 .wrapper {

@@ -56,10 +56,10 @@
             </span>
             <span v-else-if="$store.state.eventFilterStartDate">
               on or after {{ $store.state.eventFilterStartDate }}
-            </span>   
+            </span>
             <span v-else-if="$store.state.eventFilterLoc">
               in {{ $store.state.eventFilterLoc }}
-            </span>        
+            </span>
           </h2>
         </div>
         <div class="right">
@@ -92,14 +92,14 @@
   <div v-if="$store.state.username" class="rightColumn">
     <button v-on:click="showText = !showText"> Click Here for Help! </button>
       <div v-if="showText" class="pageIntroduction">
-        If you are an event organizer: 
+        If you are an event organizer:
         <ul class="bullets">
           <li>Use the "create an event" form below to provide information on your event and what items you need for the event! </li>
           <li>Submit your event for others to see!</li>
         </ul>
       </div>
       <div v-if="showText" class="pageIntroduction">
-        If you are a donator: 
+        If you are a donator:
         <ul class="bullets">
           <li>Browse through the events in the events list below! </li>
           <li>If you find an event that is requesting items you own, click the "respond" button to let them know. </li>
@@ -132,20 +132,18 @@ export default {
   },
   mounted() {
     this.$refs.getEventsForm.submit();
-    this.fetchImages(); 
-    console.log(this.urls); 
+    this.fetchImages();
   },
   methods: {
     async fetchImages(){
       const url = '/api/eventResponses';
       try{
-        const r = await fetch(url); 
-        var res = await r.json(); 
-        res = res.filter((obj) => obj.imageURL != null && obj.imageURL.length > 0); 
-        this.urls = res; 
-        console.log(this.urls);
+        const r = await fetch(url);
+        var res = await r.json();
+        res = res.filter((obj) => obj.imageURL != null && obj.imageURL.length > 0);
+        this.urls = res;
       }catch(e){
-        console.log(e); 
+        console.log(e);
       }
     }
   }
@@ -177,7 +175,7 @@ section .scrollbox {
 }
 
 .pageIntroduction{
-  margin-top: 20px; 
+  margin-top: 20px;
   font-weight: 700;
 }
 
@@ -194,11 +192,11 @@ section .scrollbox {
 
 .rightColumn{
   margin-left: 20px;
-  margin-top: 88px; 
+  margin-top: 88px;
 }
 
 .pageIntroduction{
-  margin-top: 20px; 
+  margin-top: 20px;
   font-weight: 700;
   margin-right: 50px;
 }

@@ -274,7 +274,6 @@ export default {
       this.imageData = event.target.files[0];
     },
     async onUpload() {
-      console.log("on upload");
       const storage = getStorage();
 
       const imgRef = ref(storage, `images/${this.imageData.name}`);
@@ -282,8 +281,6 @@ export default {
         const snapshot = await uploadBytes(imgRef, this.imageData);
         const url = await getDownloadURL(snapshot.ref);
         this.imageUrl = url;
-        console.log(this.imageUrl);
-        console.log(snapshot);
       } catch (error) {
         // Handle errors.
       }

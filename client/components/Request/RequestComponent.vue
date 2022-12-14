@@ -246,7 +246,6 @@ export default {
     },
 
     async onUpload() {
-      console.log("on upload");
       const storage = getStorage();
 
       const imgRef = ref(storage, `images/${this.imageData.name}`);
@@ -254,8 +253,6 @@ export default {
         const snapshot = await uploadBytes(imgRef, this.imageData);
         const url = await getDownloadURL(snapshot.ref);
         this.imageUrl = url;
-        console.log(this.imageUrl);
-        console.log(snapshot);
       } catch (error) {
         // Handle errors.
       }
@@ -365,7 +362,6 @@ export default {
     },
     async submitResponse() {
       await this.onUpload();
-      console.log(this.imageURL);
       const params = {
         method: "POST",
         message: "Successfully created a response!",

@@ -235,7 +235,6 @@ router.patch(
         requestValidator.isValidRequestContent
     ],
     async (req: Request, res: Response) => {
-        console.log("ROUTER", req.body.description, req.params.requestId)
         const request = await RequestCollection.updateOne(req.params.requestId, req.body.description);
         res.status(200).json({
             message: 'Your request was updated successfully.',

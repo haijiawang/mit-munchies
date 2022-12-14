@@ -66,10 +66,6 @@ nav {
   position: relative;
 }
 
-.router-link-exact-active  {
-  color: saddlebrown;
-}
-
 .title {
   font-size: 32px;
   margin: 0 5px;
@@ -94,6 +90,10 @@ img {
 
 .right a {
   margin-left: 5px;
+}
+
+.router-link-exact-active  {
+  color: saddlebrown;
 }
 
 .alerts {

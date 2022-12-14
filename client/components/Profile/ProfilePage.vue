@@ -8,7 +8,7 @@
         <h2>
           @{{
             $store.state.username
-          }}'s donation requests and events 
+          }}'s donation requests and events
         </h2>
       </header>
     </section>
@@ -31,7 +31,7 @@
       Date Joined: {{ $store.state.userDateJoined }}
     </div>
     -->
-    
+
     <section>
       <div class="right">
         <GetEventsFormBlank
@@ -103,8 +103,6 @@ export default {
     this.$refs.getRequestsFormBlank.submit();
     this.$refs.getEventResponsesForm.submit();
     this.$refs.getProfileForm.submit();
-
-    console.log(this.$store);
   },
 };
 </script>
