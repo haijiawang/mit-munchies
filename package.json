@@ -10,6 +10,7 @@
         "dev": "nodemon api/index.ts -e js,ts,json"
     },
     "dependencies": {
+        "@vuepic/vue-datepicker": "^3.6.3",
         "bootstrap": "^5.2.3",
         "bootstrap-vue": "^2.23.1",
         "connect-history-api-fallback": "^1.6.0",
@@ -29,6 +30,7 @@
         "ts-loader": "^9.4.2",
         "vue": "^2.7.14",
         "vue-carousel": "^0.18.0",
+        "vue-date-pick": "^1.5.1",
         "vue-clickaway": "^2.2.2",
         "vue-router": "^3.6.5",
         "vuefire": "^3.0.0-alpha.13",

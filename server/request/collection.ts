@@ -87,6 +87,49 @@ class RequestCollection {
     return RequestModel.find({ size: size }).sort({ dateCreated: -1 }).populate('author');
   }
 
+  /**
+   * Get all the requests in a given size
+   *
+   * @param {string} size - The color of the items
+   * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests with the specified color
+   */
+   static async findAllBySizeAndColor(size: string, color: string): Promise<Array<HydratedDocument<Request>>> {
+    return RequestModel.find({ $and: [{size: size}, {color: color}]}).sort({ dateCreated: -1 }).populate('author');
+  }
+  
+  /**
+   * Get all the requests in a given size
+   *
+   * @param {string} size - The color of the items
+   * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests with the specified color
+   */
+  static async findAllBySizeAndUser(username: string, size: string): Promise<Array<HydratedDocument<Request>>> {
+    const author = await UserCollection.findOneByUsername(username);
+    return RequestModel.find({ $and: [{size: size}, {author: author._id}]}).sort({ dateCreated: -1 }).populate('author');
+  }
+
+  /**
+   * Get all the requests in a given size
+   *
+   * @param {string} size - The color of the items
+   * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests with the specified color
+   */
+  static async findAllByColorAndUser(username: string, color: string): Promise<Array<HydratedDocument<Request>>> {
+    const author = await UserCollection.findOneByUsername(username);
+    return RequestModel.find({ $and: [{color: color}, {author: author._id}]}).sort({ dateCreated: -1 }).populate('author');
+  }
+
+  /**
+   * Get all the requests in a given size
+   *
+   * @param {string} size - The color of the items
+   * @return {Promise<HydratedDocument<Request>[]>} - An array of all of the requests with the specified color
+   */
+  static async findAllByAll(username: string, size: string, color: string): Promise<Array<HydratedDocument<Request>>> {
+    const author = await UserCollection.findOneByUsername(username);
+    return RequestModel.find({ $and: [{size: size}, {color: color}, {author: author._id}]}).sort({ dateCreated: -1 }).populate('author');
+  }
+
   /** //TODO: UPDATE THIS
    * Update a freet with the new content
    *

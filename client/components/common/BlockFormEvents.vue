@@ -11,39 +11,54 @@
     <table>
     <tr>
       <td>
-        <label>{{ fields[0].label }}: </label>
+        <label>{{ fields[6].label }}: </label>
         <input
-          :size="15"
-          :type="fields[0].id === 'password' ? 'password' : 'text'"
-          :name="fields[0].id"
-          :value="fields[0].value"
-          :placeholder="fields[0].placeholder"
-          @input="fields[0].value = $event.target.value"
+          :size="20"
+          :type="fields[6].id === 'password' ? 'password' : 'text'"
+          :name="fields[6].id"
+          :value="fields[6].value"
+          :placeholder="fields[6].placeholder"
+          @input="fields[6].value = $event.target.value"
         >
+      </td>
+
+      <td colspan="2">
+        <label>{{ fields[7].label }}: </label>
+        <input
+          :size="80"
+          :type="fields[7].id === 'password' ? 'password' : 'text'"
+          :name="fields[7].id"
+          :value="fields[7].value"
+          :placeholder="fields[7].placeholder"
+          @input="fields[7].value = $event.target.value"
+        >
+      </td>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <label>{{ fields[0].label }}: </label>
+        <date-pick
+          v-model="fields[0].value"
+          :inputAttributes="{size: 15}"
+        ></date-pick>
       </td>
 
       <td>
         <label>{{ fields[1].label }}: </label>
-        <input
-          :size="15"
-          :type="fields[1].id === 'password' ? 'password' : 'text'"
-          :name="fields[1].id"
-          :value="fields[1].value"
-          :placeholder="fields[1].placeholder"
-          @input="fields[1].value = $event.target.value"
-        >
+        <date-pick
+          v-model="fields[1].value"
+          :inputAttributes="{size: 15}"
+        ></date-pick>
       </td>
 
       <td>
         <label>{{ fields[5].label }}: </label>
-        <input
-          :size="15"
-          :type="fields[5].id === 'password' ? 'password' : 'text'"
-          :name="fields[5].id"
-          :value="fields[5].value"
-          :placeholder="fields[5].placeholder"
-          @input="fields[5].value = $event.target.value"
-        >
+        <date-pick
+          v-model="fields[5].value"
+          :inputAttributes="{size: 15}"
+        ></date-pick>
       </td>
     </tr>
 
@@ -61,7 +76,7 @@
       </td>
 
       <td>
-        <label>{{ fields[4].label }}: </label>
+        <label>{{ fields[4].label }}: <br></label>
         <input
           :size="25"
           :type="fields[4].id === 'password' ? 'password' : 'text'"
@@ -77,7 +92,7 @@
       <td colspan="3">
         <label>{{ fields[3].label }}: </label>
         <input
-          :size="128"
+          :size="141"
           :type="fields[3].id === 'password' ? 'password' : 'text'"
           :name="fields[3].id"
           :value="fields[3].value"
@@ -111,6 +126,9 @@
 </template>
 
 <script>
+import DatePicker from '@/components/common/DatePicker.vue';
+import DatePick from 'vue-date-pick';
+import 'vue-date-pick/dist/vueDatePick.css';
 
 export default {
   name: 'BlockFormEvents',
@@ -126,9 +144,10 @@ export default {
       refreshRequests: false, // Whether or not stored freets should be updated after form submission
       refreshEvents: false, // Whether or not stored freets should be updated after form submission
       alerts: {}, // Displays success/error messages encountered during form submission
-      callback: null // Function to run after successful form submission
+      callback: null, // Function to run after successful form submission
     };
   },
+  components: { DatePicker, DatePick },
   methods: {
     checkErrors (){
       // overriden by instantiation
@@ -223,5 +242,27 @@ form h3 {
 textarea {
    font-family: inherit;
    font-size: inherit;
+}
+
+vdpArrowPrev:after {
+    border-right-color: #cd99a2;
+}
+
+vdpArrowNext:after {
+    border-left-color: #cd99a2;
+}
+
+vdpCell.selectable:hover .vdpCellContent,
+vdpCell.selected .vdpCellContent {
+    background: #cd99a2;
+}
+
+vdpCell.today {
+    color: #cd99a2;
+}
+
+vdpTimeUnit > input:hover,
+vdpTimeUnit > input:focus {
+    border-bottom-color: #cd99a2;
 }
 </style>

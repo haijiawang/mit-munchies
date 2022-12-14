@@ -20,6 +20,8 @@ export type Event = {
   event: number;
   contact: string;
   images: Array<string>;
+  title: string;
+  url: string;
 };
 
 export type PopulatedEvent = {
@@ -34,6 +36,8 @@ export type PopulatedEvent = {
   event: number;
   contact: string;
   images: Array<string>;
+  title: string;
+  url: string;
 };
 
 // Mongoose schema definition for interfacing with a MongoDB table
@@ -90,6 +94,14 @@ const EventSchema = new Schema<Event>({
   images: {
     type: [String],
     required: true
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  url: {
+    type: String,
+    required: false
   }
 });
 

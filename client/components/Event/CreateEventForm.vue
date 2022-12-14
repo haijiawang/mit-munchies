@@ -12,12 +12,14 @@ export default {
       method: 'POST',
       hasBody: true,
       fields: [
-        {id: 'startrange', label: 'Event Start Date', placeholder: 'yyyy-mm-dd'},
-        {id: 'endrange', label: 'Event End Date', placeholder: 'yyyy-mm-dd'},
-        {id: 'location', label: 'Event Location', placeholder: 'city, st'},
+        {id: 'startrange', label: 'Event Start Date', value: (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate()},
+        {id: 'endrange', label: 'Event End Date', value: (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate()},
+        {id: 'location', label: 'Event Location', placeholder: 'City, ST'},
         {id: 'description', label: 'Description', placeholder: 'Describe the types of donation items you are requesting'},
         {id: 'contact', label: 'Contact', placeholder: 'Phone or email'},
-        {id: 'donationdate', label: 'Last Date for Donations', placeholder: 'yyyy-mm-dd'}
+        {id: 'donationdate', label: 'Last Date for Donations', value: (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate()},
+        {id: 'title', label: 'Title of Event', placeholder: 'Event Title'},
+        {id: 'url', label: 'RSVP URL', placeholder: 'Optional: ex: https://eventbrite.com/example'}
       ],
       title: 'Create an event',
       refreshEvents: true,
@@ -25,12 +27,14 @@ export default {
         const message = 'Successfully created an event!';
         this.$set(this.alerts, message, 'success');
         setTimeout(() => this.$delete(this.alerts, message), 3000);
-      }
+      },
+      date1: null,
+      date2: null
     };
   },
   methods: {
     checkAllFields(){
-      if (!this.fields[0] || !this.fields[1] || !this.fields[2] || !this.fields[3] || !this.fields[4] || !this.fields[5]){
+      if (!this.fields[0] || !this.fields[1] || !this.fields[2] || !this.fields[3] || !this.fields[4] || !this.fields[5] || !this.fields[6]){
           try{
             throw new Error("Empty fields: please fill in all of the fields.");
           }catch{

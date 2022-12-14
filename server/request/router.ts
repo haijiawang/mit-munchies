@@ -29,7 +29,7 @@ router.get(
     '/',
     async (req: Request, res: Response, next: NextFunction) => {
         // Check if author query parameter was supplied
-        if (req.query.author !== undefined) {
+        if (req.query.author !== undefined || req.query.color !== undefined || req.query.size !== undefined) {
             next();
             return;
         }
@@ -38,53 +38,121 @@ router.get(
         const response = allRequests.map(util.constructRequestResponse);
         res.status(200).json(response);
     },
-    [
-        userValidator.isAuthorExists
-    ],
+    async (req: Request, res: Response, next: NextFunction) => {
+        if (req.query.author === undefined || req.query.color === undefined || req.query.size === undefined) {
+            next();
+            return;
+        }
+
+        // check all
+        userValidator.isAuthorExists;
+        const authorRequests = await RequestCollection.findAllByAll(req.query.author as string, req.query.size as string, req.query.color as string);
+        const response = authorRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    },
+    async (req: Request, res: Response, next: NextFunction) => {
+        if (req.query.author !== undefined || req.query.color === undefined || req.query.size === undefined) {
+            next();
+            return;
+        }
+
+        // check color and size
+        const authorRequests = await RequestCollection.findAllBySizeAndColor(req.query.size as string, req.query.color as string);
+        const response = authorRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    },
+    async (req: Request, res: Response, next: NextFunction) => {
+        if (req.query.author === undefined || req.query.color === undefined || req.query.size !== undefined) {
+            next();
+            return;
+        }
+
+        // check color and user
+        userValidator.isAuthorExists;
+        const authorRequests = await RequestCollection.findAllByColorAndUser(req.query.author as string, req.query.color as string);
+        const response = authorRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    },
+    async (req: Request, res: Response, next: NextFunction) => {
+        if (req.query.author === undefined || req.query.color !== undefined || req.query.size === undefined) {
+            next();
+            return;
+        }
+
+        // check size and user
+        userValidator.isAuthorExists;
+        const authorRequests = await RequestCollection.findAllBySizeAndUser(req.query.author as string, req.query.size as string);
+        const response = authorRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    },
+    async (req: Request, res: Response, next: NextFunction) => {
+        if (req.query.author !== undefined || req.query.color !== undefined) {
+            next();
+            return;
+        }
+
+        // check size
+        const authorRequests = await RequestCollection.findAllBySize(req.query.size as string);
+        const response = authorRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    },
+    async (req: Request, res: Response, next: NextFunction) => {
+        if (req.query.author !== undefined) {
+            next();
+            return;
+        }
+
+        // check color
+        const authorRequests = await RequestCollection.findAllByColor(req.query.color as string);
+        const response = authorRequests.map(util.constructRequestResponse);
+        res.status(200).json(response);
+    },
     async (req: Request, res: Response) => {
+        // check user
+        userValidator.isAuthorExists;
         const authorRequests = await RequestCollection.findAllByUsername(req.query.author as string);
         const response = authorRequests.map(util.constructRequestResponse);
         res.status(200).json(response);
-    }
+    } 
 );
 
-/**
- * Get request by color
- *
- * @name GET /api/requests?color=color
- *
- * @return {FreetResponse[]} - An array of freets created by user with username, author
- * @throws {400} - If author is not given
- * @throws {404} - If no user has given author
- *
- */
-router.get(
-    '/',
-    async (req: Request, res: Response) => {
-        const allRequests = await RequestCollection.findAllByColor(req.body.color);
-        const response = allRequests.map(util.constructRequestResponse);
-        res.status(200).json(response);
-    }
-);
+// /**
+//  * Get request by color
+//  *
+//  * @name GET /api/requests?color=color
+//  *
+//  * @return {FreetResponse[]} - An array of freets created by user with username, author
+//  * @throws {400} - If author is not given
+//  * @throws {404} - If no user has given author
+//  *
+//  */
+// router.get(
+//     '/',
+//     async (req: Request, res: Response) => {
+//         const allRequests = await RequestCollection.findAllByColor(req.body.color);
+//         const response = allRequests.map(util.constructRequestResponse);
+//         res.status(200).json(response);
+//     }
+// );
 
-/**
- * Get request by size
- *
- * @name GET /api/requests?color=color
- *
- * @return {FreetResponse[]} - An array of freets created by user with username, author
- * @throws {400} - If author is not given
- * @throws {404} - If no user has given author
- *
- */
-router.get(
-    '/',
-    async (req: Request, res: Response) => {
-        const allRequests = await RequestCollection.findAllBySize(req.body.size);
-        const response = allRequests.map(util.constructRequestResponse);
-        res.status(200).json(response);
-    }
-);
+// /**
+//  * Get request by size
+//  *
+//  * @name GET /api/requests?color=color
+//  *
+//  * @return {FreetResponse[]} - An array of freets created by user with username, author
+//  * @throws {400} - If author is not given
+//  * @throws {404} - If no user has given author
+//  *
+//  */
+// router.get(
+//     '/',
+//     async (req: Request, res: Response) => {
+//         const allRequests = await RequestCollection.findAllBySize(req.body.size);
+//         const response = allRequests.map(util.constructRequestResponse);
+//         res.status(200).json(response);
+//     }
+// );
 
 /**
  * Create a new freet.

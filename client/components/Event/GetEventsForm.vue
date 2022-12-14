@@ -27,7 +27,7 @@ export default {
         url = `/api/events?location=${this.locvalue}&startrange=${this.startvalue}`;
       }else if (this.coordvalue){
         url = `/api/events?coordinator=${this.coordvalue}`;
-      }else if (this.startvalue && this.endvalue){
+      }else if (this.startvalue && this.endvalue && (this.startvalue !== this.endvalue)){
         url = `/api/events?startrange=${this.startvalue}&endrange=${this.endvalue}`;
       }else if (this.startvalue){
         url = `/api/events?startrange=${this.startvalue}`;
@@ -62,6 +62,10 @@ export default {
         setTimeout(() => this.$delete(this.alerts, e), 3000);
       }
     }
+  },
+  mounted(){
+    this.$store.commit('updateEventStart', (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate());
+    this.$store.commit('updateEventEnd', (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate());
   }
 };
 </script>

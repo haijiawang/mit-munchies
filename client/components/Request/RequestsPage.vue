@@ -30,8 +30,26 @@
         <div class="left">
           <h2>
             Viewing all requests
-            <span v-if="$store.state.filter">
+            <span v-if="$store.state.filter && $store.state.colorFilter && store.state.sizeFilter">
+              by @{{ $store.state.filter }} in {{ $store.state.colorFilter }} size {{ $store.state.sizeFilter }}
+            </span>
+            <span v-else-if="$store.state.filter && $store.state.colorFilter">
+              by @{{ $store.state.filter }} in {{ $store.state.colorFilter }}
+            </span>
+            <span v-else-if="$store.state.filter && $store.state.sizeFilter">
+              by @{{ $store.state.filter }} size {{ $store.state.sizeFilter }}
+            </span>
+            <span v-else-if="$store.state.sizeFilter && $store.state.colorFilter">
+              in {{ $store.state.colorFilter }} size {{ $store.state.sizeFilter }}
+            </span>
+            <span v-else-if="$store.state.filter">
               by @{{ $store.state.filter }}
+            </span>
+            <span v-else-if="$store.state.colorFilter">
+              in {{ $store.state.colorFilter }}
+            </span>
+            <span v-else-if="$store.state.sizeFilter">
+              size {{ $store.state.sizeFilter }}
             </span>
           </h2>
         </div>
@@ -39,7 +57,9 @@
           <GetRequestsForm
             ref="getRequestsForm"
             value="requestor"
-            placeholder="🔍 Filter by requestor (optional)"
+            placeholderuser="🔍 @Requestor"
+            placeholdersize="🔍 Size (ex: Small)"
+            placeholdercolor="🔍 Color (ex: Red)"
             button="🔄 Get requests"
           />
         </div>

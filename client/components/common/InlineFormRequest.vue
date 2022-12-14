@@ -5,29 +5,23 @@
   <form @submit.prevent="submit">
     <table cellspacing="0" cellpadding="10">
       <tr>
-        <td width="40">
-          Start and end search range:
-          <date-pick
-            v-model="startvalue"
-            :inputAttributes="{size: 10}"
-          ></date-pick>
-          <date-pick
-            v-model="endvalue"
-            :inputAttributes="{size: 10}"
-          ></date-pick>
-        </td>
-
         <td width="20">
           <input
-            v-model="coordvalue"
+            v-model="value"
             type="text"
-            :placeholder="coordplaceholder"
+            :placeholder="placeholderuser"
             :size="30"
           >
           <input
-            v-model="locvalue"
+            v-model="color"
             type="text"
-            :placeholder="locplaceholder"
+            :placeholder="placeholdercolor"
+            :size="30"
+          >
+          <input
+            v-model="size"
+            type="text"
+            :placeholder="placeholdersize"
             :size="30"
           >
         </td>
@@ -54,41 +48,29 @@
 </template>
 
 <script>
-import DatePicker from '@/components/common/DatePicker.vue';
-import DatePick from 'vue-date-pick';
-import 'vue-date-pick/dist/vueDatePick.css';
-
 export default {
-  name: 'InlineFormEvent',
+  name: 'InlineFormRequest',
   props: {
-    coordplaceholder: {
+    placeholderuser: {
       type: String,
       default: ''
     },
-    startplaceholder: {
+    placeholdercolor: {
       type: String,
       default: ''
     },
-    endplaceholder: {
-      type: String,
-      default: ''
-    },
-    locplaceholder: {
+    placeholdersize: {
       type: String,
       default: ''
     },
     button: {
       type: String,
-      default: 'Submit',
+      default: 'Submit'
     }
   },
   data() {
-    return {coordvalue: '', 
-    startvalue: (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate(), 
-    endvalue: (new Date()).getFullYear() + '-' + (new Date()).getMonth() + '-' + (new Date()).getDate(), 
-    locvalue: '', alerts: {}, date: new Date()};
-  },
-  components: { DatePicker, DatePick },
+    return {value: '', alerts: {}};
+  }
 };
 </script>
 
@@ -101,9 +83,5 @@ form {
 input {
     padding: 0 5px;
     min-width: 200px;
-}
-
-button {
-  width: 120px;
 }
 </style>

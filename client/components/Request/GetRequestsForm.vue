@@ -1,17 +1,32 @@
 <!-- Form for getting requests (all, from user for now) (inline style) -->
 
 <script>
-import InlineForm from '@/components/common/InlineForm.vue';
+import InlineFormRequest from '@/components/common/InlineFormRequest.vue';
 
 export default {
   name: 'GetRequestsForm',
-  mixins: [InlineForm],
+  mixins: [InlineFormRequest],
   data() {
-    return {value: this.$store.state.filter};
+    return {value: this.$store.state.filter, color: this.$store.state.colorFilter, size: this.$store.state.sizeFilter};
   },
   methods: {
     async submit() {
-      const url = this.value ? `/api/requests?author=${this.value}` : '/api/requests';
+      var url = '/api/requests';
+      if (this.value && this.color && this.size){
+        url = `/api/requests?author=${this.value}&color=${this.color}&size=${this.size}`;
+      }else if (this.value && this.color){
+        url = `/api/requests?author=${this.value}&color=${this.color}`;
+      }else if (this.value && this.size){
+        url = `/api/requests?author=${this.value}&size=${this.size}`;
+      }else if (this.color && this.size){
+        url = `/api/requests?color=${this.color}&size=${this.size}`;
+      }else if (this.value){
+        url = `/api/requests?author=${this.value}`;
+      }else if (this.color){
+        url = `/api/requests?color=${this.color}`;
+      }else if (this.size){
+        url = `/api/requests?size=${this.size}`;
+      }
       try {
         const r = await fetch(url);
         const res = await r.json();
@@ -20,6 +35,8 @@ export default {
         }
 
         this.$store.commit('updateFilter', this.value);
+        this.$store.commit('updateColorFilter', this.color);
+        this.$store.commit('updateSizeFilter', this.size);
         this.$store.commit('updateRequests', res);
       } catch (e) {
         if (this.value === this.$store.state.filter) {

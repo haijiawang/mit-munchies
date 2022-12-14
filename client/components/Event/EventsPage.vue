@@ -51,7 +51,7 @@
             <span v-else-if="$store.state.eventFilterCoord">
               by @{{ $store.state.eventFilterCoord }}
             </span>
-            <span v-else-if="$store.state.eventFilterStartDate && $store.state.eventFilterEndDate">
+            <span v-else-if="$store.state.eventFilterStartDate && $store.state.eventFilterEndDate && ($store.state.eventFilterStartDate !== $store.state.eventFilterEndDate)">
               between {{ $store.state.eventFilterStartDate }} and {{ $store.state.eventFilterEndDate }}
             </span>
             <span v-else-if="$store.state.eventFilterStartDate">
@@ -69,10 +69,10 @@
             startvalue="start"
             endvalue="end"
             locvalue="location"
-            coordplaceholder="🔍 Filter by event coordinator (optional)"
+            coordplaceholder="🔍 Coordinator username (@)"
             startplaceholder="🔍 Filter by event start date (optional)"
             endplaceholder="🔍 Filter by event end date (optional)"
-            locplaceholder="🔍 Filter by event location (optional)"
+            locplaceholder="🔍 Location (ex: Boston, MA)"
             button="🔄 Get events"
           />
         </div>
