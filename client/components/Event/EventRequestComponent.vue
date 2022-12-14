@@ -143,7 +143,7 @@
             @input="draftresponsedescription = $event.target.value"
         />
 
-        Submit an Image:
+        Submit an Image (Required):
         <v-layout row>
           <v-flex md6 offset-sm3>
             <div>
